@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Puntos — Sistema eSports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/puntos.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+</head>
+<body>
+  <!-- NAV -->
+  <nav>
+    <img src="img/ab6761610000e5ebe80d1ffb81aa6503ad41c574.png" alt="Logo L">
+    <div class="menu">
+      <a href="index.html"><i class="fa fa-home"></i> Inicio</a>
+      <a href="#"><i class="fa fa-trophy"></i> Puntos</a>
+      <!-- <a href="estadisticas.html"><i class="fa fa-chart-bar"></i> Estadísticas</a>-->
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <section id="cardEquipo" class="card"></section>
+    <section id="cardJugadores" class="card" style="display:none;"></section>
+    <section id="cardPartidas" class="card" style="display:none;"></section>
+    <section id="cardResumen" class="grid-3" style="display:none;"></section>
+    <section id="cardRecientes" class="card" style="display:none;"></section>
+    <section id="cardToggleRanking" class="card" style="display:none;"></section>
+    <section id="cardRanking" class="card" style="display:none;"></section>
+  </div>
+
+  <footer>© 2024 Sistema de Gestión eSports</footer>
+  <script src="js/puntos.js"></script>
+<div id="modalEquipo" class="modal" style="display:none;">
+  <div class="modal-content card">
+    <h3>Crear nuevo equipo</h3>
+    <input type="text" id="nuevoEquipoInput" placeholder="Nombre del equipo">
+    <div class="row">
+      <button class="btn btn-primary" onclick="confirmarNuevoEquipo()">Aceptar</button>
+      <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

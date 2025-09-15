@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 </head>
 <body>
   <!-- NAV -->
@@ -32,41 +31,19 @@
   </div>
 
   <footer>© 2024 Sistema de Gestión eSports</footer>
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  
+  <!-- 🔑 IMPORTANTE -->
+  <script type="module" src="js/puntos.js"></script>
 
-  // 👉 Config de tu proyecto (la que Firebase te mostró)
-  const firebaseConfig = {
-    apiKey: "AIzaSyC8_wsFs6jfyva62xoBDLUeZJh42Orv7-I",
-    authDomain: "sistema-puntos-b46dd.firebaseapp.com",
-    projectId: "sistema-puntos-b46dd",
-    storageBucket: "sistema-puntos-b46dd.firebasestorage.app",
-    messagingSenderId: "412750867994",
-    appId: "1:412750867994:web:0627943ce5605d99c3eba3",
-    measurementId: "G-5KCWW7FDC8"
-  };
-
-  // Inicializar Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // 👉 Hacemos visible db para puntos.js
-  window.db = db;
-</script>
-
-<script src="js/puntos.js" type="module"></script>
-<div id="modalEquipo" class="modal" style="display:none;">
-  <div class="modal-content card">
-    <h3>Crear nuevo equipo</h3>
-    <input type="text" id="nuevoEquipoInput" placeholder="Nombre del equipo">
-    <div class="row">
-      <button class="btn btn-primary" onclick="confirmarNuevoEquipo()">Aceptar</button>
-      <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+  <div id="modalEquipo" class="modal" style="display:none;">
+    <div class="modal-content card">
+      <h3>Crear nuevo equipo</h3>
+      <input type="text" id="nuevoEquipoInput" placeholder="Nombre del equipo">
+      <div class="row">
+        <button class="btn btn-primary" onclick="confirmarNuevoEquipo()">Aceptar</button>
+        <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+      </div>
     </div>
   </div>
-</div>
-
-
 </body>
 </html>

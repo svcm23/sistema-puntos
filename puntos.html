@@ -32,7 +32,30 @@
   </div>
 
   <footer>© 2024 Sistema de Gestión eSports</footer>
-  <script src="js/puntos.js"></script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+  // 👉 Config de tu proyecto (la que Firebase te mostró)
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8_wsFs6jfyva62xoBDLUeZJh42Orv7-I",
+    authDomain: "sistema-puntos-b46dd.firebaseapp.com",
+    projectId: "sistema-puntos-b46dd",
+    storageBucket: "sistema-puntos-b46dd.firebasestorage.app",
+    messagingSenderId: "412750867994",
+    appId: "1:412750867994:web:0627943ce5605d99c3eba3",
+    measurementId: "G-5KCWW7FDC8"
+  };
+
+  // Inicializar Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 👉 Hacemos visible db para puntos.js
+  window.db = db;
+</script>
+
+<script src="js/puntos.js" type="module"></script>
 <div id="modalEquipo" class="modal" style="display:none;">
   <div class="modal-content card">
     <h3>Crear nuevo equipo</h3>

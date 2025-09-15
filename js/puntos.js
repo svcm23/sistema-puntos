@@ -1,15 +1,16 @@
-// Importar Firebase
+// ======================
+// 🔥 Firebase
+// ======================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot
+  getFirestore, doc, getDoc, setDoc, onSnapshot
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// Configuración de Firebase (tuya)
 const firebaseConfig = {
   apiKey: "AIzaSyC8_wsFs6jfyva62xoBDLUeZJh42Orv7-I",
   authDomain: "sistema-puntos-b46dd.firebaseapp.com",
   projectId: "sistema-puntos-b46dd",
-  storageBucket: "sistema-puntos-b46dd.firebasestorage.app",
+  storageBucket: "sistema-puntos-b46dd.appspot.com",
   messagingSenderId: "412750867994",
   appId: "1:412750867994:web:0627943ce5605d99c3eba3",
   measurementId: "G-5KCWW7FDC8"
@@ -18,35 +19,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Referencia al documento principal
+// Documento principal
 const docRef = doc(db, "sistemaPuntos_v1", "data");
 
 // Estado local
 let store = { equipos: [], equipoActivo: null };
 
-// ====================
+// ======================
 // 🔹 Sincronización
-// ====================
-
-// Escuchar cambios en tiempo real
+// ======================
 onSnapshot(docRef, (docSnap) => {
   if (docSnap.exists()) {
     store = docSnap.data();
-    render(); // 👈 redibuja cada vez que alguien cambie algo
+    // Aseguramos estructura mínima
+    if (!store.equipos) store.equipos = [];
+    if (!store.equipoActivo) store.equipoActivo = null;
+    render();
   } else {
-    // Si no existe aún el doc, lo creamos vacío
+    // Si no existe, lo inicializamos vacío
     setDoc(docRef, store);
   }
 });
 
-// Guardar en Firebase
 async function save() {
   await setDoc(docRef, store);
 }
 
-// ====================
-// ⭐ Función de estrellas
-// ====================
+// ======================
+// ⭐ Estrellas
+// ======================
 function getStars(puntos) {
   const maxStars = 10;
   let estrellas = puntos % maxStars;
@@ -60,9 +61,9 @@ function getStars(puntos) {
   return `<span class="stars ${colorClass}">${"★".repeat(estrellas)}</span>`;
 }
 
-// ====================
-// 📢 Frases motivacionales
-// ====================
+// ======================
+// 📢 Frases
+// ======================
 const frasesVictoria = [
   "¡Esa es la actitud! 💪","Victoria dulce, sigue así 🔥","¡Brillaste como una estrella! ⭐",
   "El esfuerzo siempre paga 🏆","Increíble trabajo, GG 👑","¡Dominaste la grieta! ⚔️",
@@ -100,9 +101,9 @@ function shakePantalla() {
   setTimeout(() => document.body.classList.remove("shake"), 600);
 }
 
-// ====================
+// ======================
 // 🔹 Render
-// ====================
+// ======================
 function getEquipoActivo() {
   return store.equipos.find(e => e.nombre === store.equipoActivo) || null;
 }
@@ -229,7 +230,7 @@ function render() {
               <div class="pos">${i+1}</div>
               <span>${j.nombre} ${i===0 ? "👑":""}</span>
             </div>
-            <div>${getStars(j.puntos)} <small>${j.puntos} pts</small> (${j.victorias}V-${j.derrotas}D)</div>
+            <div>${getStars(j.puntos)} <small>${j.puntos} pts</small> (${j.victorias||0}V-${j.derrotas||0}D)</div>
           </div>
         `).join("")}
       </div>
@@ -237,57 +238,69 @@ function render() {
   }
 }
 
-// ====================
+// ======================
 // 🔹 Acciones
-// ====================
-function nuevoEquipo() { document.getElementById("modalEquipo").style.display = "flex"; }
-function cerrarModal() { document.getElementById("modalEquipo").style.display = "none"; }
-
-function confirmarNuevoEquipo() {
+// ======================
+window.nuevoEquipo = function() {
+  document.getElementById("modalEquipo").style.display = "flex";
+};
+window.cerrarModal = function() {
+  document.getElementById("modalEquipo").style.display = "none";
+};
+window.confirmarNuevoEquipo = async function() {
   const nombre = document.getElementById("nuevoEquipoInput").value.trim();
   if (!nombre) return;
+  if (!store.equipos) store.equipos = [];
+
   if (store.equipos.some(e => e.nombre.toLowerCase() === nombre.toLowerCase())) {
-    alert("Ese equipo ya existe."); return;
+    alert("Ese equipo ya existe.");
+    return;
   }
+
   store.equipos.push({ nombre, jugadores:[], partidas:[], currentPlayerName:null });
   store.equipoActivo = nombre;
-  save(); cerrarModal();
-  document.getElementById("nuevoEquipoInput").value = "";
-}
 
-function usarEquipo() {
+  await save();
+  cerrarModal();
+  document.getElementById("nuevoEquipoInput").value = "";
+};
+
+window.usarEquipo = async function() {
   const sel = document.getElementById("equipoSelect").value;
   store.equipoActivo = sel;
-  save();
-}
-function resetEquipo() {
+  await save();
+};
+window.resetEquipo = async function() {
   store.equipoActivo = null;
-  save();
-}
-function agregarJugador() {
+  await save();
+};
+window.agregarJugador = async function() {
   const equipo = getEquipoActivo();
+  if (!equipo.jugadores) equipo.jugadores = [];
   const nombre = document.getElementById("jugadorInput").value.trim();
   if (!nombre) return;
   equipo.jugadores.push({ nombre, puntos:0, victorias:0, derrotas:0 });
   equipo.currentPlayerName = nombre;
   document.getElementById("jugadorInput").value = "";
-  save();
-}
-function registrarPartida(resultado) {
+  await save();
+};
+window.registrarPartida = async function(resultado) {
   const equipo = getEquipoActivo();
   const jugadorNombre = document.getElementById("jugadorSelect").value;
   equipo.currentPlayerName = jugadorNombre;
   const jugador = equipo.jugadores.find(j => j.nombre === jugadorNombre);
 
-  if (resultado === "victoria") { jugador.puntos+=3; jugador.victorias++; }
-  else { jugador.puntos+=1; jugador.derrotas++; }
+  if (resultado === "victoria") { jugador.puntos+=3; jugador.victorias=(jugador.victorias||0)+1; }
+  else { jugador.puntos+=1; jugador.derrotas=(jugador.derrotas||0)+1; }
 
+  if (!equipo.partidas) equipo.partidas = [];
   equipo.partidas.unshift({ jugador:jugadorNombre, resultado, fecha:new Date().toLocaleString() });
-  save();
+
+  await save();
   mostrarFrase(resultado);
-}
-function toggleRanking() {
+};
+window.toggleRanking = function() {
   const cardRanking = document.getElementById("cardRanking");
   cardRanking.style.display = cardRanking.style.display === "block" ? "none" : "block";
   render();
-}
+};

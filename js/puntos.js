@@ -1,182 +1,49 @@
-// 👉 Importamos lo que necesitamos de Firestore
-import {
-  collection,
-  doc,
-  setDoc,
-  updateDoc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  increment
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Puntos — Sistema eSports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/puntos.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- NAV -->
+  <nav>
+    <img src="img/ab6761610000e5ebe80d1ffb81aa6503ad41c574.png" alt="Logo L">
+    <div class="menu">
+      <a href="index.html"><i class="fa fa-home"></i> Inicio</a>
+      <a href="#"><i class="fa fa-trophy"></i> Puntos</a>
+      <!-- <a href="estadisticas.html"><i class="fa fa-chart-bar"></i> Estadísticas</a>-->
+    </div>
+  </nav>
 
-/* ----------------- FRASES ----------------- */
-const frasesVictoria = [
-  "¡Esa es la actitud! 💪",
-  "Victoria dulce, sigue así 🔥",
-  "¡Brillaste como una estrella! ⭐",
-  "El esfuerzo siempre paga 🏆",
-  "Increíble trabajo, GG 👑",
-  "¡Dominaste la grieta! ⚔️",
-  "Nada los detiene 💥",
-  "Están imparables 🚀",
-  "¡Qué sinergia de equipo! 🤝",
-  "Ese es el espíritu de campeones 🏅"
-];
+  <div class="wrap">
+    <section id="cardEquipo" class="card"></section>
+    <section id="cardJugadores" class="card" style="display:none;"></section>
+    <section id="cardPartidas" class="card" style="display:none;"></section>
+    <section id="cardResumen" class="grid-3" style="display:none;"></section>
+    <section id="cardRecientes" class="card" style="display:none;"></section>
+    <section id="cardToggleRanking" class="card" style="display:none;"></section>
+    <section id="cardRanking" class="card" style="display:none;"></section>
+  </div>
 
-const frasesDerrota = [
-  "No pasa nada, cada derrota es una lección 📚",
-  "Lo importante es no rendirse 💜",
-  "Hoy se pierde, mañana se gana 💫",
-  "Respira, aprende y vuelve más fuerte ⚔️",
-  "Incluso Faker perdió alguna vez 😉",
-  "Esto es parte del camino 🚶",
-  "De los errores nacen los pros 🧠",
-  "La próxima es suya 🔮",
-  "Perder también suma experiencia 🎯",
-  "Confíen, que la remontada siempre llega 🔥"
-];
+  <footer>© 2024 Sistema de Gestión eSports</footer>
+  
+  <!-- 🔑 IMPORTANTE -->
+  <script type="module" src="js/puntos.js"></script>
 
-/* ----------------- VARIABLES ----------------- */
-let equipoActual = null;
-let jugadorActual = null;
-
-/* ----------------- FIRESTORE HELPERS ----------------- */
-
-// Guardar un equipo
-async function guardarEquipo(nombre) {
-  await setDoc(doc(window.db, "equipos", nombre), { creado: new Date() }, { merge: true });
-  equipoActual = nombre;
-}
-
-// Guardar un jugador
-async function guardarJugador(nombreJugador) {
-  if (!equipoActual) return alert("Primero seleccioná un equipo");
-  await setDoc(
-    doc(window.db, "equipos", equipoActual, "jugadores", nombreJugador),
-    { puntos: 0, partidas: 0 },
-    { merge: true }
-  );
-  jugadorActual = nombreJugador;
-}
-
-// Registrar partida
-async function registrarPartida(resultado) {
-  if (!equipoActual || !jugadorActual) return alert("Seleccioná equipo y jugador primero");
-
-  const puntos = resultado === "victoria" ? 3 : 1;
-  const jugadorRef = doc(window.db, "equipos", equipoActual, "jugadores", jugadorActual);
-
-  await updateDoc(jugadorRef, {
-    puntos: increment(puntos),
-    partidas: increment(1)
-  });
-
-  mostrarFrase(resultado);
-}
-
-// Obtener jugadores de un equipo
-async function obtenerJugadores() {
-  if (!equipoActual) return [];
-  const snap = await getDocs(collection(window.db, "equipos", equipoActual, "jugadores"));
-  let lista = [];
-  snap.forEach((d) => lista.push({ id: d.id, ...d.data() }));
-  return lista;
-}
-
-// Escuchar ranking en tiempo real
-function escucharRanking(callback) {
-  if (!equipoActual) return;
-  return onSnapshot(collection(window.db, "equipos", equipoActual, "jugadores"), (snap) => {
-    const data = [];
-    snap.forEach((d) => data.push({ id: d.id, ...d.data() }));
-    data.sort((a, b) => b.puntos - a.puntos);
-    callback(data);
-  });
-}
-
-/* ----------------- ESTRELLAS ----------------- */
-function generarEstrellas(puntos) {
-  let estrellas = "";
-  const niveles = ["bronce", "plata", "oro", "multicolor"];
-  const nivel = Math.min(Math.floor(puntos / 10), 3);
-  const cantidad = Math.min(puntos, 10);
-
-  for (let i = 0; i < cantidad; i++) {
-    estrellas += `<span class="estrella ${niveles[nivel]}">★</span>`;
-  }
-
-  if (puntos > 10) {
-    estrellas += `<span class="extra">+${puntos - 10}</span>`;
-  }
-  return estrellas;
-}
-
-/* ----------------- FRASES Y EFECTOS ----------------- */
-function mostrarFrase(resultado) {
-  const frases = resultado === "victoria" ? frasesVictoria : frasesDerrota;
-  const frase = frases[Math.floor(Math.random() * frases.length)];
-  const box = document.createElement("div");
-  box.className = `frase-popup ${resultado}`;
-  box.innerText = frase;
-  document.body.appendChild(box);
-
-  if (resultado === "victoria") {
-    lanzarConfetti();
-  } else {
-    shakePantalla();
-  }
-
-  setTimeout(() => box.remove(), 3000);
-}
-
-function lanzarConfetti() {
-  if (typeof confetti !== "undefined") {
-    confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
-  }
-}
-
-function shakePantalla() {
-  document.body.classList.add("shake");
-  setTimeout(() => document.body.classList.remove("shake"), 600);
-}
-
-/* ----------------- RENDER ----------------- */
-function renderRanking(jugadores) {
-  const cont = document.getElementById("ranking-list");
-  if (!cont) return;
-  cont.innerHTML = "";
-
-  jugadores.forEach((j, i) => {
-    const crown = i === 0 ? "👑" : "";
-    cont.innerHTML += `
-      <div class="rank-row">
-        <div class="left">
-          <div class="pos">${i + 1}</div>
-          <strong>${j.id}</strong> ${crown}
-        </div>
-        <div class="right">
-          ${generarEstrellas(j.puntos)}
-        </div>
+  <div id="modalEquipo" class="modal" style="display:none;">
+    <div class="modal-content card">
+      <h3>Crear nuevo equipo</h3>
+      <input type="text" id="nuevoEquipoInput" placeholder="Nombre del equipo">
+      <div class="row">
+        <button class="btn btn-primary" onclick="confirmarNuevoEquipo()">Aceptar</button>
+        <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
       </div>
-    `;
-  });
-}
-
-/* ----------------- EVENTOS UI ----------------- */
-document.getElementById("btn-equipo")?.addEventListener("click", async () => {
-  const nombre = prompt("Nombre del equipo:");
-  if (nombre) await guardarEquipo(nombre);
-});
-
-document.getElementById("btn-jugador")?.addEventListener("click", async () => {
-  const nombre = prompt("Nombre del jugador:");
-  if (nombre) await guardarJugador(nombre);
-});
-
-document.getElementById("btn-victoria")?.addEventListener("click", () => registrarPartida("victoria"));
-document.getElementById("btn-derrota")?.addEventListener("click", () => registrarPartida("derrota"));
-
-document.getElementById("btn-ranking")?.addEventListener("click", () => {
-  escucharRanking(renderRanking);
-});
+    </div>
+  </div>
+</body>
+</html>

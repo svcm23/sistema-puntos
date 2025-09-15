@@ -1,14 +1,15 @@
-// ======================
-// 🔥 Firebase
-// ======================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+// Importar Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
+// Configuración de Firebase (tuya)
 const firebaseConfig = {
   apiKey: "AIzaSyC8_wsFs6jfyva62xoBDLUeZJh42Orv7-I",
   authDomain: "sistema-puntos-b46dd.firebaseapp.com",
   projectId: "sistema-puntos-b46dd",
-  storageBucket: "sistema-puntos-b46dd.appspot.com",
+  storageBucket: "sistema-puntos-b46dd.firebasestorage.app",
   messagingSenderId: "412750867994",
   appId: "1:412750867994:web:0627943ce5605d99c3eba3",
   measurementId: "G-5KCWW7FDC8"
@@ -17,29 +18,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ======================
-// 🔧 Store en Firestore
-// ======================
-const DOC_KEY = "sistemaPuntos_v1";
+// Referencia al documento principal
+const docRef = doc(db, "sistemaPuntos_v1", "data");
+
+// Estado local
 let store = { equipos: [], equipoActivo: null };
 
-async function load() {
-  const ref = doc(db, "sistema", DOC_KEY);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    return { equipos: [], equipoActivo: null };
+// ====================
+// 🔹 Sincronización
+// ====================
+
+// Escuchar cambios en tiempo real
+onSnapshot(docRef, (docSnap) => {
+  if (docSnap.exists()) {
+    store = docSnap.data();
+    render(); // 👈 redibuja cada vez que alguien cambie algo
+  } else {
+    // Si no existe aún el doc, lo creamos vacío
+    setDoc(docRef, store);
   }
-  return snap.data();
-}
+});
 
+// Guardar en Firebase
 async function save() {
-  const ref = doc(db, "sistema", DOC_KEY);
-  await setDoc(ref, store);
+  await setDoc(docRef, store);
 }
 
-// ======================
+// ====================
 // ⭐ Función de estrellas
-// ======================
+// ====================
 function getStars(puntos) {
   const maxStars = 10;
   let estrellas = puntos % maxStars;
@@ -53,32 +60,18 @@ function getStars(puntos) {
   return `<span class="stars ${colorClass}">${"★".repeat(estrellas)}</span>`;
 }
 
-// ======================
+// ====================
 // 📢 Frases motivacionales
-// ======================
+// ====================
 const frasesVictoria = [
-  "¡Esa es la actitud! 💪",
-  "Victoria dulce, sigue así 🔥",
-  "¡Brillaste como una estrella! ⭐",
-  "El esfuerzo siempre paga 🏆",
-  "Increíble trabajo, GG 👑",
-  "¡Dominaste la grieta! ⚔️",
-  "Nada te detiene 💥",
-  "Eres imparable 🚀",
-  "¡Qué sinergia de equipo! 🤝",
-  "Ese es el espíritu de campeones 🏅"
+  "¡Esa es la actitud! 💪","Victoria dulce, sigue así 🔥","¡Brillaste como una estrella! ⭐",
+  "El esfuerzo siempre paga 🏆","Increíble trabajo, GG 👑","¡Dominaste la grieta! ⚔️",
+  "Nada te detiene 💥","Eres imparable 🚀","¡Qué sinergia de equipo! 🤝","Ese es el espíritu de campeones 🏅"
 ];
 const frasesDerrota = [
-  "No pasa nada, cada derrota es una lección 📚",
-  "Lo importante es no rendirse 💜",
-  "Hoy se pierde, mañana se gana 💫",
-  "Respira, aprende y vuelve más fuerte ⚔️",
-  "Incluso Faker perdió alguna vez 😉",
-  "Esto es parte del camino 🚶",
-  "De los errores nacen los pros 🧠",
-  "La próxima es tuya 🔮",
-  "Perder también suma experiencia 🎯",
-  "Confía, que la remontada siempre llega 🔥"
+  "No pasa nada, cada derrota es una lección 📚","Lo importante es no rendirse 💜","Hoy se pierde, mañana se gana 💫",
+  "Respira, aprende y vuelve más fuerte ⚔️","Incluso Faker perdió alguna vez 😉","Esto es parte del camino 🚶",
+  "De los errores nacen los pros 🧠","La próxima es tuya 🔮","Perder también suma experiencia 🎯","Confía, que la remontada siempre llega 🔥"
 ];
 
 function mostrarFrase(resultado) {
@@ -89,38 +82,27 @@ function mostrarFrase(resultado) {
   box.innerText = frase;
   document.body.appendChild(box);
 
-  if (resultado === "victoria") {
-    lanzarConfetti();
-  } else {
-    shakePantalla();
-  }
+  if (resultado === "victoria") lanzarConfetti();
+  else shakePantalla();
 
-  setTimeout(() => {
-    box.remove();
-  }, 3000);
+  setTimeout(() => box.remove(), 3000);
 }
 
 // 🎉 Confetti
 function lanzarConfetti() {
-  if (typeof confetti === "undefined") return;
-  confetti({
-    particleCount: 120,
-    spread: 90,
-    origin: { y: 0.6 }
-  });
+  if (typeof confetti !== "undefined") {
+    confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+  }
 }
-
 // 🔴 Shake
 function shakePantalla() {
   document.body.classList.add("shake");
-  setTimeout(() => {
-    document.body.classList.remove("shake");
-  }, 600);
+  setTimeout(() => document.body.classList.remove("shake"), 600);
 }
 
-// ======================
-// Render
-// ======================
+// ====================
+// 🔹 Render
+// ====================
 function getEquipoActivo() {
   return store.equipos.find(e => e.nombre === store.equipoActivo) || null;
 }
@@ -197,9 +179,7 @@ function render() {
         <button class="btn btn-lose" onclick="registrarPartida('derrota')">Derrota (+1)</button>
       </div>
     `;
-  } else {
-    cardPartidas.style.display = "none";
-  }
+  } else cardPartidas.style.display = "none";
 
   // Resumen
   if (equipo.jugadores.length > 0) {
@@ -209,9 +189,7 @@ function render() {
       <div class="stat"><div class="k">Partidas</div><div class="v">${equipo.partidas.length}</div></div>
       <div class="stat"><div class="k">Líder</div><div class="v">${equipo.jugadores.sort((a,b)=>b.puntos-a.puntos)[0]?.nombre || "—"}</div></div>
     `;
-  } else {
-    cardResumen.style.display = "none";
-  }
+  } else cardResumen.style.display = "none";
 
   // Partidas recientes
   if (equipo.partidas.length > 0) {
@@ -229,11 +207,9 @@ function render() {
         `).join("")}
       </div>
     `;
-  } else {
-    cardRecientes.style.display = "none";
-  }
+  } else cardRecientes.style.display = "none";
 
-  // Toggle ranking
+  // Botón toggle ranking
   cardToggleRanking.style.display = "block";
   cardToggleRanking.innerHTML = `
     <button class="btn btn-primary" onclick="toggleRanking()">
@@ -261,48 +237,43 @@ function render() {
   }
 }
 
-// ======================
-// Acciones
-// ======================
-window.nuevoEquipo = function() {
-  document.getElementById("modalEquipo").style.display = "flex";
-};
-window.cerrarModal = function() {
-  document.getElementById("modalEquipo").style.display = "none";
-};
-window.confirmarNuevoEquipo = async function() {
+// ====================
+// 🔹 Acciones
+// ====================
+function nuevoEquipo() { document.getElementById("modalEquipo").style.display = "flex"; }
+function cerrarModal() { document.getElementById("modalEquipo").style.display = "none"; }
+
+function confirmarNuevoEquipo() {
   const nombre = document.getElementById("nuevoEquipoInput").value.trim();
   if (!nombre) return;
   if (store.equipos.some(e => e.nombre.toLowerCase() === nombre.toLowerCase())) {
-    alert("Ese equipo ya existe.");
-    return;
+    alert("Ese equipo ya existe."); return;
   }
   store.equipos.push({ nombre, jugadores:[], partidas:[], currentPlayerName:null });
   store.equipoActivo = nombre;
-  await save(); render();
-  cerrarModal();
+  save(); cerrarModal();
   document.getElementById("nuevoEquipoInput").value = "";
-};
+}
 
-window.usarEquipo = async function() {
+function usarEquipo() {
   const sel = document.getElementById("equipoSelect").value;
   store.equipoActivo = sel;
-  await save(); render();
-};
-window.resetEquipo = async function() {
+  save();
+}
+function resetEquipo() {
   store.equipoActivo = null;
-  await save(); render();
-};
-window.agregarJugador = async function() {
+  save();
+}
+function agregarJugador() {
   const equipo = getEquipoActivo();
   const nombre = document.getElementById("jugadorInput").value.trim();
   if (!nombre) return;
   equipo.jugadores.push({ nombre, puntos:0, victorias:0, derrotas:0 });
   equipo.currentPlayerName = nombre;
   document.getElementById("jugadorInput").value = "";
-  await save(); render();
-};
-window.registrarPartida = async function(resultado) {
+  save();
+}
+function registrarPartida(resultado) {
   const equipo = getEquipoActivo();
   const jugadorNombre = document.getElementById("jugadorSelect").value;
   equipo.currentPlayerName = jugadorNombre;
@@ -312,19 +283,11 @@ window.registrarPartida = async function(resultado) {
   else { jugador.puntos+=1; jugador.derrotas++; }
 
   equipo.partidas.unshift({ jugador:jugadorNombre, resultado, fecha:new Date().toLocaleString() });
-  await save(); render();
+  save();
   mostrarFrase(resultado);
-};
-window.toggleRanking = function() {
+}
+function toggleRanking() {
   const cardRanking = document.getElementById("cardRanking");
   cardRanking.style.display = cardRanking.style.display === "block" ? "none" : "block";
   render();
-};
-
-// ======================
-// Init
-// ======================
-(async () => {
-  store = await load();
-  render();
-})();
+}

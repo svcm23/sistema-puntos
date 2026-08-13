@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>Mi perfil — Crimson Veil</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/perfil.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+</head>
+
+
+<body class="profile-page">
+
+  <!-- =========================
+       NAV
+  ========================== -->
+
+  <nav id="main-nav" class="site-nav">
+
+    <a href="index.html" class="brand">
+
+      <div class="nav-logo-wrap">
+
+        <img
+          src="img/crimson-veil-logo.jpeg"
+          alt="Crimson Veil"
+          class="nav-logo"
+        >
+
+      </div>
+
+      <div class="brand-copy">
+
+        <strong>
+          Crimson Veil
+        </strong>
+
+        <small>
+          Team Hub
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <div class="menu">
+
+      <a href="index.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>
+          Inicio
+        </span>
+
+      </a>
+
+
+      <a href="puntos.html">
+
+        <i class="fa-solid fa-star"></i>
+
+        <span>
+          Ranking
+        </span>
+
+      </a>
+
+
+      <a
+        href="perfil.html"
+        class="active"
+      >
+
+        <i class="fa-solid fa-user"></i>
+
+        <span>
+          Perfil
+        </span>
+
+      </a>
+
+    </div>
+
+  </nav>
+
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main class="profile-main">
+
+    <div class="profile-stars"></div>
+
+    <div class="profile-glow"></div>
+
+    <span class="profile-decoration deco-profile-one">
+      ✦
+    </span>
+
+    <span class="profile-decoration deco-profile-two">
+      ✧
+    </span>
+
+    <span class="profile-decoration deco-profile-three">
+      ☾
+    </span>
+
+
+    <div class="profile-container">
+
+
+      <!-- =========================
+           HEADER
+      ========================== -->
+
+      <header class="profile-heading">
+
+        <p class="eyebrow">
+          PLAYER PROFILE
+        </p>
+
+        <h1>
+          Your place beneath
+          <em>the Veil.</em>
+        </h1>
+
+        <p>
+          Personalizá tu identidad dentro de Crimson Veil.
+        </p>
+
+      </header>
+
+
+      <div class="profile-divider">
+
+        <span></span>
+
+        <i class="fa-solid fa-moon"></i>
+
+        <span></span>
+
+      </div>
+
+
+      <!-- =========================
+           LAYOUT
+      ========================== -->
+
+      <div class="profile-layout">
+
+
+        <!-- =========================
+             LEFT
+        ========================== -->
+
+        <section class="profile-preview">
+
+          <p class="preview-title">
+            TU CARD
+          </p>
+
+
+          <!-- CARD -->
+
+          <article
+            id="profileCard"
+            class="player-card profile-player-card"
+            data-role="mid"
+          >
+
+            <div class="corner corner-top"></div>
+
+            <div class="corner corner-bottom"></div>
+
+
+            <div class="player-header">
+
+              <div class="role-symbol">
+
+                <i
+                  id="previewRoleIcon"
+                  class="fa-solid fa-wand-magic-sparkles"
+                ></i>
+
+              </div>
+
+
+              <span
+                id="previewRole"
+                class="player-role"
+              >
+                MID
+              </span>
+
+            </div>
+
+
+            <div class="player-content">
+
+              <span
+                id="previewSymbol"
+                class="player-decoration"
+              >
+                ✧
+              </span>
+
+
+              <h3 id="previewNickname">
+                QueenStranger
+              </h3>
+
+
+              <p
+                id="previewQuote"
+                class="player-quote"
+              >
+                Beneath the veil.
+              </p>
+
+            </div>
+
+
+            <div class="player-bottom">
+
+              <span>
+                CRIMSON VEIL
+              </span>
+
+              <span id="previewBottomRole">
+                MID
+              </span>
+
+            </div>
+
+          </article>
+
+
+          <!-- =========================
+               STATS
+          ========================== -->
+
+          <div class="profile-stats">
+
+            <div class="profile-stat">
+
+              <span>
+                PUNTOS
+              </span>
+
+              <strong>
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="profile-stat">
+
+              <span>
+                VICTORIAS
+              </span>
+
+              <strong>
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="profile-stat">
+
+              <span>
+                DERROTAS
+              </span>
+
+              <strong>
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <p class="stats-note">
+
+            <i class="fa-solid fa-lock"></i>
+
+            Las estadísticas se actualizarán
+            desde tus partidas.
+
+          </p>
+
+        </section>
+
+
+
+        <!-- =========================
+             EDITOR
+        ========================== -->
+
+        <section class="profile-editor">
+
+          <div class="editor-heading">
+
+            <p class="eyebrow">
+              CUSTOMIZE
+            </p>
+
+            <h2>
+              Hacelo
+              <em>tuyo.</em>
+            </h2>
+
+          </div>
+
+
+          <form id="profileForm">
+
+
+            <!-- NICKNAME -->
+
+            <div class="profile-field">
+
+              <label for="nickname">
+                Nickname
+              </label>
+
+              <input
+                id="nickname"
+                type="text"
+                maxlength="25"
+                value="QueenStranger"
+              >
+
+              <small>
+                Este será el nombre que verá el team.
+              </small>
+
+            </div>
+
+
+
+            <!-- ROLE -->
+
+            <div class="profile-field">
+
+              <label for="role">
+                Rol
+              </label>
+
+              <select id="role">
+
+                <option value="top">
+                  Top
+                </option>
+
+                <option value="jungle">
+                  Jungle
+                </option>
+
+                <option
+                  value="mid"
+                  selected
+                >
+                  Mid
+                </option>
+
+                <option value="adc">
+                  ADC
+                </option>
+
+                <option value="support">
+                  Support
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- FRASE -->
+
+            <div class="profile-field">
+
+              <div class="field-label-row">
+
+                <label for="quote">
+                  Frase
+                </label>
+
+                <span id="quoteCounter">
+                  18 / 70
+                </span>
+
+              </div>
+
+
+              <textarea
+                id="quote"
+                maxlength="70"
+                rows="3"
+                placeholder="Escribí una frase..."
+              >Beneath the veil.</textarea>
+
+              <small>
+                Aparecerá debajo de tu nickname.
+              </small>
+
+            </div>
+
+
+
+            <!-- SYMBOL -->
+
+            <div class="profile-field">
+
+              <label>
+                Símbolo
+              </label>
+
+
+              <div
+                id="symbolPicker"
+                class="symbol-picker"
+              >
+
+                <button
+                  type="button"
+                  class="symbol-option"
+                  data-symbol="✦"
+                >
+                  ✦
+                </button>
+
+
+                <button
+                  type="button"
+                  class="symbol-option active"
+                  data-symbol="✧"
+                >
+                  ✧
+                </button>
+
+
+                <button
+                  type="button"
+                  class="symbol-option"
+                  data-symbol="☾"
+                >
+                  ☾
+                </button>
+
+
+                <button
+                  type="button"
+                  class="symbol-option"
+                  data-symbol="♡"
+                >
+                  ♡
+                </button>
+
+
+                <button
+                  type="button"
+                  class="symbol-option"
+                  data-symbol="❀"
+                >
+                  ❀
+                </button>
+
+
+                <button
+                  type="button"
+                  class="symbol-option"
+                  data-symbol="♛"
+                >
+                  ♛
+                </button>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- COLOR -->
+
+            <div class="profile-field">
+
+              <label>
+                Color de acento
+              </label>
+
+
+              <div
+                id="colorPicker"
+                class="color-picker"
+              >
+
+                <button
+                  type="button"
+                  class="color-option"
+                  data-color="#df526f"
+                  aria-label="Crimson"
+                ></button>
+
+
+                <button
+                  type="button"
+                  class="color-option"
+                  data-color="#c34462"
+                  aria-label="Wine"
+                ></button>
+
+
+                <button
+                  type="button"
+                  class="color-option active"
+                  data-color="#f68aa1"
+                  aria-label="Rose"
+                ></button>
+
+
+                <button
+                  type="button"
+                  class="color-option"
+                  data-color="#ed5878"
+                  aria-label="Pink"
+                ></button>
+
+
+                <button
+                  type="button"
+                  class="color-option"
+                  data-color="#ffa0b4"
+                  aria-label="Light pink"
+                ></button>
+
+
+                <button
+                  type="button"
+                  class="color-option"
+                  data-color="#b98cff"
+                  aria-label="Violet"
+                ></button>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- ACTIONS -->
+
+            <div class="profile-actions">
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+              >
+
+                <i class="fa-solid fa-check"></i>
+
+                Guardar cambios
+
+              </button>
+
+
+              <button
+                id="resetProfile"
+                type="button"
+                class="btn btn-ghost"
+              >
+
+                Restablecer
+
+              </button>
+
+            </div>
+
+
+            <div
+              id="saveMessage"
+              class="save-message"
+            >
+
+              <i class="fa-solid fa-check"></i>
+
+              Perfil guardado
+
+            </div>
+
+          </form>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script src="js/perfil-visual.js"></script>
+
+</body>
+
+</html>

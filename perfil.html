@@ -11,8 +11,20 @@
     content="width=device-width, initial-scale=1"
   >
 
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/perfil.css">
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/navbar.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/perfil.css"
+  >
 
   <link
     rel="stylesheet"
@@ -23,13 +35,19 @@
 
 <body class="profile-page">
 
-  <!-- =========================
+  <!-- =====================================
        NAV
-  ========================== -->
+  ====================================== -->
 
-  <nav id="main-nav" class="site-nav">
+  <nav
+    id="main-nav"
+    class="site-nav"
+  >
 
-    <a href="index.html" class="brand">
+    <a
+      href="index.html"
+      class="brand"
+    >
 
       <div class="nav-logo-wrap">
 
@@ -40,6 +58,7 @@
         >
 
       </div>
+
 
       <div class="brand-copy">
 
@@ -69,6 +88,17 @@
       </a>
 
 
+      <a href="index.html#roster">
+
+        <i class="fa-solid fa-users"></i>
+
+        <span>
+          Team
+        </span>
+
+      </a>
+
+
       <a href="puntos.html">
 
         <i class="fa-solid fa-star"></i>
@@ -80,33 +110,110 @@
       </a>
 
 
-      <a
-        href="perfil.html"
-        class="active"
-      >
+      <!-- USUARIO -->
 
-        <i class="fa-solid fa-user"></i>
+      <div class="user-area">
 
-        <span>
-          Perfil
-        </span>
+        <a
+          id="loginLink"
+          href="login.html"
+          class="login-link"
+        >
 
-      </a>
+          <i class="fa-solid fa-user"></i>
+
+          <span>
+            Ingresar
+          </span>
+
+        </a>
+
+
+        <div
+          id="loggedUser"
+          class="logged-user hidden"
+        >
+
+          <button
+            id="userMenuButton"
+            class="user-menu-button"
+            type="button"
+          >
+
+            <i class="fa-solid fa-user"></i>
+
+            <span id="navNickname">
+              Player
+            </span>
+
+            <i
+              class="fa-solid fa-chevron-down user-chevron"
+            ></i>
+
+          </button>
+
+
+          <div
+            id="userDropdown"
+            class="user-dropdown"
+          >
+
+            <a href="perfil.html">
+
+              <i class="fa-regular fa-user"></i>
+
+              <span>
+                Mi perfil
+              </span>
+
+            </a>
+
+
+            <a href="puntos.html">
+
+              <i class="fa-regular fa-star"></i>
+
+              <span>
+                Mis puntos
+              </span>
+
+            </a>
+
+
+            <button
+              id="logoutButton"
+              type="button"
+            >
+
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+              <span>
+                Cerrar sesión
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 
   </nav>
 
 
-  <!-- =========================
+  <!-- =====================================
        MAIN
-  ========================== -->
+  ====================================== -->
 
   <main class="profile-main">
 
     <div class="profile-stars"></div>
 
     <div class="profile-glow"></div>
+
 
     <span class="profile-decoration deco-profile-one">
       ✦
@@ -123,10 +230,7 @@
 
     <div class="profile-container">
 
-
-      <!-- =========================
-           HEADER
-      ========================== -->
+      <!-- HEADER -->
 
       <header class="profile-heading">
 
@@ -157,16 +261,34 @@
       </div>
 
 
-      <!-- =========================
-           LAYOUT
-      ========================== -->
+      <!-- LOADING -->
 
-      <div class="profile-layout">
+      <div
+        id="profileLoading"
+        class="profile-loading"
+      >
+
+        <span class="loading-symbol">
+          ✦
+        </span>
+
+        <p>
+          Cargando tu perfil...
+        </p>
+
+      </div>
 
 
-        <!-- =========================
-             LEFT
-        ========================== -->
+      <!-- PROFILE CONTENT -->
+
+      <div
+        id="profileContent"
+        class="profile-layout profile-content-hidden"
+      >
+
+        <!-- =================================
+             PREVIEW
+        ================================== -->
 
         <section class="profile-preview">
 
@@ -175,8 +297,6 @@
           </p>
 
 
-          <!-- CARD -->
-
           <article
             id="profileCard"
             class="player-card profile-player-card"
@@ -184,7 +304,6 @@
           >
 
             <div class="corner corner-top"></div>
-
             <div class="corner corner-bottom"></div>
 
 
@@ -204,7 +323,7 @@
                 id="previewRole"
                 class="player-role"
               >
-                MID
+                PLAYER
               </span>
 
             </div>
@@ -216,12 +335,12 @@
                 id="previewSymbol"
                 class="player-decoration"
               >
-                ✧
+                ✦
               </span>
 
 
               <h3 id="previewNickname">
-                QueenStranger
+                Player
               </h3>
 
 
@@ -229,7 +348,7 @@
                 id="previewQuote"
                 class="player-quote"
               >
-                Beneath the veil.
+                Crimson Veil
               </p>
 
             </div>
@@ -242,7 +361,7 @@
               </span>
 
               <span id="previewBottomRole">
-                MID
+                PLAYER
               </span>
 
             </div>
@@ -250,9 +369,7 @@
           </article>
 
 
-          <!-- =========================
-               STATS
-          ========================== -->
+          <!-- STATS -->
 
           <div class="profile-stats">
 
@@ -262,7 +379,7 @@
                 PUNTOS
               </span>
 
-              <strong>
+              <strong id="profilePoints">
                 0
               </strong>
 
@@ -275,7 +392,7 @@
                 VICTORIAS
               </span>
 
-              <strong>
+              <strong id="profileWins">
                 0
               </strong>
 
@@ -288,7 +405,7 @@
                 DERROTAS
               </span>
 
-              <strong>
+              <strong id="profileLosses">
                 0
               </strong>
 
@@ -301,7 +418,7 @@
 
             <i class="fa-solid fa-lock"></i>
 
-            Las estadísticas se actualizarán
+            Las estadísticas se actualizan
             desde tus partidas.
 
           </p>
@@ -309,10 +426,9 @@
         </section>
 
 
-
-        <!-- =========================
+        <!-- =================================
              EDITOR
-        ========================== -->
+        ================================== -->
 
         <section class="profile-editor">
 
@@ -332,7 +448,6 @@
 
           <form id="profileForm">
 
-
             <!-- NICKNAME -->
 
             <div class="profile-field">
@@ -345,7 +460,7 @@
                 id="nickname"
                 type="text"
                 maxlength="25"
-                value="QueenStranger"
+                required
               >
 
               <small>
@@ -353,7 +468,6 @@
               </small>
 
             </div>
-
 
 
             <!-- ROLE -->
@@ -364,35 +478,23 @@
                 Rol
               </label>
 
-              <select id="role">
+              <div class="locked-field">
 
-                <option value="top">
-                  Top
-                </option>
-
-                <option value="jungle">
-                  Jungle
-                </option>
-
-                <option
-                  value="mid"
-                  selected
+                <input
+                  id="role"
+                  type="text"
+                  disabled
                 >
-                  Mid
-                </option>
 
-                <option value="adc">
-                  ADC
-                </option>
+                <i class="fa-solid fa-lock"></i>
 
-                <option value="support">
-                  Support
-                </option>
+              </div>
 
-              </select>
+              <small>
+                El rol está asociado a tu cuenta y no se puede cambiar desde el perfil.
+              </small>
 
             </div>
-
 
 
             <!-- FRASE -->
@@ -406,7 +508,7 @@
                 </label>
 
                 <span id="quoteCounter">
-                  18 / 70
+                  0 / 70
                 </span>
 
               </div>
@@ -417,14 +519,13 @@
                 maxlength="70"
                 rows="3"
                 placeholder="Escribí una frase..."
-              >Beneath the veil.</textarea>
+              ></textarea>
 
               <small>
                 Aparecerá debajo de tu nickname.
               </small>
 
             </div>
-
 
 
             <!-- SYMBOL -->
@@ -452,7 +553,7 @@
 
                 <button
                   type="button"
-                  class="symbol-option active"
+                  class="symbol-option"
                   data-symbol="✧"
                 >
                   ✧
@@ -499,7 +600,6 @@
             </div>
 
 
-
             <!-- COLOR -->
 
             <div class="profile-field">
@@ -532,7 +632,7 @@
 
                 <button
                   type="button"
-                  class="color-option active"
+                  class="color-option"
                   data-color="#f68aa1"
                   aria-label="Rose"
                 ></button>
@@ -566,12 +666,12 @@
             </div>
 
 
-
             <!-- ACTIONS -->
 
             <div class="profile-actions">
 
               <button
+                id="saveProfileButton"
                 type="submit"
                 class="btn btn-primary"
               >
@@ -584,12 +684,12 @@
 
 
               <button
-                id="resetProfile"
+                id="discardChanges"
                 type="button"
                 class="btn btn-ghost"
               >
 
-                Restablecer
+                Descartar cambios
 
               </button>
 
@@ -607,6 +707,12 @@
 
             </div>
 
+
+            <div
+              id="profileError"
+              class="profile-error"
+            ></div>
+
           </form>
 
         </section>
@@ -618,7 +724,18 @@
   </main>
 
 
-  <script src="js/perfil-visual.js"></script>
+  <!-- NAVBAR -->
+  <script
+    type="module"
+    src="js/navbar.js"
+  ></script>
+
+
+  <!-- PERFIL -->
+  <script
+    type="module"
+    src="js/perfil.js"
+  ></script>
 
 </body>
 

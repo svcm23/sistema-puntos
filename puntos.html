@@ -1,50 +1,721 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
   <meta charset="UTF-8">
-  <title>Puntos — Sistema Esports</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/puntos.css">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <title>Puntos — Crimson Veil</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <!-- GENERAL -->
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  >
+
+  <!-- NAVBAR -->
+  <link
+    rel="stylesheet"
+    href="css/navbar.css"
+  >
+
+  <!-- PUNTOS -->
+  <link
+    rel="stylesheet"
+    href="css/puntos.css"
+  >
+
+  <!-- ICONOS -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <!-- CONFETTI -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
+  ></script>
+
 </head>
-<body>
-  <!-- NAV -->
-  <nav>
-    <img src="img/ab6761610000e5ebe80d1ffb81aa6503ad41c574.png" alt="Logo L">
+
+
+<body class="points-page">
+
+
+  <!-- ==========================================
+       NAVBAR
+  =========================================== -->
+
+  <nav
+    id="main-nav"
+    class="site-nav"
+  >
+
+    <a
+      href="index.html"
+      class="brand"
+    >
+
+      <div class="nav-logo-wrap">
+
+        <img
+          src="img/crimson-veil-logo.jpeg"
+          alt="Crimson Veil"
+          class="nav-logo"
+        >
+
+      </div>
+
+
+      <div class="brand-copy">
+
+        <strong>
+          Crimson Veil
+        </strong>
+
+        <small>
+          Team Hub
+        </small>
+
+      </div>
+
+    </a>
+
+
     <div class="menu">
-      <a href="index.html"><i class="fa fa-home"></i> Inicio</a>
-      <a href="#"><i class="fa fa-trophy"></i> Puntos</a>
-      <!-- <a href="estadisticas.html"><i class="fa fa-chart-bar"></i> Estadísticas</a>-->
+
+      <a href="index.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>
+          Inicio
+        </span>
+
+      </a>
+
+
+      <a href="index.html#roster">
+
+        <i class="fa-solid fa-users"></i>
+
+        <span>
+          Team
+        </span>
+
+      </a>
+
+
+      <a
+        href="puntos.html"
+        class="active"
+      >
+
+        <i class="fa-solid fa-star"></i>
+
+        <span>
+          Ranking
+        </span>
+
+      </a>
+
+
+      <!-- USUARIO -->
+
+      <div class="user-area">
+
+        <a
+          id="loginLink"
+          href="login.html"
+          class="login-link"
+        >
+
+          <i class="fa-solid fa-user"></i>
+
+          <span>
+            Ingresar
+          </span>
+
+        </a>
+
+
+        <div
+          id="loggedUser"
+          class="logged-user hidden"
+        >
+
+          <button
+            id="userMenuButton"
+            class="user-menu-button"
+            type="button"
+          >
+
+            <i class="fa-solid fa-user"></i>
+
+            <span id="navNickname">
+              Player
+            </span>
+
+            <i
+              class="fa-solid fa-chevron-down user-chevron"
+            ></i>
+
+          </button>
+
+
+          <div
+            id="userDropdown"
+            class="user-dropdown"
+          >
+
+            <a href="perfil.html">
+
+              <i class="fa-regular fa-user"></i>
+
+              <span>
+                Mi perfil
+              </span>
+
+            </a>
+
+
+            <a href="puntos.html">
+
+              <i class="fa-regular fa-star"></i>
+
+              <span>
+                Mis puntos
+              </span>
+
+            </a>
+
+
+            <button
+              id="logoutButton"
+              type="button"
+            >
+
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+              <span>
+                Cerrar sesión
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   </nav>
 
-  <div class="wrap">
-    <section id="cardEquipo" class="card"></section>
-    <section id="cardJugadores" class="card" style="display:none;"></section>
-    <section id="cardPartidas" class="card" style="display:none;"></section>
-    <section id="cardResumen" class="grid-3" style="display:none;"></section>
-    <section id="cardRecientes" class="card" style="display:none;"></section>
-    <section id="cardToggleRanking" class="card" style="display:none;"></section>
-    <section id="cardRanking" class="card" style="display:none;"></section>
-  </div>
 
-  <footer>© 2025 Sistema de Gestión Esports</footer>
-  
-  <!-- 🔑 IMPORTANTE -->
-  <script type="module" src="js/puntos.js"></script>
 
-  <div id="modalEquipo" class="modal" style="display:none;">
-    <div class="modal-content card">
-      <h3>Crear nuevo equipo</h3>
-      <input type="text" id="nuevoEquipoInput" placeholder="Nombre del equipo">
-      <div class="row">
-        <button class="btn btn-primary" onclick="confirmarNuevoEquipo()">Aceptar</button>
-        <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+  <!-- ==========================================
+       MAIN
+  =========================================== -->
+
+  <main class="points-main">
+
+
+    <!-- FONDO -->
+
+    <div class="points-stars"></div>
+
+    <div class="points-glow points-glow-left"></div>
+
+    <div class="points-glow points-glow-right"></div>
+
+
+    <span class="points-decoration points-deco-one">
+      ✦
+    </span>
+
+    <span class="points-decoration points-deco-two">
+      ☾
+    </span>
+
+    <span class="points-decoration points-deco-three">
+      ❀
+    </span>
+
+
+
+    <div class="points-container">
+
+
+      <!-- =====================================
+           HEADER
+      ====================================== -->
+
+      <header class="points-heading">
+
+        <p class="eyebrow">
+          THE VEIL
+        </p>
+
+        <h1>
+          Chase the
+          <em>stars.</em>
+        </h1>
+
+        <p>
+          Cada partida cuenta. Seguí tu progreso
+          y descubrí quién lidera el Veil.
+        </p>
+
+      </header>
+
+
+      <div class="points-divider">
+
+        <span></span>
+
+        <i class="fa-solid fa-moon"></i>
+
+        <span></span>
+
       </div>
-    </div>
-  </div>
-</body>
-</html>
 
+
+
+      <!-- =====================================
+           NO LOGUEADA
+      ====================================== -->
+
+      <section
+        id="guestPanel"
+        class="guest-panel"
+      >
+
+        <span class="guest-symbol">
+          ✦
+        </span>
+
+        <p class="eyebrow">
+          PLAYER ACCESS
+        </p>
+
+        <h2>
+          ¿Querés registrar
+          <em>tu partida?</em>
+        </h2>
+
+        <p>
+          Iniciá sesión con tu cuenta de Crimson Veil.
+          El ranking puede verse sin iniciar sesión.
+        </p>
+
+        <a
+          href="login.html"
+          class="btn btn-primary"
+        >
+
+          <i class="fa-solid fa-user"></i>
+
+          Ingresar al Veil
+
+        </a>
+
+      </section>
+
+
+
+      <!-- =====================================
+           PLAYER AREA
+      ====================================== -->
+
+      <section
+        id="playerArea"
+        class="player-area hidden"
+      >
+
+
+        <!-- =================================
+             PLAYER SUMMARY
+        ================================== -->
+
+        <div class="player-progress">
+
+
+          <div class="progress-card">
+
+
+            <div class="progress-top">
+
+              <div>
+
+                <p class="eyebrow">
+                  YOUR PROGRESS
+                </p>
+
+                <h2 id="pointsNickname">
+                  Player
+                </h2>
+
+              </div>
+
+
+              <span
+                id="pointsRole"
+                class="progress-role"
+              >
+                PLAYER
+              </span>
+
+            </div>
+
+
+
+            <!-- STARS -->
+
+            <div class="star-progress">
+
+              <div
+                id="starDisplay"
+                class="star-display"
+              ></div>
+
+
+              <div class="points-total">
+
+                <strong id="pointsTotal">
+                  0
+                </strong>
+
+                <span>
+                  PUNTOS
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- STATS -->
+
+            <div class="points-stats">
+
+              <div class="points-stat">
+
+                <span>
+                  VICTORIAS
+                </span>
+
+                <strong id="winsTotal">
+                  0
+                </strong>
+
+              </div>
+
+
+              <div class="points-stat">
+
+                <span>
+                  DERROTAS
+                </span>
+
+                <strong id="lossesTotal">
+                  0
+                </strong>
+
+              </div>
+
+
+              <div class="points-stat">
+
+                <span>
+                  PARTIDAS
+                </span>
+
+                <strong id="matchesTotal">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================
+               REGISTER MATCH
+          ================================== -->
+
+          <div class="match-register-card">
+
+            <div class="register-heading">
+
+              <p class="eyebrow">
+                NEW MATCH
+              </p>
+
+              <h3>
+                ¿Cómo salió
+                <em>la partida?</em>
+              </h3>
+
+              <p>
+                Solo podés registrar resultados
+                para tu propia cuenta.
+              </p>
+
+            </div>
+
+
+            <div class="match-actions">
+
+
+              <!-- VICTORIA -->
+
+              <button
+                id="winButton"
+                type="button"
+                class="result-button result-win"
+              >
+
+                <span class="result-icon">
+
+                  <i class="fa-solid fa-crown"></i>
+
+                </span>
+
+
+                <span class="result-copy">
+
+                  <strong>
+                    Victoria
+                  </strong>
+
+                  <small>
+                    +3 puntos
+                  </small>
+
+                </span>
+
+              </button>
+
+
+
+              <!-- DERROTA -->
+
+              <button
+                id="lossButton"
+                type="button"
+                class="result-button result-loss"
+              >
+
+                <span class="result-icon">
+
+                  <i class="fa-solid fa-moon"></i>
+
+                </span>
+
+
+                <span class="result-copy">
+
+                  <strong>
+                    Derrota
+                  </strong>
+
+                  <small>
+                    +1 punto
+                  </small>
+
+                </span>
+
+              </button>
+
+            </div>
+
+
+            <p class="register-note">
+
+              <i class="fa-solid fa-lock"></i>
+
+              La partida se registra directamente
+              en tu usuario.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- =================================
+             RECENT MATCHES
+        ================================== -->
+
+        <section class="recent-section">
+
+          <div class="subsection-heading">
+
+            <div>
+
+              <p class="eyebrow">
+                MATCH HISTORY
+              </p>
+
+              <h2>
+                Tus últimas
+                <em>partidas.</em>
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="recentMatches"
+            class="recent-matches"
+          >
+
+            <div class="points-loading">
+
+              <span>
+                ✦
+              </span>
+
+              <p>
+                Cargando partidas...
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </section>
+
+
+
+      <!-- =====================================
+           TEAM RANKING
+      ====================================== -->
+
+      <section class="ranking-section">
+
+
+        <div class="subsection-heading ranking-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              CRIMSON VEIL
+            </p>
+
+            <h2>
+              Veil
+              <em>ranking.</em>
+            </h2>
+
+          </div>
+
+
+          <span class="ranking-symbol">
+            ♛
+          </span>
+
+        </div>
+
+
+        <div
+          id="rankingList"
+          class="ranking-list"
+        >
+
+          <div class="points-loading">
+
+            <span>
+              ✦
+            </span>
+
+            <p>
+              Ordenando las estrellas...
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ==========================================
+       MOTIVATIONAL POPUP
+  =========================================== -->
+
+  <div
+    id="resultPopup"
+    class="result-popup"
+    aria-live="polite"
+  ></div>
+
+
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+
+  <footer>
+
+    <div class="footer-symbol">
+      ✦
+    </div>
+
+    <div class="footer-name">
+      CRIMSON VEIL
+    </div>
+
+    <p>
+      League of Legends · LAS
+    </p>
+
+    <span class="footer-moon">
+      ☾
+    </span>
+
+  </footer>
+
+
+
+  <!-- ==========================================
+       JS
+  =========================================== -->
+
+  <script
+    type="module"
+    src="js/navbar.js"
+  ></script>
+
+
+  <script
+    type="module"
+    src="js/puntos.js"
+  ></script>
+
+
+</body>
+
+</html>

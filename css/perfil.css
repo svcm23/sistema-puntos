@@ -1,915 +1,121 @@
 /* ==================================================
-   PROFILE
+   FIREBASE PROFILE STATES
 ================================================== */
 
-.profile-page {
-  min-height: 100vh;
+.profile-loading {
+  min-height: 360px;
 
-  background:
-    #050405;
-}
-
-
-.profile-main {
-  min-height: 100vh;
-
-  position: relative;
-
-  padding:
-    130px
-    20px
-    100px;
-
-  overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at 20% 35%,
-      rgba(145, 16, 45, .10),
-      transparent 27%
-    ),
-
-    radial-gradient(
-      circle at 80% 60%,
-      rgba(239, 71, 106, .045),
-      transparent 30%
-    ),
-
-    #050405;
-}
-
-
-.profile-stars {
-  position: absolute;
-
-  inset: 0;
-
-  opacity: .25;
-
-  pointer-events: none;
-
-  background-image:
-    radial-gradient(
-      rgba(255,160,185,.45) .7px,
-      transparent .8px
-    );
-
-  background-size:
-    65px
-    65px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent,
-      black 12%,
-      black 80%,
-      transparent
-    );
-}
-
-
-.profile-glow {
-  width: 550px;
-  height: 550px;
-
-  position: absolute;
-
-  left: 50%;
-  top: 35%;
-
-  transform:
-    translate(-50%, -50%);
-
-  border-radius: 50%;
-
-  background:
-    rgba(160, 15, 48, .05);
-
-  filter:
-    blur(110px);
-
-  pointer-events: none;
-}
-
-
-.profile-decoration {
-  position: absolute;
-
-  color:
-    rgba(239,71,106,.12);
-
-  pointer-events: none;
-}
-
-
-.deco-profile-one {
-  top: 25%;
-  left: 7%;
-
-  font-size: 30px;
-}
-
-
-.deco-profile-two {
-  bottom: 18%;
-  right: 8%;
-
-  font-size: 22px;
-}
-
-
-.deco-profile-three {
-  top: 17%;
-  right: 10%;
-
-  color:
-    rgba(239,71,106,.045);
-
-  font-size: 100px;
-}
-
-
-/* ==================================================
-   CONTAINER
-================================================== */
-
-.profile-container {
-  width:
-    min(
-      1100px,
-      100%
-    );
-
-  position: relative;
-
-  z-index: 2;
-
-  margin:
-    auto;
-}
-
-
-/* ==================================================
-   HEADING
-================================================== */
-
-.profile-heading {
-  max-width: 700px;
-
-  margin:
-    0
-    auto;
-
-  text-align: center;
-}
-
-
-.profile-heading h1 {
-  margin:
-    0;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  color:
-    var(--white);
-
-  font-size:
-    clamp(
-      48px,
-      6vw,
-      76px
-    );
-
-  font-weight:
-    400;
-
-  line-height:
-    .95;
-
-  letter-spacing:
-    -.045em;
-}
-
-
-.profile-heading h1 em {
-  color:
-    var(--rose-light);
-
-  font-weight:
-    400;
-}
-
-
-.profile-heading > p:last-child {
-  margin:
-    20px
-    0
-    0;
-
-  color:
-    var(--muted);
-
-  font-size:
-    12px;
-}
-
-
-/* DIVIDER */
-
-.profile-divider {
   display: flex;
+  flex-direction: column;
 
   align-items: center;
+  justify-content: center;
 
   gap: 15px;
 
-  margin:
-    50px
-    0;
-
   color:
-    var(--crimson-light);
-}
-
-
-.profile-divider span {
-  height: 1px;
-
-  flex: 1;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(239,71,106,.2)
-    );
-}
-
-
-.profile-divider span:last-child {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(239,71,106,.2),
-      transparent
-    );
-}
-
-
-.profile-divider i {
-  font-size: 9px;
-}
-
-
-/* ==================================================
-   LAYOUT
-================================================== */
-
-.profile-layout {
-  display: grid;
-
-  grid-template-columns:
-    .8fr
-    1.2fr;
-
-  gap: 55px;
-
-  align-items: start;
-}
-
-
-/* ==================================================
-   PREVIEW
-================================================== */
-
-.profile-preview {
-  position: sticky;
-
-  top: 110px;
-}
-
-
-.preview-title {
-  margin:
-    0
-    0
-    12px;
-
-  color:
-    #765b64;
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: .22em;
-}
-
-
-/* CARD */
-
-.profile-player-card {
-  --player-accent:
-    #f68aa1;
-
-  min-height: 310px;
-
-  width: 100%;
-
-  box-shadow:
-    0 25px 70px
-    rgba(0,0,0,.28);
-}
-
-
-.profile-player-card .player-content {
-  margin-top: 70px;
-}
-
-
-.profile-player-card .player-content h3 {
-  font-size:
-    clamp(
-      31px,
-      4vw,
-      42px
-    );
-}
-
-
-/* ==================================================
-   STATS
-================================================== */
-
-.profile-stats {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  margin-top: 15px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.055);
-
-  background:
-    rgba(255,255,255,.015);
-}
-
-
-.profile-stat {
-  padding:
-    21px
-    10px;
+    #80616a;
 
   text-align: center;
-
-  border-right:
-    1px solid
-    rgba(255,255,255,.05);
 }
 
 
-.profile-stat:last-child {
-  border-right: 0;
-}
-
-
-.profile-stat span {
-  display: block;
-
-  margin-bottom: 6px;
-
-  color:
-    #684f57;
-
-  font-size: 7px;
-
-  font-weight: 700;
-
-  letter-spacing: .16em;
-}
-
-
-.profile-stat strong {
+.loading-symbol {
   color:
     var(--rose-light);
 
-  font-family:
-    Georgia,
-    serif;
+  font-size: 22px;
 
-  font-size: 25px;
-
-  font-weight: 400;
+  animation:
+    profileLoadingPulse
+    1.5s
+    ease-in-out
+    infinite;
 }
 
 
-.stats-note {
-  display: flex;
+@keyframes profileLoadingPulse {
 
-  align-items: center;
+  50% {
+    opacity: .35;
 
-  justify-content: center;
+    transform:
+      scale(.85);
+  }
 
-  gap: 7px;
-
-  margin:
-    12px
-    0
-    0;
-
-  color:
-    #59434b;
-
-  font-size: 8px;
-
-  line-height: 1.5;
 }
 
 
-/* ==================================================
-   EDITOR
-================================================== */
-
-.profile-editor {
-  position: relative;
-
-  padding:
-    40px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.06);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(24,9,15,.5),
-      rgba(7,5,7,.9)
-    );
-}
-
-
-.profile-editor::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 55px;
-  height: 55px;
-
-  border-top:
-    1px solid
-    rgba(239,71,106,.45);
-
-  border-left:
-    1px solid
-    rgba(239,71,106,.45);
-}
-
-
-.editor-heading {
-  margin-bottom: 32px;
-}
-
-
-.editor-heading h2 {
+.profile-loading p {
   margin: 0;
 
-  color:
-    var(--white);
-
-  font-family:
-    Georgia,
-    serif;
-
-  font-size: 38px;
-
-  font-weight: 400;
-
-  letter-spacing: -.025em;
-}
-
-
-.editor-heading h2 em {
-  color:
-    var(--rose-light);
-
-  font-weight: 400;
-}
-
-
-/* ==================================================
-   FORM
-================================================== */
-
-#profileForm {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 25px;
-}
-
-
-.profile-field {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 8px;
-}
-
-
-.profile-field label {
-  color:
-    #ae9099;
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: .18em;
-
-  text-transform: uppercase;
-}
-
-
-.profile-field input,
-.profile-field select,
-.profile-field textarea {
-  width: 100%;
-
-  border:
-    1px solid
-    rgba(255,255,255,.075);
-
-  border-radius: 3px;
-
-  outline: none;
-
-  color:
-    var(--white);
-
-  background:
-    rgba(255,255,255,.02);
-
-  font-family:
-    inherit;
-
-  transition:
-    .2s ease;
-}
-
-
-.profile-field input,
-.profile-field select {
-  height: 48px;
-
-  padding:
-    0
-    14px;
-}
-
-
-.profile-field textarea {
-  min-height: 90px;
-
-  padding:
-    13px
-    14px;
-
-  resize: vertical;
-}
-
-
-.profile-field input:focus,
-.profile-field select:focus,
-.profile-field textarea:focus {
-  border-color:
-    rgba(239,71,106,.38);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(239,71,106,.045);
-}
-
-
-.profile-field select option {
-  color:
-    var(--white);
-
-  background:
-    #0d080b;
-}
-
-
-.profile-field small {
-  color:
-    #5e484f;
-
-  font-size: 8px;
-
-  line-height: 1.5;
-}
-
-
-.field-label-row {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-}
-
-
-#quoteCounter {
-  color:
-    #634b53;
-
-  font-size: 8px;
-}
-
-
-/* ==================================================
-   SYMBOLS
-================================================== */
-
-.symbol-picker {
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 9px;
-}
-
-
-.symbol-option {
-  width: 47px;
-  height: 47px;
-
-  display: grid;
-
-  place-items: center;
-
-  border:
-    1px solid
-    rgba(255,255,255,.07);
-
-  border-radius: 50%;
-
-  color:
-    #866872;
-
-  background:
-    rgba(255,255,255,.015);
-
-  cursor: pointer;
-
-  font-size: 17px;
-
-  transition: .2s ease;
-}
-
-
-.symbol-option:hover {
-  color:
-    var(--rose-light);
-
-  border-color:
-    rgba(239,71,106,.25);
-}
-
-
-.symbol-option.active {
-  color:
-    var(--rose-light);
-
-  border-color:
-    var(--rose);
-
-  background:
-    rgba(239,71,106,.08);
-
-  box-shadow:
-    0 0 20px
-    rgba(239,71,106,.08);
-}
-
-
-/* ==================================================
-   COLORS
-================================================== */
-
-.color-picker {
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 12px;
-}
-
-
-.color-option {
-  width: 30px;
-  height: 30px;
-
-  position: relative;
-
-  border:
-    3px solid #090607;
-
-  border-radius: 50%;
-
-  outline:
-    1px solid
-    rgba(255,255,255,.08);
-
-  background:
-    var(--color);
-
-  cursor: pointer;
-
-  transition: .2s ease;
-}
-
-
-.color-option:nth-child(1) {
-  --color: #df526f;
-}
-
-.color-option:nth-child(2) {
-  --color: #c34462;
-}
-
-.color-option:nth-child(3) {
-  --color: #f68aa1;
-}
-
-.color-option:nth-child(4) {
-  --color: #ed5878;
-}
-
-.color-option:nth-child(5) {
-  --color: #ffa0b4;
-}
-
-.color-option:nth-child(6) {
-  --color: #b98cff;
-}
-
-
-.color-option:hover {
-  transform:
-    scale(1.12);
-}
-
-
-.color-option.active {
-  outline:
-    1px solid
-    var(--color);
-
-  box-shadow:
-    0 0 15px
-    color-mix(
-      in srgb,
-      var(--color) 35%,
-      transparent
-    );
-}
-
-
-/* ==================================================
-   ACTIONS
-================================================== */
-
-.profile-actions {
-  display: flex;
-
-  gap: 10px;
-
-  margin-top: 5px;
-}
-
-
-.profile-actions .btn-primary {
-  flex: 1;
-
-  border-radius: 3px;
-}
-
-
-.profile-actions .btn-ghost {
-  border-radius: 3px;
-}
-
-
-.save-message {
-  display: none;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 7px;
-
-  color:
-    var(--rose-light);
-
-  font-size: 9px;
+  font-size: 10px;
 
   letter-spacing: .08em;
 }
 
 
-.save-message.visible {
-  display: flex;
+.profile-content-hidden {
+  display: none !important;
 }
 
 
 /* ==================================================
-   RESPONSIVE
+   LOCKED ROLE
 ================================================== */
 
-@media (max-width: 850px) {
-
-  .profile-layout {
-    grid-template-columns:
-      1fr;
-
-    gap: 40px;
-  }
-
-
-  .profile-preview {
-    position: static;
-
-    width:
-      min(
-        500px,
-        100%
-      );
-
-    margin:
-      auto;
-  }
-
+.locked-field {
+  position: relative;
 }
 
 
-@media (max-width: 550px) {
+.locked-field input {
+  padding-right: 45px;
 
-  .profile-main {
-    padding:
-      105px
-      13px
-      70px;
-  }
+  color:
+    #886d75;
 
+  cursor:
+    not-allowed;
 
-  .profile-heading h1 {
-    font-size: 50px;
-  }
+  opacity: .75;
+}
 
 
-  .profile-editor {
-    padding:
-      30px
-      22px;
-  }
+.locked-field i {
+  position: absolute;
+
+  top: 50%;
+  right: 15px;
+
+  transform:
+    translateY(-50%);
+
+  color:
+    #72515b;
+
+  font-size: 9px;
+}
 
 
-  .profile-stats {
-    grid-template-columns:
-      repeat(3,1fr);
-  }
+/* ==================================================
+   PROFILE ERROR
+================================================== */
+
+.profile-error {
+  display: none;
+
+  color:
+    #ff6982;
+
+  text-align: center;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
 
 
-  .profile-stat {
-    padding:
-      17px
-      5px;
-  }
-
-
-  .profile-actions {
-    flex-direction: column;
-  }
-
-
-  .symbol-option {
-    width: 43px;
-    height: 43px;
-  }
-
+.profile-error.visible {
+  display: block;
 }

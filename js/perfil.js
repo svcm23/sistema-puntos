@@ -1,6 +1,6 @@
 /* =====================================================
    CRIMSON VEIL
-   PLAYER PROFILE
+   POINTS SYSTEM
 ===================================================== */
 
 import {
@@ -15,9 +15,13 @@ import {
 
 
 import {
+  collection,
   doc,
-  getDoc,
-  updateDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+  runTransaction,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
@@ -27,141 +31,81 @@ import {
    ELEMENTS
 ===================================================== */
 
-const loading =
+const playerArea =
   document.getElementById(
-    "profileLoading"
+    "playerArea"
   );
 
 
-const profileContent =
+const pointsNickname =
   document.getElementById(
-    "profileContent"
+    "pointsNickname"
   );
 
 
-const form =
+const pointsRole =
   document.getElementById(
-    "profileForm"
+    "pointsRole"
   );
 
 
-const nicknameInput =
+const pointsTotal =
   document.getElementById(
-    "nickname"
+    "pointsTotal"
   );
 
 
-const roleInput =
+const winsTotal =
   document.getElementById(
-    "role"
+    "winsTotal"
   );
 
 
-const quoteInput =
+const lossesTotal =
   document.getElementById(
-    "quote"
+    "lossesTotal"
   );
 
 
-const quoteCounter =
+const matchesTotal =
   document.getElementById(
-    "quoteCounter"
+    "matchesTotal"
   );
 
 
-const profileCard =
+const starDisplay =
   document.getElementById(
-    "profileCard"
+    "starDisplay"
   );
 
 
-const previewNickname =
+const winButton =
   document.getElementById(
-    "previewNickname"
+    "winButton"
   );
 
 
-const previewRole =
+const lossButton =
   document.getElementById(
-    "previewRole"
+    "lossButton"
   );
 
 
-const previewBottomRole =
+const recentMatches =
   document.getElementById(
-    "previewBottomRole"
+    "recentMatches"
   );
 
 
-const previewRoleIcon =
+const rankingList =
   document.getElementById(
-    "previewRoleIcon"
+    "rankingList"
   );
 
 
-const previewSymbol =
+const resultPopup =
   document.getElementById(
-    "previewSymbol"
-  );
-
-
-const previewQuote =
-  document.getElementById(
-    "previewQuote"
-  );
-
-
-const profilePoints =
-  document.getElementById(
-    "profilePoints"
-  );
-
-
-const profileWins =
-  document.getElementById(
-    "profileWins"
-  );
-
-
-const profileLosses =
-  document.getElementById(
-    "profileLosses"
-  );
-
-
-const symbolButtons =
-  document.querySelectorAll(
-    ".symbol-option"
-  );
-
-
-const colorButtons =
-  document.querySelectorAll(
-    ".color-option"
-  );
-
-
-const discardButton =
-  document.getElementById(
-    "discardChanges"
-  );
-
-
-const saveButton =
-  document.getElementById(
-    "saveProfileButton"
-  );
-
-
-const saveMessage =
-  document.getElementById(
-    "saveMessage"
-  );
-
-
-const profileError =
-  document.getElementById(
-    "profileError"
+    "resultPopup"
   );
 
 
@@ -170,69 +114,67 @@ const profileError =
    STATE
 ===================================================== */
 
-let currentUser = null;
+let currentUser =
+  null;
 
-let originalProfile = null;
+
+let currentProfile =
+  null;
 
 
-let profile = {
+let stopProfileListener =
+  null;
 
-  nickname:
-    "",
 
-  role:
-    "player",
-
-  quote:
-    "",
-
-  symbol:
-    "✦",
-
-  color:
-    "#ef476a",
-
-  puntos:
-    0,
-
-  victorias:
-    0,
-
-  derrotas:
-    0
-
-};
+let stopMatchesListener =
+  null;
 
 
 
 /* =====================================================
-   ROLE ICONS
+   MESSAGES
 ===================================================== */
 
-const roleIcons = {
+const victoryMessages = [
 
-  top:
-    "fa-solid fa-shield-halved",
+  "¡Esa es la actitud! ✦",
 
-  jungle:
-    "fa-solid fa-compass",
+  "Victoria dulce. Seguí así ♛",
 
-  mid:
-    "fa-solid fa-wand-magic-sparkles",
+  "Una estrella más para el Veil ✧",
 
-  adc:
-    "fa-solid fa-crosshairs",
+  "GG. El esfuerzo siempre paga.",
 
-  support:
-    "fa-solid fa-hand-holding-heart",
+  "Dominaste la grieta ⚔",
 
-  staff:
-    "fa-solid fa-headset",
+  "Nada te detiene.",
 
-  coach:
-    "fa-solid fa-clipboard"
+  "The Veil rises again. ✦",
 
-};
+  "Otra victoria bajo el velo."
+
+];
+
+
+const defeatMessages = [
+
+  "Cada derrota también construye el camino.",
+
+  "Respirá. Aprendé. Volvé más fuerte. ☾",
+
+  "Hoy se pierde, mañana se remonta.",
+
+  "La próxima es tuya. ✦",
+
+  "Perder también suma experiencia.",
+
+  "Una partida no define tu progreso.",
+
+  "Beneath the Veil, we rise again.",
+
+  "Seguimos. Siempre."
+
+];
 
 
 
@@ -244,27 +186,53 @@ onAuthStateChanged(
 
   auth,
 
-  async user => {
+  user => {
 
-    /* ==========================
-       NOT LOGGED IN
-    ========================== */
+    currentUser =
+      user;
+
+
+    cleanUserListeners();
+
+
+    /* ==========================================
+       NO LOGUEADA
+    ========================================== */
 
     if (!user) {
 
-      window.location.href =
-        "login.html";
+      currentProfile =
+        null;
+
+
+      playerArea.classList.add(
+        "hidden"
+      );
+
 
       return;
 
     }
 
 
-    currentUser =
-      user;
+
+    /* ==========================================
+       LOGUEADA
+    ========================================== */
+
+    playerArea.classList.remove(
+      "hidden"
+    );
 
 
-    await loadProfile();
+    listenCurrentProfile(
+      user.uid
+    );
+
+
+    listenRecentMatches(
+      user.uid
+    );
 
   }
 
@@ -273,17 +241,322 @@ onAuthStateChanged(
 
 
 /* =====================================================
-   LOAD PROFILE
+   CURRENT PROFILE
 ===================================================== */
 
-async function loadProfile() {
+function listenCurrentProfile(
+  uid
+) {
+
+  const profileReference =
+    doc(
+      db,
+      "usuarios",
+      uid
+    );
+
+
+  stopProfileListener =
+    onSnapshot(
+
+      profileReference,
+
+      snapshot => {
+
+        if (
+          !snapshot.exists()
+        ) {
+
+          console.error(
+            "Perfil no encontrado."
+          );
+
+          return;
+
+        }
+
+
+        currentProfile =
+          snapshot.data();
+
+
+        renderCurrentProfile();
+
+      },
+
+      error => {
+
+        console.error(
+          "Error cargando perfil:",
+          error
+        );
+
+      }
+
+    );
+
+}
+
+
+
+/* =====================================================
+   RENDER CURRENT PLAYER
+===================================================== */
+
+function renderCurrentProfile() {
+
+  if (!currentProfile) {
+
+    return;
+
+  }
+
+
+  const nickname =
+    currentProfile.nickname ||
+    "Player";
+
+
+  const role =
+    normalizeRole(
+      currentProfile.rol
+    );
+
+
+  const points =
+    Number(
+      currentProfile.puntos ||
+      0
+    );
+
+
+  const wins =
+    Number(
+      currentProfile.victorias ||
+      0
+    );
+
+
+  const losses =
+    Number(
+      currentProfile.derrotas ||
+      0
+    );
+
+
+  const matches =
+    Number(
+      currentProfile.partidas ??
+      (
+        wins +
+        losses
+      )
+    );
+
+
+  pointsNickname.textContent =
+    nickname;
+
+
+  pointsRole.textContent =
+    formatRole(
+      role
+    );
+
+
+  pointsTotal.textContent =
+    points;
+
+
+  winsTotal.textContent =
+    wins;
+
+
+  lossesTotal.textContent =
+    losses;
+
+
+  matchesTotal.textContent =
+    matches;
+
+
+  renderStars(
+    points
+  );
+
+}
+
+
+
+/* =====================================================
+   STARS
+===================================================== */
+
+function renderStars(
+  points
+) {
+
+  const maximumVisible =
+    10;
+
+
+  let starCount =
+    points %
+    maximumVisible;
+
+
+  if (
+    starCount === 0 &&
+    points > 0
+  ) {
+
+    starCount =
+      maximumVisible;
+
+  }
+
+
+  let level =
+    "bronze";
+
+
+  if (
+    points >= 10 &&
+    points < 20
+  ) {
+
+    level =
+      "silver";
+
+  }
+
+
+  if (
+    points >= 20 &&
+    points < 30
+  ) {
+
+    level =
+      "gold";
+
+  }
+
+
+  if (
+    points >= 30
+  ) {
+
+    level =
+      "rainbow";
+
+  }
+
+
+  starDisplay.className =
+    `star-display ${level}`;
+
+
+  if (
+    starCount === 0
+  ) {
+
+    starDisplay.innerHTML = `
+
+      <span class="no-stars">
+
+        Tu primera estrella
+        está esperando. ✦
+
+      </span>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  starDisplay.innerHTML =
+    Array(
+      starCount
+    )
+      .fill(
+        `<span class="progress-star">★</span>`
+      )
+      .join("");
+
+}
+
+
+
+/* =====================================================
+   REGISTER MATCH BUTTONS
+===================================================== */
+
+winButton.addEventListener(
+
+  "click",
+
+  () => {
+
+    registerMatch(
+      "victoria"
+    );
+
+  }
+
+);
+
+
+lossButton.addEventListener(
+
+  "click",
+
+  () => {
+
+    registerMatch(
+      "derrota"
+    );
+
+  }
+
+);
+
+
+
+/* =====================================================
+   REGISTER MATCH
+===================================================== */
+
+async function registerMatch(
+  result
+) {
+
+  if (
+    !currentUser ||
+    !currentProfile
+  ) {
+
+    return;
+
+  }
+
+
+  const pointsEarned =
+    result === "victoria"
+      ? 3
+      : 1;
+
 
   try {
 
-    showLoading();
+    setRegisterDisabled(
+      true
+    );
 
 
-    const profileRef =
+    const profileReference =
       doc(
         db,
         "usuarios",
@@ -291,95 +564,195 @@ async function loadProfile() {
       );
 
 
-    const profileSnap =
-      await getDoc(
-        profileRef
+    const matchReference =
+      doc(
+        collection(
+          db,
+          "usuarios",
+          currentUser.uid,
+          "partidas"
+        )
       );
+
+
+    await runTransaction(
+
+      db,
+
+      async transaction => {
+
+        const profileSnapshot =
+          await transaction.get(
+            profileReference
+          );
+
+
+        if (
+          !profileSnapshot.exists()
+        ) {
+
+          throw new Error(
+            "Perfil inexistente."
+          );
+
+        }
+
+
+        const profileData =
+          profileSnapshot.data();
+
+
+        const previousPoints =
+          Number(
+            profileData.puntos ||
+            0
+          );
+
+
+        const previousWins =
+          Number(
+            profileData.victorias ||
+            0
+          );
+
+
+        const previousLosses =
+          Number(
+            profileData.derrotas ||
+            0
+          );
+
+
+        const previousMatches =
+          Number(
+            profileData.partidas ||
+            0
+          );
+
+
+        const newPoints =
+          previousPoints +
+          pointsEarned;
+
+
+        const newWins =
+          previousWins +
+          (
+            result === "victoria"
+              ? 1
+              : 0
+          );
+
+
+        const newLosses =
+          previousLosses +
+          (
+            result === "derrota"
+              ? 1
+              : 0
+          );
+
+
+        const newMatches =
+          previousMatches +
+          1;
+
+
+
+        /* ==========================================
+           UPDATE PROFILE
+        ========================================== */
+
+        transaction.update(
+
+          profileReference,
+
+          {
+
+            puntos:
+              newPoints,
+
+            victorias:
+              newWins,
+
+            derrotas:
+              newLosses,
+
+            partidas:
+              newMatches,
+
+            actualizadoPuntos:
+              serverTimestamp()
+
+          }
+
+        );
+
+
+
+        /* ==========================================
+           MATCH HISTORY
+        ========================================== */
+
+        transaction.set(
+
+          matchReference,
+
+          {
+
+            usuarioId:
+              currentUser.uid,
+
+            resultado:
+              result,
+
+            puntos:
+              pointsEarned,
+
+            creado:
+              serverTimestamp()
+
+          }
+
+        );
+
+      }
+
+    );
+
+
+    showResultMessage(
+      result
+    );
 
 
     if (
-      !profileSnap.exists()
+      result ===
+      "victoria"
     ) {
 
-      showProfileError(
-        "No encontramos tu perfil en Crimson Veil."
-      );
+      launchConfetti();
 
-      return;
+    } else {
+
+      shakePage();
 
     }
-
-
-    const data =
-      profileSnap.data();
-
-
-    profile = {
-
-      nickname:
-        data.nickname ||
-        "Player",
-
-      role:
-        data.rol ||
-        "player",
-
-      quote:
-        data.frase ||
-        "",
-
-      symbol:
-        data.simbolo ||
-        getDefaultSymbol(
-          data.rol
-        ),
-
-      color:
-        data.accentColor ||
-        getDefaultColor(
-          data.rol
-        ),
-
-      puntos:
-        Number(
-          data.puntos || 0
-        ),
-
-      victorias:
-        Number(
-          data.victorias || 0
-        ),
-
-      derrotas:
-        Number(
-          data.derrotas || 0
-        )
-
-    };
-
-
-    originalProfile =
-      structuredClone(
-        profile
-      );
-
-
-    syncForm();
-
-    renderProfile();
-
-    showProfile();
 
   } catch(error) {
 
     console.error(
-      "Error cargando perfil:",
+      "Error registrando partida:",
       error
     );
 
 
-    showProfileError(
-      "No pudimos cargar tu perfil."
+    showErrorMessage();
+
+  } finally {
+
+    setRegisterDisabled(
+      false
     );
 
   }
@@ -389,580 +762,813 @@ async function loadProfile() {
 
 
 /* =====================================================
-   FORM
+   RECENT MATCHES
 ===================================================== */
 
-function syncForm() {
+function listenRecentMatches(
+  uid
+) {
 
-  nicknameInput.value =
-    profile.nickname;
+  const matchesQuery =
+    query(
 
+      collection(
+        db,
+        "usuarios",
+        uid,
+        "partidas"
+      ),
 
-  roleInput.value =
-    formatRole(
-      profile.role
+      orderBy(
+        "creado",
+        "desc"
+      ),
+
+      limit(
+        5
+      )
+
     );
 
 
-  quoteInput.value =
-    profile.quote;
+  stopMatchesListener =
+    onSnapshot(
 
+      matchesQuery,
 
-  symbolButtons.forEach(
-    button => {
+      snapshot => {
 
-      button.classList.toggle(
+        const matches =
+          [];
 
-        "active",
 
-        button.dataset.symbol ===
-          profile.symbol
+        snapshot.forEach(
 
-      );
+          documentSnapshot => {
 
-    }
-  );
+            matches.push({
 
+              id:
+                documentSnapshot.id,
 
-  colorButtons.forEach(
-    button => {
+              ...documentSnapshot.data()
 
-      button.classList.toggle(
-
-        "active",
-
-        button.dataset.color ===
-          profile.color
-
-      );
-
-    }
-  );
-
-
-  updateCounter();
-
-}
-
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function renderProfile() {
-
-  const nickname =
-    profile.nickname.trim() ||
-    "Player";
-
-
-  const quote =
-    profile.quote.trim() ||
-    "Crimson Veil";
-
-
-  const role =
-    profile.role ||
-    "player";
-
-
-  previewNickname.textContent =
-    nickname;
-
-
-  previewRole.textContent =
-    formatRole(
-      role
-    );
-
-
-  previewBottomRole.textContent =
-    formatRole(
-      role
-    );
-
-
-  previewRoleIcon.className =
-    roleIcons[role] ||
-    "fa-solid fa-user";
-
-
-  previewSymbol.textContent =
-    profile.symbol;
-
-
-  previewQuote.textContent =
-    quote;
-
-
-  profileCard.dataset.role =
-    role;
-
-
-  profileCard.style.setProperty(
-    "--player-accent",
-    profile.color
-  );
-
-
-  profilePoints.textContent =
-    profile.puntos;
-
-
-  profileWins.textContent =
-    profile.victorias;
-
-
-  profileLosses.textContent =
-    profile.derrotas;
-
-
-  updateCounter();
-
-}
-
-
-
-/* =====================================================
-   LIVE PREVIEW
-===================================================== */
-
-nicknameInput.addEventListener(
-
-  "input",
-
-  () => {
-
-    profile.nickname =
-      nicknameInput.value;
-
-
-    renderProfile();
-
-  }
-
-);
-
-
-quoteInput.addEventListener(
-
-  "input",
-
-  () => {
-
-    profile.quote =
-      quoteInput.value;
-
-
-    renderProfile();
-
-  }
-
-);
-
-
-
-/* =====================================================
-   SYMBOL
-===================================================== */
-
-symbolButtons.forEach(
-
-  button => {
-
-    button.addEventListener(
-
-      "click",
-
-      () => {
-
-        profile.symbol =
-          button.dataset.symbol;
-
-
-        symbolButtons.forEach(
-          item => {
-
-            item.classList.remove(
-              "active"
-            );
+            });
 
           }
+
         );
 
 
-        button.classList.add(
-          "active"
+        renderRecentMatches(
+          matches
+        );
+
+      },
+
+      error => {
+
+        console.error(
+          "Error cargando partidas:",
+          error
         );
 
 
-        renderProfile();
+        recentMatches.innerHTML = `
+
+          <div class="points-empty">
+
+            <span>
+              ✧
+            </span>
+
+            <p>
+              No pudimos cargar tus partidas.
+            </p>
+
+          </div>
+
+        `;
 
       }
 
     );
 
-  }
-
-);
+}
 
 
 
 /* =====================================================
-   COLOR
+   RENDER RECENT MATCHES
 ===================================================== */
 
-colorButtons.forEach(
+function renderRecentMatches(
+  matches
+) {
 
-  button => {
-
-    button.addEventListener(
-
-      "click",
-
-      () => {
-
-        profile.color =
-          button.dataset.color;
+  recentMatches.innerHTML =
+    "";
 
 
-        colorButtons.forEach(
-          item => {
+  if (
+    matches.length === 0
+  ) {
 
-            item.classList.remove(
-              "active"
-            );
+    recentMatches.innerHTML = `
 
-          }
-        );
+      <div class="points-empty">
+
+        <span>
+          ☾
+        </span>
+
+        <p>
+          Todavía no registraste ninguna partida.
+        </p>
+
+      </div>
+
+    `;
 
 
-        button.classList.add(
-          "active"
-        );
-
-
-        renderProfile();
-
-      }
-
-    );
+    return;
 
   }
 
-);
+
+  matches.forEach(
+
+    match => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "recent-match";
+
+
+      const result =
+        match.resultado ===
+          "victoria"
+
+          ? "VICTORIA"
+          : "DERROTA";
+
+
+      row.innerHTML = `
+
+        <span
+          class="match-result ${escapeHTML(match.resultado)}"
+        >
+          ${result}
+        </span>
+
+
+        <span class="match-date">
+
+          ${formatDate(match.creado)}
+
+        </span>
+
+
+        <span class="match-earned">
+
+          +${Number(match.puntos || 0)}
+          pts
+
+        </span>
+
+      `;
+
+
+      recentMatches.appendChild(
+        row
+      );
+
+    }
+
+  );
+
+}
 
 
 
 /* =====================================================
-   SAVE
+   GLOBAL RANKING
 ===================================================== */
 
-form.addEventListener(
-
-  "submit",
-
-  async event => {
-
-    event.preventDefault();
+const usersReference =
+  collection(
+    db,
+    "usuarios"
+  );
 
 
-    if (!currentUser) {
+onSnapshot(
 
-      return;
+  usersReference,
 
-    }
+  snapshot => {
 
-
-    const nickname =
-      profile.nickname.trim();
-
-
-    if (!nickname) {
-
-      showFormError(
-        "El nickname no puede quedar vacío."
-      );
-
-      return;
-
-    }
+    const players =
+      [];
 
 
-    try {
+    snapshot.forEach(
 
-      setSaving(
-        true
-      );
+      documentSnapshot => {
 
-
-      clearFormError();
+        const data =
+          documentSnapshot.data();
 
 
-      const profileRef =
-        doc(
-          db,
-          "usuarios",
-          currentUser.uid
-        );
+        const role =
+          normalizeRole(
+            data.rol
+          );
 
 
-      /*
-        Solamente actualizamos campos
-        personalizables.
+        if (
+          !isPlayerRole(
+            role
+          )
+        ) {
 
-        NO tocamos:
-        - rol
-        - puntos
-        - victorias
-        - derrotas
-        - email
-      */
+          return;
 
-      await updateDoc(
-
-        profileRef,
-
-        {
-          nickname:
-            nickname,
-
-          frase:
-            profile.quote.trim(),
-
-          simbolo:
-            profile.symbol,
-
-          accentColor:
-            profile.color,
-
-          actualizado:
-            serverTimestamp()
         }
 
-      );
+
+        players.push({
+
+          id:
+            documentSnapshot.id,
+
+          nickname:
+            data.nickname ||
+            "Player",
+
+          role:
+            role,
+
+          symbol:
+            data.simbolo ||
+            "✦",
+
+          color:
+            data.accentColor ||
+            "#ef476a",
+
+          points:
+            Number(
+              data.puntos ||
+              0
+            ),
+
+          wins:
+            Number(
+              data.victorias ||
+              0
+            ),
+
+          losses:
+            Number(
+              data.derrotas ||
+              0
+            )
+
+        });
+
+      }
+
+    );
 
 
-      profile.nickname =
-        nickname;
+
+    /* ==========================================
+       SORT
+    ========================================== */
+
+    players.sort(
+
+      (
+        a,
+        b
+      ) => {
 
 
-      originalProfile =
-        structuredClone(
-          profile
+        /* MÁS PUNTOS */
+
+        if (
+          b.points !==
+          a.points
+        ) {
+
+          return (
+            b.points -
+            a.points
+          );
+
+        }
+
+
+        /* MÁS VICTORIAS */
+
+        if (
+          b.wins !==
+          a.wins
+        ) {
+
+          return (
+            b.wins -
+            a.wins
+          );
+
+        }
+
+
+        /* NICKNAME */
+
+        return (
+          a.nickname.localeCompare(
+            b.nickname,
+            "es",
+            {
+              sensitivity:
+                "base"
+            }
+          )
+        );
+
+      }
+
+    );
+
+
+    renderRanking(
+      players
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Error cargando ranking:",
+      error
+    );
+
+
+    rankingList.innerHTML = `
+
+      <div class="points-empty">
+
+        <span>
+          ✧
+        </span>
+
+        <p>
+          No pudimos cargar el ranking.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+);
+
+
+
+/* =====================================================
+   RENDER RANKING
+===================================================== */
+
+function renderRanking(
+  players
+) {
+
+  rankingList.innerHTML =
+    "";
+
+
+  if (
+    players.length === 0
+  ) {
+
+    rankingList.innerHTML = `
+
+      <div class="points-empty">
+
+        <span>
+          ☾
+        </span>
+
+        <p>
+          El ranking todavía está vacío.
+        </p>
+
+      </div>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  players.forEach(
+
+    (
+      player,
+      index
+    ) => {
+
+      const row =
+        document.createElement(
+          "div"
         );
 
 
-      showSaved();
+      const leader =
+        index === 0;
 
-    } catch(error) {
 
-      console.error(
-        "Error guardando perfil:",
-        error
+      const current =
+        currentUser &&
+        player.id ===
+          currentUser.uid;
+
+
+
+      /* ==========================================
+         TOP 3
+      ========================================== */
+
+      let podiumClass =
+        "";
+
+
+      if (
+        index === 0
+      ) {
+
+        podiumClass =
+          "rank-first";
+
+      } else if (
+        index === 1
+      ) {
+
+        podiumClass =
+          "rank-second";
+
+      } else if (
+        index === 2
+      ) {
+
+        podiumClass =
+          "rank-third";
+
+      }
+
+
+
+      row.className =
+        `
+          ranking-row
+          ${leader ? "leader" : ""}
+          ${podiumClass}
+          ${current ? "current-user" : ""}
+        `;
+
+
+      row.style.setProperty(
+        "--player-color",
+        player.color
       );
 
 
-      showFormError(
-        "No pudimos guardar los cambios."
-      );
+      row.innerHTML = `
 
-    } finally {
+        <div class="ranking-position">
 
-      setSaving(
-        false
+          ${String(index + 1).padStart(2,"0")}
+
+        </div>
+
+
+        <div class="ranking-player">
+
+          <div class="ranking-player-top">
+
+            <span class="ranking-symbol-player">
+
+              ${escapeHTML(player.symbol)}
+
+            </span>
+
+
+            <strong>
+
+              ${escapeHTML(player.nickname)}
+
+              ${leader ? " ♛" : ""}
+
+            </strong>
+
+
+            ${
+              current
+
+                ? `
+                  <span class="ranking-you">
+                    VOS
+                  </span>
+                `
+
+                : ""
+            }
+
+          </div>
+
+
+          <small>
+
+            ${formatRole(player.role)}
+
+            ·
+
+            ${player.wins}V
+
+            ${player.losses}D
+
+          </small>
+
+        </div>
+
+
+        <div class="ranking-score">
+
+          <strong>
+
+            ${player.points}
+
+          </strong>
+
+          <span>
+            PUNTOS
+          </span>
+
+        </div>
+
+      `;
+
+
+      rankingList.appendChild(
+        row
       );
 
     }
 
-  }
-
-);
-
-
-
-/* =====================================================
-   DISCARD CHANGES
-===================================================== */
-
-discardButton.addEventListener(
-
-  "click",
-
-  () => {
-
-    if (!originalProfile) {
-
-      return;
-
-    }
-
-
-    profile =
-      structuredClone(
-        originalProfile
-      );
-
-
-    syncForm();
-
-    renderProfile();
-
-    clearFormError();
-
-  }
-
-);
-
-
-
-/* =====================================================
-   COUNTER
-===================================================== */
-
-function updateCounter() {
-
-  quoteCounter.textContent =
-    `${quoteInput.value.length} / 70`;
-
-}
-
-
-
-/* =====================================================
-   UI STATES
-===================================================== */
-
-function showLoading() {
-
-  loading.style.display =
-    "flex";
-
-
-  profileContent.classList.add(
-    "profile-content-hidden"
   );
 
 }
 
 
-function showProfile() {
 
-  loading.style.display =
-    "none";
+/* =====================================================
+   RESULT MESSAGE
+===================================================== */
+
+function showResultMessage(
+  result
+) {
+
+  const messages =
+    result ===
+      "victoria"
+
+      ? victoryMessages
+      : defeatMessages;
 
 
-  profileContent.classList.remove(
-    "profile-content-hidden"
+  const message =
+    messages[
+      Math.floor(
+        Math.random() *
+        messages.length
+      )
+    ];
+
+
+  resultPopup.textContent =
+    message;
+
+
+  resultPopup.className =
+    `result-popup visible ${result}`;
+
+
+  setTimeout(
+    () => {
+
+      resultPopup.className =
+        "result-popup";
+
+    },
+    2800
   );
 
 }
 
 
-function showProfileError(text) {
 
-  loading.innerHTML = `
+/* =====================================================
+   ERROR MESSAGE
+===================================================== */
 
-    <span class="loading-symbol">
-      ✧
-    </span>
+function showErrorMessage() {
 
-    <p>
-      ${text}
-    </p>
+  resultPopup.textContent =
+    "No pudimos registrar la partida. ✧";
 
-    <a
-      href="index.html"
-      class="btn btn-ghost"
-    >
-      Volver al inicio
-    </a>
 
-  `;
+  resultPopup.className =
+    "result-popup visible derrota";
+
+
+  setTimeout(
+    () => {
+
+      resultPopup.className =
+        "result-popup";
+
+    },
+    2800
+  );
 
 }
 
 
-function showSaved() {
 
-  saveMessage.classList.add(
-    "visible"
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+function launchConfetti() {
+
+  if (
+    typeof confetti ===
+    "undefined"
+  ) {
+
+    return;
+
+  }
+
+
+  confetti({
+
+    particleCount:
+      100,
+
+    spread:
+      85,
+
+    origin: {
+      y:
+        .62
+    }
+
+  });
+
+}
+
+
+
+/* =====================================================
+   SHAKE
+===================================================== */
+
+function shakePage() {
+
+  const container =
+    document.querySelector(
+      ".points-container"
+    );
+
+
+  if (!container) {
+
+    return;
+
+  }
+
+
+  container.classList.add(
+    "points-shake"
   );
 
 
   setTimeout(
     () => {
 
-      saveMessage.classList.remove(
-        "visible"
+      container.classList.remove(
+        "points-shake"
       );
 
     },
-    2000
+    500
   );
-
-}
-
-
-function showFormError(text) {
-
-  profileError.textContent =
-    text;
-
-
-  profileError.classList.add(
-    "visible"
-  );
-
-}
-
-
-function clearFormError() {
-
-  profileError.textContent =
-    "";
-
-
-  profileError.classList.remove(
-    "visible"
-  );
-
-}
-
-
-function setSaving(saving) {
-
-  saveButton.disabled =
-    saving;
-
-
-  discardButton.disabled =
-    saving;
-
-
-  saveButton.innerHTML =
-    saving
-
-      ? `
-        <i class="fa-solid fa-spinner fa-spin"></i>
-        Guardando...
-      `
-
-      : `
-        <i class="fa-solid fa-check"></i>
-        Guardar cambios
-      `;
 
 }
 
 
 
 /* =====================================================
-   HELPERS
+   REGISTER BUTTON STATE
 ===================================================== */
 
-function formatRole(role) {
+function setRegisterDisabled(
+  disabled
+) {
+
+  winButton.disabled =
+    disabled;
+
+
+  lossButton.disabled =
+    disabled;
+
+}
+
+
+
+/* =====================================================
+   CLEAN LISTENERS
+===================================================== */
+
+function cleanUserListeners() {
+
+  if (
+    stopProfileListener
+  ) {
+
+    stopProfileListener();
+
+    stopProfileListener =
+      null;
+
+  }
+
+
+  if (
+    stopMatchesListener
+  ) {
+
+    stopMatchesListener();
+
+    stopMatchesListener =
+      null;
+
+  }
+
+}
+
+
+
+/* =====================================================
+   NORMALIZE ROLE
+===================================================== */
+
+function normalizeRole(
+  role
+) {
+
+  return String(
+    role ||
+    ""
+  )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+
+/* =====================================================
+   FORMAT ROLE
+===================================================== */
+
+function formatRole(
+  role
+) {
 
   const roles = {
 
@@ -979,83 +1585,112 @@ function formatRole(role) {
       "ADC",
 
     support:
-      "SUPPORT",
-
-    staff:
-      "STAFF",
-
-    coach:
-      "COACH",
-
-    player:
-      "PLAYER"
+      "SUPPORT"
 
   };
 
 
   return (
     roles[role] ||
-    String(role).toUpperCase()
+    String(role)
+      .toUpperCase()
   );
 
 }
 
 
-function getDefaultSymbol(role) {
 
-  const symbols = {
+/* =====================================================
+   PLAYER ROLE
+===================================================== */
 
-    top:
-      "✦",
+function isPlayerRole(
+  role
+) {
 
-    jungle:
-      "☾",
-
-    mid:
-      "✧",
-
-    adc:
-      "❀",
-
-    support:
-      "♡"
-
-  };
-
-
-  return (
-    symbols[role] ||
-    "✦"
+  return [
+    "top",
+    "jungle",
+    "mid",
+    "adc",
+    "support"
+  ].includes(
+    role
   );
 
 }
 
 
-function getDefaultColor(role) {
 
-  const colors = {
+/* =====================================================
+   DATE
+===================================================== */
 
-    top:
-      "#df526f",
+function formatDate(
+  timestamp
+) {
 
-    jungle:
-      "#c34462",
+  if (
+    !timestamp ||
+    !timestamp.toDate
+  ) {
 
-    mid:
-      "#f68aa1",
+    return "Ahora";
 
-    adc:
-      "#ed5878",
+  }
 
-    support:
-      "#ffa0b4"
 
-  };
+  return timestamp
+    .toDate()
+    .toLocaleString(
+      "es-UY",
+      {
+
+        day:
+          "2-digit",
+
+        month:
+          "2-digit",
+
+        year:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit"
+
+      }
+    );
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+  value
+) {
+
+  const element =
+    document.createElement(
+      "div"
+    );
+
+
+  element.textContent =
+    String(
+      value ??
+      ""
+    );
 
 
   return (
-    colors[role] ||
-    "#ef476a"
+    element.innerHTML
   );
 
 }

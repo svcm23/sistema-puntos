@@ -1,0 +1,326 @@
+/* ============================================
+   CRIMSON VEIL
+   USER NAVIGATION
+============================================ */
+
+
+/* ============================================
+   HELPERS
+============================================ */
+
+.hidden {
+  display: none !important;
+}
+
+
+/* ============================================
+   USER AREA
+============================================ */
+
+.user-area {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+}
+
+
+/* ============================================
+   LOGIN
+============================================ */
+
+.user-area .login-link {
+  min-height: 40px;
+
+  padding:
+    0
+    14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:
+    999px;
+
+  color:
+    #c8adb6;
+
+  background:
+    rgba(255,255,255,.02);
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  transition: .2s ease;
+}
+
+
+.user-area .login-link:hover {
+  color:
+    var(--rose-light);
+
+  border-color:
+    rgba(239,71,106,.2);
+
+  background:
+    rgba(239,71,106,.04);
+}
+
+
+/* ============================================
+   LOGGED USER
+============================================ */
+
+.logged-user {
+  position: relative;
+}
+
+
+.user-menu-button {
+  min-height: 40px;
+
+  padding:
+    0
+    14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border:
+    1px solid
+    rgba(239,71,106,.18);
+
+  border-radius:
+    999px;
+
+  color:
+    var(--rose-light);
+
+  background:
+    rgba(239,71,106,.035);
+
+  cursor: pointer;
+
+  transition: .2s ease;
+}
+
+
+.user-menu-button:hover {
+  border-color:
+    rgba(239,71,106,.32);
+
+  background:
+    rgba(239,71,106,.07);
+}
+
+
+.user-menu-button > i:first-child {
+  color:
+    var(--crimson-light);
+
+  font-size: 11px;
+}
+
+
+#navNickname {
+  max-width: 160px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+.user-chevron {
+  margin-left: 3px;
+
+  color:
+    #74535e;
+
+  font-size: 7px;
+
+  transition: transform .2s ease;
+}
+
+
+/* ============================================
+   DROPDOWN
+============================================ */
+
+.user-dropdown {
+  width: 190px;
+
+  position: absolute;
+
+  top:
+    calc(100% + 11px);
+
+  right: 0;
+
+  z-index: 1200;
+
+  display: none;
+
+  flex-direction: column;
+
+  padding: 7px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.075);
+
+  background:
+    rgba(7,5,7,.98);
+
+  box-shadow:
+    0
+    22px
+    60px
+    rgba(0,0,0,.42);
+
+  backdrop-filter:
+    blur(20px);
+}
+
+
+.user-dropdown.visible {
+  display: flex;
+}
+
+
+.user-dropdown::before {
+  content: "";
+
+  position: absolute;
+
+  top: -1px;
+  left: 18px;
+
+  width: 42px;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--crimson-light),
+      transparent
+    );
+}
+
+
+/* LINKS */
+
+.user-dropdown a,
+.user-dropdown button {
+  width: 100%;
+
+  min-height: 39px;
+
+  padding:
+    0
+    11px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border: 0;
+
+  color:
+    #a98f98;
+
+  background:
+    transparent;
+
+  text-align: left;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  font-size: 10px;
+
+  transition: .18s ease;
+}
+
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+  color:
+    var(--rose-light);
+
+  background:
+    rgba(239,71,106,.045);
+}
+
+
+.user-dropdown i {
+  width: 14px;
+
+  color:
+    #8d5263;
+
+  text-align: center;
+}
+
+
+/* LOGOUT */
+
+#logoutButton {
+  margin-top: 5px;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.045);
+}
+
+
+/* ============================================
+   MOBILE
+============================================ */
+
+@media (max-width: 620px) {
+
+  #navNickname {
+    max-width: 90px;
+  }
+
+
+  .user-menu-button {
+    padding:
+      0
+      10px;
+  }
+
+
+  .user-chevron {
+    display: none;
+  }
+
+
+  .user-dropdown {
+    right: -5px;
+  }
+
+}

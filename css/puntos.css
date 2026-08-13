@@ -174,7 +174,7 @@
 
 
 /* ==================================================
-   MAIN HEADING
+   HEADING
 ================================================== */
 
 .points-heading {
@@ -288,10 +288,6 @@
 }
 
 
-/* ==================================================
-   HIDDEN
-================================================== */
-
 .hidden {
   display: none !important;
 }
@@ -320,7 +316,7 @@
 
 
 /* ==================================================
-   PROGRESS CARD
+   CARDS
 ================================================== */
 
 .progress-card,
@@ -396,8 +392,7 @@
     Georgia,
     serif;
 
-  font-size:
-    40px;
+  font-size: 40px;
 
   font-weight: 400;
 }
@@ -430,7 +425,7 @@
 
 
 /* ==================================================
-   STAR PROGRESS
+   STARS
 ================================================== */
 
 .star-progress {
@@ -481,12 +476,6 @@
     #bd6b48;
 
   font-size: 20px;
-
-  text-shadow:
-    0
-    0
-    10px
-    rgba(239,71,106,.08);
 }
 
 
@@ -572,7 +561,7 @@
 
 
 /* ==================================================
-   PLAYER STATS
+   STATS
 ================================================== */
 
 .points-stats {
@@ -713,8 +702,6 @@
 }
 
 
-/* RESULT BUTTONS */
-
 .match-actions {
   display: grid;
 
@@ -754,9 +741,7 @@
   text-align: left;
 
   transition:
-    border-color .2s ease,
-    transform .2s ease,
-    background .2s ease;
+    .2s ease;
 }
 
 
@@ -860,13 +845,6 @@
   text-align: center;
 
   font-size: 7px;
-
-  line-height: 1.5;
-}
-
-
-.register-note i {
-  margin-right: 5px;
 }
 
 
@@ -912,8 +890,7 @@
       48px
     );
 
-  font-weight:
-    400;
+  font-weight: 400;
 
   letter-spacing:
     -.03em;
@@ -929,7 +906,7 @@
 
 
 /* ==================================================
-   RECENT MATCHES
+   HISTORY
 ================================================== */
 
 .recent-matches {
@@ -1009,7 +986,7 @@
 
 
 /* ==================================================
-   RANKING
+   RANKING HEADER
 ================================================== */
 
 .ranking-section {
@@ -1029,10 +1006,8 @@
 
 
 .ranking-symbol {
-  color:
-    rgba(239,71,106,.35);
-
-  font-size: 25px;
+  display:
+    none;
 }
 
 
@@ -1043,13 +1018,17 @@
 }
 
 
+/* ==================================================
+   RANKING BASE
+================================================== */
+
 .ranking-row {
   min-height: 83px;
 
   display: grid;
 
   grid-template-columns:
-    60px
+    82px
     1fr
     auto;
 
@@ -1060,7 +1039,7 @@
   position: relative;
 
   padding:
-    11px
+    13px
     14px;
 
   border-bottom:
@@ -1068,7 +1047,8 @@
     rgba(255,255,255,.05);
 
   transition:
-    background .2s ease;
+    background .2s ease,
+    padding .2s ease;
 }
 
 
@@ -1078,27 +1058,40 @@
 }
 
 
-.ranking-row.current-user {
-  background:
-    rgba(239,71,106,.03);
-}
-
-
 .ranking-position {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
   color:
     #6e5059;
 
   font-family:
     Georgia,
     serif;
-
-  font-size: 27px;
 }
 
 
-.ranking-row.leader .ranking-position {
+.ranking-number {
+  font-size:
+    27px;
+}
+
+
+.ranking-medal-icon {
+  width: 18px;
+
+  flex-shrink: 0;
+
   color:
-    #e3bd66;
+    #72545d;
+
+  font-size:
+    8px;
+
+  text-align: center;
 }
 
 
@@ -1152,6 +1145,21 @@
 }
 
 
+.ranking-podium-label {
+  margin-bottom:
+    2px;
+
+  font-size:
+    6px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    .21em;
+}
+
+
 .ranking-score {
   min-width: 135px;
 
@@ -1186,240 +1194,189 @@
 
 
 /* ==================================================
-   TOP 3 — VEIL PODIUM
-================================================== */
-
-.ranking-row.rank-first,
-.ranking-row.rank-second,
-.ranking-row.rank-third {
-  margin:
-    7px
-    0;
-
-  border:
-    1px solid
-    rgba(255,255,255,.055);
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.055);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.018),
-      transparent 72%
-    );
-}
-
-
-/* ==================================================
-   #1
+   #1 — VEIL LEADER
 ================================================== */
 
 .ranking-row.rank-first {
   min-height:
-    102px;
+    94px;
 
-  margin-top:
-    13px;
-
-  padding:
-    17px
-    18px;
-
-  border-color:
-    rgba(226,190,104,.24);
+  padding-left:
+    19px;
 
   background:
-    radial-gradient(
-      circle at 7% 50%,
-      rgba(226,190,104,.095),
-      transparent 34%
-    ),
-
     linear-gradient(
       90deg,
-      rgba(90,56,24,.09),
-      rgba(239,71,106,.018) 58%,
-      transparent
+      rgba(226,190,104,.045),
+      rgba(239,71,106,.014) 50%,
+      transparent 78%
     );
 
   box-shadow:
-    inset 3px 0 0
-    rgba(226,190,104,.52),
-
-    0
-    18px
-    50px
-    rgba(0,0,0,.13);
+    inset 2px 0 0
+    rgba(226,190,104,.72);
 }
 
 
-.ranking-row.rank-first::before {
-  content:
-    "FIRST VEIL";
-
-  position:
-    absolute;
-
-  top:
-    9px;
-  right:
-    16px;
-
-  color:
-    rgba(226,190,104,.34);
-
-  font-size:
-    6px;
-
-  font-weight:
-    700;
-
-  letter-spacing:
-    .24em;
-}
-
-
-.ranking-row.rank-first .ranking-position {
+.rank-first .ranking-medal-icon {
   color:
     #e3bd66;
 
   font-size:
-    34px;
+    10px;
 }
 
 
-.ranking-row.rank-first .ranking-player strong {
+.rank-first .ranking-number {
   color:
-    #f4e8d1;
+    #e3bd66;
+
+  font-size:
+    31px;
+}
+
+
+.rank-first .ranking-podium-label {
+  color:
+    rgba(226,190,104,.55);
+}
+
+
+.rank-first .ranking-player strong {
+  color:
+    #f4e6d3;
 
   font-size:
     23px;
 }
 
 
-.ranking-row.rank-first .ranking-symbol-player {
+.rank-first .ranking-symbol-player {
   color:
     #e3bd66;
-
-  text-shadow:
-    0
-    0
-    13px
-    rgba(227,189,102,.25);
 }
 
 
-.ranking-row.rank-first .ranking-score strong {
+.rank-first .ranking-score strong {
   color:
     #e3bd66;
-
-  font-size:
-    30px;
-}
-
-
-/* ==================================================
-   #2
-================================================== */
-
-.ranking-row.rank-second {
-  border-color:
-    rgba(196,188,193,.14);
-
-  background:
-    radial-gradient(
-      circle at 7% 50%,
-      rgba(196,188,193,.055),
-      transparent 30%
-    ),
-
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.022),
-      transparent 65%
-    );
-
-  box-shadow:
-    inset 2px 0 0
-    rgba(196,188,193,.24);
-}
-
-
-.ranking-row.rank-second .ranking-position {
-  color:
-    #c4bcc1;
-
-  font-size:
-    30px;
-}
-
-
-.ranking-row.rank-second .ranking-player strong {
-  color:
-    #eadfe2;
-
-  font-size:
-    21px;
-}
-
-
-.ranking-row.rank-second .ranking-score strong {
-  color:
-    #d5c9cd;
-}
-
-
-/* ==================================================
-   #3
-================================================== */
-
-.ranking-row.rank-third {
-  border-color:
-    rgba(183,114,81,.13);
-
-  background:
-    radial-gradient(
-      circle at 7% 50%,
-      rgba(183,114,81,.052),
-      transparent 30%
-    ),
-
-    linear-gradient(
-      90deg,
-      rgba(106,56,40,.027),
-      transparent 65%
-    );
-
-  box-shadow:
-    inset 2px 0 0
-    rgba(183,114,81,.22);
-}
-
-
-.ranking-row.rank-third .ranking-position {
-  color:
-    #b9795d;
 
   font-size:
     29px;
 }
 
 
-.ranking-row.rank-third .ranking-player strong {
+/* ==================================================
+   #2 — SILVER
+================================================== */
+
+.ranking-row.rank-second {
+  padding-left:
+    17px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(195,187,192,.027),
+      transparent 65%
+    );
+
+  box-shadow:
+    inset 2px 0 0
+    rgba(195,187,192,.33);
+}
+
+
+.rank-second .ranking-medal-icon {
   color:
-    #e5d4d8;
+    #c5bdc2;
+}
+
+
+.rank-second .ranking-number {
+  color:
+    #c5bdc2;
+
+  font-size:
+    29px;
+}
+
+
+.rank-second .ranking-podium-label {
+  color:
+    #756a70;
+}
+
+
+.rank-second .ranking-player strong {
+  color:
+    #ede1e5;
 
   font-size:
     21px;
 }
 
 
-.ranking-row.rank-third .ranking-score strong {
+.rank-second .ranking-score strong {
   color:
-    #c78b72;
+    #cdc2c6;
+}
+
+
+/* ==================================================
+   #3 — BRONZE
+================================================== */
+
+.ranking-row.rank-third {
+  padding-left:
+    17px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(184,116,83,.025),
+      transparent 65%
+    );
+
+  box-shadow:
+    inset 2px 0 0
+    rgba(184,116,83,.34);
+}
+
+
+.rank-third .ranking-medal-icon {
+  color:
+    #b8795c;
+}
+
+
+.rank-third .ranking-number {
+  color:
+    #b8795c;
+
+  font-size:
+    29px;
+}
+
+
+.rank-third .ranking-podium-label {
+  color:
+    #73554c;
+}
+
+
+.rank-third .ranking-player strong {
+  color:
+    #e6d5d8;
+
+  font-size:
+    21px;
+}
+
+
+.rank-third .ranking-score strong {
+  color:
+    #c58b70;
 }
 
 
@@ -1430,12 +1387,15 @@
 .ranking-row.current-user {
   position:
     relative;
+}
 
+
+.ranking-row.current-user:not(.rank-first):not(.rank-second):not(.rank-third) {
   background:
     linear-gradient(
       90deg,
-      rgba(239,71,106,.055),
-      rgba(239,71,106,.012) 62%,
+      rgba(239,71,106,.045),
+      rgba(239,71,106,.01),
       transparent
     );
 
@@ -1445,35 +1405,12 @@
 }
 
 
-.ranking-row.current-user.rank-first,
-.ranking-row.current-user.rank-second,
-.ranking-row.current-user.rank-third {
-  box-shadow:
-    inset 3px 0 0
-    var(--rose),
-
-    0 0 0 1px
-    rgba(239,71,106,.055),
-
-    0
-    18px
-    50px
-    rgba(0,0,0,.13);
-}
-
-
 .ranking-you {
-  display:
-    inline-flex;
+  display: inline-flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  min-height:
-    17px;
-
-  margin-left:
-    3px;
+  min-height: 17px;
 
   padding:
     0
@@ -1481,7 +1418,7 @@
 
   border:
     1px solid
-    rgba(239,71,106,.19);
+    rgba(239,71,106,.20);
 
   border-radius:
     999px;
@@ -1503,41 +1440,6 @@
 
   letter-spacing:
     .13em;
-
-  vertical-align:
-    middle;
-}
-
-
-/* ==================================================
-   PODIUM HOVER
-================================================== */
-
-.ranking-row.rank-first:hover {
-  background:
-    radial-gradient(
-      circle at 7% 50%,
-      rgba(226,190,104,.12),
-      transparent 34%
-    ),
-
-    linear-gradient(
-      90deg,
-      rgba(90,56,24,.11),
-      rgba(239,71,106,.024) 58%,
-      transparent
-    );
-}
-
-
-.ranking-row.rank-second:hover,
-.ranking-row.rank-third:hover {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.03),
-      transparent 68%
-    );
 }
 
 
@@ -1657,8 +1559,7 @@
   pointer-events: none;
 
   transition:
-    opacity .25s ease,
-    transform .25s ease;
+    .25s ease;
 }
 
 
@@ -1790,69 +1691,51 @@
   }
 
 
-  .ranking-row {
+  .ranking-row,
+  .ranking-row.rank-first,
+  .ranking-row.rank-second,
+  .ranking-row.rank-third {
     grid-template-columns:
-      42px
+      58px
       1fr
       auto;
 
     gap:
       10px;
+
+    padding-left:
+      10px;
+  }
+
+
+  .ranking-medal-icon {
+    display:
+      none;
+  }
+
+
+  .rank-first .ranking-number {
+    font-size:
+      29px;
+  }
+
+
+  .rank-first .ranking-player strong {
+    font-size:
+      20px;
+  }
+
+
+  .rank-second .ranking-player strong,
+  .rank-third .ranking-player strong {
+    font-size:
+      18px;
   }
 
 
   .ranking-score {
     min-width:
       auto;
-  }
-
-
-  .ranking-player strong {
-    font-size:
-      17px;
-  }
-
-
-  /* TOP 3 MOBILE */
-
-  .ranking-row.rank-first {
-    min-height:
-      92px;
-
-    padding:
-      14px
-      10px;
-  }
-
-
-  .ranking-row.rank-first::before {
-    display:
-      none;
-  }
-
-
-  .ranking-row.rank-first .ranking-position {
-    font-size:
-      29px;
-  }
-
-
-  .ranking-row.rank-first .ranking-player strong {
-    font-size:
-      19px;
-  }
-
-
-  .ranking-row.rank-first .ranking-score strong {
-    font-size:
-      25px;
-  }
-
-
-  .ranking-row.rank-second .ranking-position,
-  .ranking-row.rank-third .ranking-position {
-    font-size:
-      26px;
   }
 
 
@@ -1877,7 +1760,8 @@
       10px
       0;
 
-    border-right: 0;
+    border-right:
+      0;
 
     border-bottom:
       1px solid
@@ -1891,9 +1775,21 @@
   }
 
 
-  .ranking-player small {
+  .ranking-player small,
+  .ranking-podium-label {
     display:
       none;
+  }
+
+
+  .ranking-row,
+  .ranking-row.rank-first,
+  .ranking-row.rank-second,
+  .ranking-row.rank-third {
+    grid-template-columns:
+      45px
+      1fr
+      auto;
   }
 
 }

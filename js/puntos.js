@@ -192,11 +192,6 @@ onAuthStateChanged(
       user;
 
 
-    /*
-      Si cambia la sesión,
-      cerramos listeners anteriores.
-    */
-
     cleanUserListeners();
 
 
@@ -214,15 +209,6 @@ onAuthStateChanged(
         "hidden"
       );
 
-
-      /*
-        IMPORTANTE:
-
-        No hacemos return sobre el ranking.
-
-        El ranking tiene su propio listener
-        global más abajo y sigue funcionando.
-      */
 
       return;
 
@@ -1219,10 +1205,45 @@ function renderRanking(
           currentUser.uid;
 
 
+
+      /* ==========================================
+         TOP 3
+      ========================================== */
+
+      let podiumClass =
+        "";
+
+
+      if (
+        index === 0
+      ) {
+
+        podiumClass =
+          "rank-first";
+
+      } else if (
+        index === 1
+      ) {
+
+        podiumClass =
+          "rank-second";
+
+      } else if (
+        index === 2
+      ) {
+
+        podiumClass =
+          "rank-third";
+
+      }
+
+
+
       row.className =
         `
           ranking-row
           ${leader ? "leader" : ""}
+          ${podiumClass}
           ${current ? "current-user" : ""}
         `;
 
@@ -1260,6 +1281,19 @@ function renderRanking(
               ${leader ? " ♛" : ""}
 
             </strong>
+
+
+            ${
+              current
+
+                ? `
+                  <span class="ranking-you">
+                    VOS
+                  </span>
+                `
+
+                : ""
+            }
 
           </div>
 

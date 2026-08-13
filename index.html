@@ -43,7 +43,6 @@
     class="site-nav"
   >
 
-
     <!-- MARCA -->
 
     <a
@@ -82,7 +81,6 @@
 
     <div class="menu">
 
-
       <!-- INICIO -->
 
       <a
@@ -99,7 +97,6 @@
       </a>
 
 
-
       <!-- TEAM -->
 
       <a href="#roster">
@@ -111,7 +108,6 @@
         </span>
 
       </a>
-
 
 
       <!-- RANKING -->
@@ -127,20 +123,11 @@
       </a>
 
 
-
-      <!-- ======================================
-           USUARIO
-      ======================================= -->
+      <!-- USUARIO -->
 
       <div class="user-area">
 
-
-        <!--
-          NO LOGUEADA
-
-          navbar.js oculta este enlace
-          cuando Firebase detecta una sesión.
-        -->
+        <!-- NO LOGUEADA -->
 
         <a
           id="loginLink"
@@ -157,21 +144,12 @@
         </a>
 
 
-
-        <!--
-          LOGUEADA
-
-          Empieza oculto.
-          navbar.js lo muestra cuando hay sesión.
-        -->
+        <!-- LOGUEADA -->
 
         <div
           id="loggedUser"
           class="logged-user hidden"
         >
-
-
-          <!-- BOTÓN USUARIO -->
 
           <button
             id="userMenuButton"
@@ -192,16 +170,12 @@
           </button>
 
 
-
           <!-- DROPDOWN -->
 
           <div
             id="userDropdown"
             class="user-dropdown"
           >
-
-
-            <!-- PERFIL -->
 
             <a href="perfil.html">
 
@@ -214,9 +188,6 @@
             </a>
 
 
-
-            <!-- PUNTOS -->
-
             <a href="puntos.html">
 
               <i class="fa-regular fa-star"></i>
@@ -227,9 +198,6 @@
 
             </a>
 
-
-
-            <!-- LOGOUT -->
 
             <button
               id="logoutButton"
@@ -272,7 +240,6 @@
       id="inicio"
     >
 
-
       <!-- FONDO -->
 
       <div class="hero-stars"></div>
@@ -282,7 +249,6 @@
       <div class="orbit orbit-one"></div>
 
       <div class="orbit orbit-two"></div>
-
 
 
       <!-- DECORACIONES -->
@@ -304,7 +270,6 @@
       </span>
 
 
-
       <!-- LOGO -->
 
       <div
@@ -324,8 +289,7 @@
       </div>
 
 
-
-      <!-- TEXTO HERO -->
+      <!-- TEXTO -->
 
       <div class="hero-copy">
 
@@ -340,7 +304,6 @@
 
 
         <div class="hero-actions">
-
 
           <a
             href="#roster"
@@ -368,7 +331,6 @@
         </div>
 
       </div>
-
 
 
       <!-- SCROLL -->
@@ -399,15 +361,13 @@
       id="roster"
     >
 
-
-      <!-- DECORACIÓN -->
+      <!-- DECORACIONES -->
 
       <div class="roster-orbit"></div>
 
       <span class="roster-flower">
         ❀
       </span>
-
 
 
       <div class="section-container">
@@ -433,8 +393,7 @@
         </div>
 
 
-
-        <!-- DIVISOR -->
+        <!-- LINEA DECORATIVA -->
 
         <div class="roster-divider">
 
@@ -447,389 +406,26 @@
         </div>
 
 
-
         <!-- =====================================
-             JUGADORAS
+             ROSTER DINÁMICO
         ====================================== -->
 
-        <div class="roster-grid">
+        <div
+          id="rosterGrid"
+          class="roster-grid"
+        >
 
+          <div class="roster-loading">
 
-          <!-- ===============================
-               TOP
-          ================================ -->
+            <span>
+              ✦
+            </span>
 
-          <article
-            class="player-card"
-            data-role="top"
-          >
+            <p>
+              Reuniendo al Veil...
+            </p>
 
-            <div class="corner corner-top"></div>
-            <div class="corner corner-bottom"></div>
-
-
-            <div class="player-header">
-
-              <div class="role-symbol">
-
-                <i
-                  class="fa-solid fa-shield-halved"
-                ></i>
-
-              </div>
-
-              <span class="player-role">
-                TOP
-              </span>
-
-            </div>
-
-
-            <div class="player-content">
-
-              <span class="player-decoration">
-                ✦
-              </span>
-
-              <h3>
-                Player
-              </h3>
-
-              <p class="player-quote">
-                Personaliza tu frase.
-              </p>
-
-            </div>
-
-
-            <div class="player-bottom">
-
-              <span>
-                CRIMSON VEIL
-              </span>
-
-              <span>
-                TOP
-              </span>
-
-            </div>
-
-          </article>
-
-
-
-          <!-- ===============================
-               JUNGLE
-          ================================ -->
-
-          <article
-            class="player-card"
-            data-role="jungle"
-          >
-
-            <div class="corner corner-top"></div>
-            <div class="corner corner-bottom"></div>
-
-
-            <div class="player-header">
-
-              <div class="role-symbol">
-
-                <i
-                  class="fa-solid fa-compass"
-                ></i>
-
-              </div>
-
-              <span class="player-role">
-                JUNGLE
-              </span>
-
-            </div>
-
-
-            <div class="player-content">
-
-              <span class="player-decoration">
-                ☾
-              </span>
-
-              <h3>
-                Player
-              </h3>
-
-              <p class="player-quote">
-                Personaliza tu frase.
-              </p>
-
-            </div>
-
-
-            <div class="player-bottom">
-
-              <span>
-                CRIMSON VEIL
-              </span>
-
-              <span>
-                JUNGLE
-              </span>
-
-            </div>
-
-          </article>
-
-
-
-          <!-- ===============================
-               MID
-          ================================ -->
-
-          <article
-            class="player-card"
-            data-role="mid"
-          >
-
-            <div class="corner corner-top"></div>
-            <div class="corner corner-bottom"></div>
-
-
-            <div class="player-header">
-
-              <div class="role-symbol">
-
-                <i
-                  class="fa-solid fa-wand-magic-sparkles"
-                ></i>
-
-              </div>
-
-              <span class="player-role">
-                MID
-              </span>
-
-            </div>
-
-
-            <div class="player-content">
-
-              <span class="player-decoration">
-                ✧
-              </span>
-
-              <h3>
-                Player
-              </h3>
-
-              <p class="player-quote">
-                Personaliza tu frase.
-              </p>
-
-            </div>
-
-
-            <div class="player-bottom">
-
-              <span>
-                CRIMSON VEIL
-              </span>
-
-              <span>
-                MID
-              </span>
-
-            </div>
-
-          </article>
-
-
-
-          <!-- ===============================
-               ADC 1
-          ================================ -->
-
-          <article
-            class="player-card"
-            data-role="adc"
-          >
-
-            <div class="corner corner-top"></div>
-            <div class="corner corner-bottom"></div>
-
-
-            <div class="player-header">
-
-              <div class="role-symbol">
-
-                <i
-                  class="fa-solid fa-crosshairs"
-                ></i>
-
-              </div>
-
-              <span class="player-role">
-                ADC
-              </span>
-
-            </div>
-
-
-            <div class="player-content">
-
-              <span class="player-decoration">
-                ❀
-              </span>
-
-              <h3>
-                Player
-              </h3>
-
-              <p class="player-quote">
-                Personaliza tu frase.
-              </p>
-
-            </div>
-
-
-            <div class="player-bottom">
-
-              <span>
-                CRIMSON VEIL
-              </span>
-
-              <span>
-                ADC
-              </span>
-
-            </div>
-
-          </article>
-
-
-
-          <!-- ===============================
-               ADC 2
-          ================================ -->
-
-          <article
-            class="player-card"
-            data-role="adc"
-          >
-
-            <div class="corner corner-top"></div>
-            <div class="corner corner-bottom"></div>
-
-
-            <div class="player-header">
-
-              <div class="role-symbol">
-
-                <i
-                  class="fa-solid fa-crosshairs"
-                ></i>
-
-              </div>
-
-              <span class="player-role">
-                ADC
-              </span>
-
-            </div>
-
-
-            <div class="player-content">
-
-              <span class="player-decoration">
-                ✿
-              </span>
-
-              <h3>
-                Player
-              </h3>
-
-              <p class="player-quote">
-                Personaliza tu frase.
-              </p>
-
-            </div>
-
-
-            <div class="player-bottom">
-
-              <span>
-                CRIMSON VEIL
-              </span>
-
-              <span>
-                ADC
-              </span>
-
-            </div>
-
-          </article>
-
-
-
-          <!-- ===============================
-               SUPPORT
-          ================================ -->
-
-          <article
-            class="player-card"
-            data-role="support"
-          >
-
-            <div class="corner corner-top"></div>
-            <div class="corner corner-bottom"></div>
-
-
-            <div class="player-header">
-
-              <div class="role-symbol">
-
-                <i
-                  class="fa-solid fa-hand-holding-heart"
-                ></i>
-
-              </div>
-
-              <span class="player-role">
-                SUPPORT
-              </span>
-
-            </div>
-
-
-            <div class="player-content">
-
-              <span class="player-decoration">
-                ♡
-              </span>
-
-              <h3>
-                Player
-              </h3>
-
-              <p class="player-quote">
-                Personaliza tu frase.
-              </p>
-
-            </div>
-
-
-            <div class="player-bottom">
-
-              <span>
-                CRIMSON VEIL
-              </span>
-
-              <span>
-                SUPPORT
-              </span>
-
-            </div>
-
-          </article>
+          </div>
 
         </div>
 
@@ -935,16 +531,26 @@
        JS
   =========================================== -->
 
-  <!-- Animaciones del Home -->
+  <!-- ANIMACIONES HOME -->
+
   <script
     src="js/main.js"
   ></script>
 
 
-  <!-- Login / Navbar Firebase -->
+  <!-- NAVBAR / AUTH -->
+
   <script
     type="module"
     src="js/navbar.js"
+  ></script>
+
+
+  <!-- ROSTER FIRESTORE -->
+
+  <script
+    type="module"
+    src="js/roster.js"
   ></script>
 
 

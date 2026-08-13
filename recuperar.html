@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>Recuperar contraseña — Crimson Veil</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/recuperar.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+</head>
+
+
+<body class="recovery-page">
+
+  <!-- NAV -->
+
+  <nav class="site-nav">
+
+    <a
+      href="index.html"
+      class="brand"
+    >
+
+      <div class="nav-logo-wrap">
+
+        <img
+          src="img/crimson-veil-logo.jpeg"
+          alt="Crimson Veil"
+          class="nav-logo"
+        >
+
+      </div>
+
+      <div class="brand-copy">
+
+        <strong>
+          Crimson Veil
+        </strong>
+
+        <small>
+          Team Hub
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <div class="menu">
+
+      <a href="login.html">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        <span>
+          Volver
+        </span>
+
+      </a>
+
+    </div>
+
+  </nav>
+
+
+  <!-- MAIN -->
+
+  <main class="recovery-main">
+
+    <div class="recovery-stars"></div>
+
+    <span class="recovery-decoration recovery-star">
+      ✦
+    </span>
+
+    <span class="recovery-decoration recovery-moon">
+      ☾
+    </span>
+
+
+    <section class="recovery-card">
+
+      <header class="recovery-header">
+
+        <p class="eyebrow">
+          RECOVERY
+        </p>
+
+        <h1>
+          Return to
+          <em>the Veil.</em>
+        </h1>
+
+        <p>
+          Ingresá el email asociado a tu cuenta
+          y te enviaremos un enlace para cambiar tu contraseña.
+        </p>
+
+      </header>
+
+
+      <form id="recoveryForm">
+
+        <div class="recovery-field">
+
+          <label for="recoveryEmail">
+            Email
+          </label>
+
+          <input
+            id="recoveryEmail"
+            type="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn btn-primary recovery-submit"
+        >
+
+          <i class="fa-solid fa-envelope"></i>
+
+          Enviar enlace
+
+        </button>
+
+      </form>
+
+
+      <div
+        id="recoveryMessage"
+        class="recovery-message"
+      ></div>
+
+
+      <a
+        href="login.html"
+        class="back-to-login"
+      >
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Volver a iniciar sesión
+
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <script
+    type="module"
+    src="js/recuperar.js"
+  ></script>
+
+</body>
+
+</html>

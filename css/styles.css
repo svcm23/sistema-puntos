@@ -2904,3 +2904,65 @@ footer p {
 .roster-title .eyebrow {
   text-align: center;
 }
+/* ============================================
+   DYNAMIC ROSTER
+============================================ */
+
+.roster-loading,
+.roster-empty {
+  grid-column: 1 / -1;
+
+  min-height: 220px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #76545e;
+
+  text-align: center;
+}
+
+
+.roster-loading span,
+.roster-empty span {
+  color: var(--rose);
+
+  font-size: 18px;
+}
+
+
+.roster-loading span {
+  animation:
+    rosterPulse
+    1.5s
+    ease-in-out
+    infinite;
+}
+
+
+.roster-loading p,
+.roster-empty p {
+  margin: 0;
+
+  font-size: 9px;
+
+  letter-spacing: .08em;
+}
+
+
+@keyframes rosterPulse {
+
+  50% {
+    opacity: .35;
+
+    transform:
+      scale(.8);
+  }
+
+}

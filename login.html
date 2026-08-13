@@ -1,64 +1,39 @@
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
-
   <meta charset="UTF-8">
 
-
-  <title>
-    Ingresar — Crimson Veil
-  </title>
-
+  <title>Ingresar — Crimson Veil</title>
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
   >
 
-
   <link
     rel="stylesheet"
     href="css/styles.css"
   >
-
 
   <link
     rel="stylesheet"
     href="css/auth.css"
   >
 
-
-  <link
-    rel="stylesheet"
-    href="css/navbar.css"
-  >
-
-
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   >
-
 </head>
 
 
 <body class="auth-page">
 
-
-  <!-- ==========================================
-       NAV
-  =========================================== -->
-
+  <!-- NAV -->
   <nav class="site-nav">
 
-
-    <a
-      href="index.html"
-      class="brand"
-    >
-
+    <a href="index.html" class="brand">
 
       <div class="nav-logo-wrap">
 
@@ -69,7 +44,6 @@
         >
 
       </div>
-
 
       <div class="brand-copy">
 
@@ -100,416 +74,300 @@
 
     </div>
 
-
   </nav>
 
 
-
-  <!-- ==========================================
-       AUTH
-  =========================================== -->
-
+  <!-- AUTH -->
   <main class="auth-main">
-
 
     <div class="auth-stars"></div>
 
-
-    <span class="auth-decoration decoration-one">
+    <span class="auth-floating star-one">
       ✦
     </span>
 
-
-    <span class="auth-decoration decoration-two">
+    <span class="auth-floating star-two">
       ✧
     </span>
 
-
-    <span class="auth-decoration decoration-three">
+    <span class="auth-floating moon-one">
       ☾
     </span>
 
 
+    <section class="auth-card">
 
-    <section class="auth-shell">
-
-
-      <!-- ========================================
-           LEFT
-      ========================================= -->
-
-      <div class="auth-left">
-
+      <!-- HEADER -->
+      <header class="auth-header">
 
         <p class="eyebrow">
           PLAYER ACCESS
         </p>
 
-
         <h1>
-
           Enter the
-
-          <em>
-            Veil.
-          </em>
-
+          <em>Veil.</em>
         </h1>
 
-
-        <p class="auth-intro">
-
-          Tu espacio dentro de Crimson Veil.
-
-          Accedé a tu perfil,
-          registrá tus partidas
-          y seguí tu progreso dentro del team.
-
+        <p>
+          Iniciá sesión o creá tu cuenta para acceder
+          a tu perfil dentro de Crimson Veil.
         </p>
 
-
-        <div class="auth-ornament">
-
-          <span></span>
-
-          <i class="fa-solid fa-moon"></i>
-
-          <span></span>
-
-        </div>
+      </header>
 
 
-        <p class="auth-quote">
+      <!-- TABS -->
+      <div class="auth-tabs">
 
-          “Beneath the veil,
-          we rise together.”
+        <button
+          type="button"
+          class="auth-tab active"
+          data-tab="login"
+        >
+          Iniciar sesión
+        </button>
 
-        </p>
-
+        <button
+          type="button"
+          class="auth-tab"
+          data-tab="register"
+        >
+          Crear cuenta
+        </button>
 
       </div>
 
 
+      <!-- =========================
+           LOGIN
+      ========================== -->
 
-      <!-- ========================================
-           RIGHT
-      ========================================= -->
+      <form
+        id="loginForm"
+        class="auth-form active"
+      >
 
-      <div class="auth-panel">
+        <div class="form-group">
 
+          <label for="loginEmail">
+            Email
+          </label>
 
-        <!-- TABS -->
-
-        <div class="auth-tabs">
-
-
-          <button
-            type="button"
-            class="auth-tab active"
-            data-tab="login"
+          <input
+            id="loginEmail"
+            type="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            required
           >
-
-            Iniciar sesión
-
-          </button>
-
-
-          <button
-            type="button"
-            class="auth-tab"
-            data-tab="register"
-          >
-
-            Crear cuenta
-
-          </button>
-
 
         </div>
 
 
+        <div class="form-group">
 
-        <!-- =====================================
-             LOGIN
-        ====================================== -->
+          <label for="loginPassword">
+            Contraseña
+          </label>
 
-        <form
-          id="loginForm"
-          class="auth-form active"
+          <div class="password-field">
+
+            <input
+              id="loginPassword"
+              type="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              aria-label="Mostrar contraseña"
+            >
+              <i class="fa-regular fa-eye"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn btn-primary auth-submit"
         >
 
+          <i class="fa-solid fa-right-to-bracket"></i>
+
+          Ingresar
+
+        </button>
+
+
+        <button
+          id="forgotPassword"
+          type="button"
+          class="forgot-button"
+        >
+          ¿Olvidaste tu contraseña?
+        </button>
+
+      </form>
+
+
+      <!-- =========================
+           REGISTRO
+      ========================== -->
+
+      <form
+        id="registerForm"
+        class="auth-form"
+      >
+
+        <div class="form-row">
 
           <div class="form-group">
 
-            <label for="loginEmail">
-              Email
+            <label for="registerNickname">
+              Nickname
             </label>
 
-
             <input
-              id="loginEmail"
-              type="email"
-              placeholder="tu@email.com"
-              autocomplete="email"
+              id="registerNickname"
+              type="text"
+              maxlength="25"
+              placeholder="QueenStranger"
               required
             >
 
           </div>
 
 
-
           <div class="form-group">
 
-            <label for="loginPassword">
-              Contraseña
+            <label for="registerRole">
+              Rol
             </label>
 
-
-            <div class="password-field">
-
-
-              <input
-                id="loginPassword"
-                type="password"
-                placeholder="••••••••"
-                autocomplete="current-password"
-                required
-              >
-
-
-              <button
-                type="button"
-                class="password-toggle"
-                aria-label="Mostrar contraseña"
-              >
-
-                <i class="fa-regular fa-eye"></i>
-
-              </button>
-
-
-            </div>
-
-          </div>
-
-
-
-          <button
-            type="submit"
-            class="btn btn-primary auth-submit"
-          >
-
-            <i class="fa-solid fa-right-to-bracket"></i>
-
-            Entrar
-
-          </button>
-
-
-
-          <button
-            id="forgotPassword"
-            type="button"
-            class="forgot-button"
-          >
-
-            ¿Olvidaste tu contraseña?
-
-          </button>
-
-
-        </form>
-
-
-
-        <!-- =====================================
-             REGISTER
-        ====================================== -->
-
-        <form
-          id="registerForm"
-          class="auth-form"
-        >
-
-
-          <div class="form-row">
-
-
-            <div class="form-group">
-
-              <label for="registerNickname">
-                Nickname
-              </label>
-
-
-              <input
-                id="registerNickname"
-                type="text"
-                maxlength="25"
-                placeholder="QueenStranger"
-                autocomplete="nickname"
-                required
-              >
-
-            </div>
-
-
-
-            <div class="form-group">
-
-              <label for="registerRole">
-                Rol
-              </label>
-
-
-              <select
-                id="registerRole"
-                required
-              >
-
-                <option value="">
-                  Elegí tu rol
-                </option>
-
-                <option value="top">
-                  Top
-                </option>
-
-                <option value="jungle">
-                  Jungle
-                </option>
-
-                <option value="mid">
-                  Mid
-                </option>
-
-                <option value="adc">
-                  ADC
-                </option>
-
-                <option value="support">
-                  Support
-                </option>
-
-              </select>
-
-            </div>
-
-
-          </div>
-
-
-
-          <div class="form-group">
-
-            <label for="registerEmail">
-              Email
-            </label>
-
-
-            <input
-              id="registerEmail"
-              type="email"
-              placeholder="tu@email.com"
-              autocomplete="email"
+            <select
+              id="registerRole"
               required
             >
 
-          </div>
+              <option value="">
+                Elegí tu rol
+              </option>
 
+              <option value="top">
+                Top
+              </option>
 
+              <option value="jungle">
+                Jungle
+              </option>
 
-          <div class="form-group">
+              <option value="mid">
+                Mid
+              </option>
 
-            <label for="registerPassword">
-              Contraseña
-            </label>
+              <option value="adc">
+                ADC
+              </option>
 
+              <option value="support">
+                Support
+              </option>
 
-            <div class="password-field">
-
-
-              <input
-                id="registerPassword"
-                type="password"
-                minlength="6"
-                placeholder="Mínimo 6 caracteres"
-                autocomplete="new-password"
-                required
-              >
-
-
-              <button
-                type="button"
-                class="password-toggle"
-                aria-label="Mostrar contraseña"
-              >
-
-                <i class="fa-regular fa-eye"></i>
-
-              </button>
-
-
-            </div>
+            </select>
 
           </div>
 
+        </div>
 
 
-          <button
-            type="submit"
-            class="btn btn-primary auth-submit"
+        <div class="form-group">
+
+          <label for="registerEmail">
+            Email
+          </label>
+
+          <input
+            id="registerEmail"
+            type="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            required
           >
 
-            <i class="fa-solid fa-user-plus"></i>
-
-            Crear cuenta
-
-          </button>
+        </div>
 
 
+        <div class="form-group">
 
-          <p class="register-note">
+          <label for="registerPassword">
+            Contraseña
+          </label>
 
-            Tu rol quedará asociado a tu perfil.
+          <div class="password-field">
 
-            Después vas a poder personalizar
-            tu frase, símbolo y color.
+            <input
+              id="registerPassword"
+              type="password"
+              minlength="6"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+              required
+            >
 
-          </p>
+            <button
+              type="button"
+              class="password-toggle"
+              aria-label="Mostrar contraseña"
+            >
+              <i class="fa-regular fa-eye"></i>
+            </button>
+
+          </div>
+
+        </div>
 
 
-        </form>
+        <button
+          type="submit"
+          class="btn btn-primary auth-submit"
+        >
+
+          <i class="fa-solid fa-user-plus"></i>
+
+          Crear cuenta
+
+        </button>
 
 
+        <p class="register-note">
+          Después vas a poder personalizar tu perfil.
+        </p>
 
-        <!-- MESSAGE -->
-
-        <div
-          id="authMessage"
-          class="auth-message"
-        ></div>
+      </form>
 
 
-      </div>
-
+      <!-- MESSAGE -->
+      <div
+        id="authMessage"
+        class="auth-message"
+      ></div>
 
     </section>
 
-
   </main>
 
-
-
-  <!-- ==========================================
-       JS
-  =========================================== -->
 
   <script
     type="module"
     src="js/auth.js"
   ></script>
-
 
 </body>
 

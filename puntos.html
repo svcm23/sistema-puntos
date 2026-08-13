@@ -89,6 +89,7 @@
 
     <div class="menu">
 
+
       <a href="index.html">
 
         <i class="fa-solid fa-house"></i>
@@ -125,9 +126,14 @@
       </a>
 
 
-      <!-- USUARIO -->
+      <!-- ======================================
+           USUARIO
+      ======================================= -->
 
       <div class="user-area">
+
+
+        <!-- NO LOGUEADA -->
 
         <a
           id="loginLink"
@@ -143,6 +149,8 @@
 
         </a>
 
+
+        <!-- LOGUEADA -->
 
         <div
           id="loggedUser"
@@ -167,6 +175,8 @@
 
           </button>
 
+
+          <!-- DROPDOWN -->
 
           <div
             id="userDropdown"
@@ -227,7 +237,9 @@
   <main class="points-main">
 
 
-    <!-- FONDO -->
+    <!-- ======================================
+         FONDO
+    ======================================= -->
 
     <div class="points-stars"></div>
 
@@ -289,49 +301,9 @@
 
 
       <!-- =====================================
-           NO LOGUEADA
-      ====================================== -->
-
-      <section
-        id="guestPanel"
-        class="guest-panel"
-      >
-
-        <span class="guest-symbol">
-          ✦
-        </span>
-
-        <p class="eyebrow">
-          PLAYER ACCESS
-        </p>
-
-        <h2>
-          ¿Querés registrar
-          <em>tu partida?</em>
-        </h2>
-
-        <p>
-          Iniciá sesión con tu cuenta de Crimson Veil.
-          El ranking puede verse sin iniciar sesión.
-        </p>
-
-        <a
-          href="login.html"
-          class="btn btn-primary"
-        >
-
-          <i class="fa-solid fa-user"></i>
-
-          Ingresar al Veil
-
-        </a>
-
-      </section>
-
-
-
-      <!-- =====================================
-           PLAYER AREA
+           ÁREA PRIVADA
+           
+           SOLO SE MUESTRA SI HAY SESIÓN
       ====================================== -->
 
       <section
@@ -341,11 +313,13 @@
 
 
         <!-- =================================
-             PLAYER SUMMARY
+             PLAYER PROGRESS
         ================================== -->
 
         <div class="player-progress">
 
+
+          <!-- PROGRESO -->
 
           <div class="progress-card">
 
@@ -376,7 +350,7 @@
 
 
 
-            <!-- STARS -->
+            <!-- ESTRELLAS -->
 
             <div class="star-progress">
 
@@ -405,6 +379,7 @@
             <!-- STATS -->
 
             <div class="points-stats">
+
 
               <div class="points-stat">
 
@@ -444,6 +419,7 @@
 
               </div>
 
+
             </div>
 
           </div>
@@ -451,10 +427,11 @@
 
 
           <!-- =================================
-               REGISTER MATCH
+               REGISTRAR PARTIDA
           ================================== -->
 
           <div class="match-register-card">
+
 
             <div class="register-heading">
 
@@ -468,11 +445,12 @@
               </h3>
 
               <p>
-                Solo podés registrar resultados
-                para tu propia cuenta.
+                El resultado se registra únicamente
+                en tu propia cuenta.
               </p>
 
             </div>
+
 
 
             <div class="match-actions">
@@ -538,6 +516,7 @@
 
               </button>
 
+
             </div>
 
 
@@ -545,8 +524,8 @@
 
               <i class="fa-solid fa-lock"></i>
 
-              La partida se registra directamente
-              en tu usuario.
+              Firebase identifica automáticamente
+              tu usuario.
 
             </p>
 
@@ -557,10 +536,11 @@
 
 
         <!-- =================================
-             RECENT MATCHES
+             HISTORIAL
         ================================== -->
 
         <section class="recent-section">
+
 
           <div class="subsection-heading">
 
@@ -601,12 +581,13 @@
 
         </section>
 
+
       </section>
 
 
 
       <!-- =====================================
-           TEAM RANKING
+           RANKING PÚBLICO
       ====================================== -->
 
       <section class="ranking-section">
@@ -656,6 +637,7 @@
 
       </section>
 
+
     </div>
 
   </main>
@@ -663,7 +645,7 @@
 
 
   <!-- ==========================================
-       MOTIVATIONAL POPUP
+       RESULT POPUP
   =========================================== -->
 
   <div

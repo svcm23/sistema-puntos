@@ -1,0 +1,381 @@
+.auth-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(153, 18, 48, .15),
+      transparent 32%
+    ),
+    #050405;
+}
+
+
+.auth-main {
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    120px
+    20px
+    70px;
+
+  overflow: hidden;
+}
+
+
+.auth-container {
+  width: min(460px, 100%);
+
+  position: relative;
+  z-index: 3;
+
+  padding:
+    38px;
+
+  border:
+    1px solid
+    rgba(239, 71, 106, .18);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(26, 9, 16, .82),
+      rgba(7, 5, 7, .95)
+    );
+
+  box-shadow:
+    0 30px 100px
+    rgba(0, 0, 0, .38);
+}
+
+
+.auth-container::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 60px;
+  height: 60px;
+
+  border-top:
+    1px solid
+    var(--crimson-light);
+
+  border-left:
+    1px solid
+    var(--crimson-light);
+
+  opacity: .45;
+}
+
+
+.auth-container::after {
+  content: "";
+
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  width: 60px;
+  height: 60px;
+
+  border-right:
+    1px solid
+    var(--crimson-light);
+
+  border-bottom:
+    1px solid
+    var(--crimson-light);
+
+  opacity: .24;
+}
+
+
+.auth-header {
+  margin-bottom: 30px;
+
+  text-align: center;
+}
+
+
+.auth-header h1 {
+  margin:
+    0
+    0
+    15px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(42px, 7vw, 58px);
+
+  font-weight: 400;
+
+  line-height: .95;
+
+  letter-spacing: -.04em;
+}
+
+
+.auth-header h1 em {
+  color: var(--rose-light);
+
+  font-weight: 400;
+}
+
+
+.auth-header > p:last-child {
+  max-width: 350px;
+
+  margin:
+    0
+    auto;
+
+  color:
+    var(--muted);
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+
+/* TABS */
+
+.auth-tabs {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  margin-bottom: 27px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+
+.auth-tab {
+  padding:
+    13px
+    10px;
+
+  border: 0;
+
+  border-bottom:
+    1px solid
+    transparent;
+
+  color:
+    var(--muted-dark);
+
+  background:
+    transparent;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: .06em;
+}
+
+
+.auth-tab.active {
+  color:
+    var(--rose-light);
+
+  border-bottom-color:
+    var(--crimson-light);
+}
+
+
+/* FORM */
+
+.auth-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+
+.auth-form.hidden {
+  display: none;
+}
+
+
+.form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.form-group label {
+  color:
+    #ba9ca5;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: .16em;
+
+  text-transform: uppercase;
+}
+
+
+.form-group input,
+.form-group select {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding:
+    0
+    14px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, .08);
+
+  border-radius:
+    5px;
+
+  outline: none;
+
+  color:
+    var(--white);
+
+  background:
+    rgba(255,255,255,.025);
+
+  transition:
+    .2s ease;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color:
+    rgba(239, 71, 106, .42);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(239, 71, 106, .06);
+}
+
+
+.form-group select option {
+  background:
+    #0d080b;
+
+  color:
+    var(--white);
+}
+
+
+.auth-submit {
+  width: 100%;
+
+  margin-top: 5px;
+
+  border-radius:
+    5px;
+}
+
+
+/* MENSAJE */
+
+.auth-message {
+  min-height: 20px;
+
+  margin-top: 18px;
+
+  text-align: center;
+
+  color:
+    var(--rose);
+
+  font-size: 11px;
+}
+
+
+.auth-message.success {
+  color: #e9a8b8;
+}
+
+
+.auth-message.error {
+  color: #ff6d85;
+}
+
+
+/* DECORACIONES */
+
+.auth-decoration {
+  position: absolute;
+
+  color:
+    rgba(239,71,106,.15);
+
+  pointer-events: none;
+}
+
+
+.auth-star-one {
+  top: 23%;
+  left: 15%;
+
+  font-size: 40px;
+}
+
+
+.auth-star-two {
+  right: 14%;
+  bottom: 27%;
+
+  font-size: 26px;
+}
+
+
+.auth-moon {
+  right: 19%;
+  top: 21%;
+
+  color:
+    rgba(239,71,106,.08);
+
+  font-size: 80px;
+}
+
+
+@media (max-width: 600px) {
+
+  .auth-container {
+    padding:
+      30px
+      22px;
+  }
+
+}

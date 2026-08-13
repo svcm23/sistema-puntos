@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Ingresar — Crimson Veil</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/auth.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+</head>
+
+<body class="auth-page">
+
+  <nav class="site-nav">
+
+    <a href="index.html" class="brand">
+
+      <div class="nav-logo-wrap">
+
+        <img
+          src="img/crimson-veil-logo.jpeg"
+          alt="Crimson Veil"
+          class="nav-logo"
+        >
+
+      </div>
+
+      <div class="brand-copy">
+        <strong>Crimson Veil</strong>
+        <small>Team Hub</small>
+      </div>
+
+    </a>
+
+    <div class="menu">
+
+      <a href="index.html">
+        <i class="fa-solid fa-house"></i>
+        <span>Inicio</span>
+      </a>
+
+    </div>
+
+  </nav>
+
+
+  <main class="auth-main">
+
+    <div class="auth-decoration auth-star-one">✦</div>
+    <div class="auth-decoration auth-star-two">✧</div>
+    <div class="auth-decoration auth-moon">☾</div>
+
+
+    <section class="auth-container">
+
+      <div class="auth-header">
+
+        <p class="eyebrow">
+          PLAYER ACCESS
+        </p>
+
+        <h1>
+          Enter the
+          <em>Veil.</em>
+        </h1>
+
+        <p>
+          Iniciá sesión o creá tu cuenta para acceder
+          a tu perfil dentro de Crimson Veil.
+        </p>
+
+      </div>
+
+
+      <div class="auth-tabs">
+
+        <button
+          id="loginTab"
+          class="auth-tab active"
+          type="button"
+        >
+          Iniciar sesión
+        </button>
+
+        <button
+          id="registerTab"
+          class="auth-tab"
+          type="button"
+        >
+          Crear cuenta
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN -->
+
+      <form
+        id="loginForm"
+        class="auth-form"
+      >
+
+        <div class="form-group">
+
+          <label for="loginEmail">
+            Email
+          </label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            placeholder="tu@email.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="loginPassword">
+            Contraseña
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="••••••••"
+            required
+          >
+
+        </div>
+
+
+        <button
+          class="btn btn-primary auth-submit"
+          type="submit"
+        >
+
+          <i class="fa-solid fa-right-to-bracket"></i>
+
+          Ingresar
+
+        </button>
+
+      </form>
+
+
+      <!-- REGISTRO -->
+
+      <form
+        id="registerForm"
+        class="auth-form hidden"
+      >
+
+        <div class="form-group">
+
+          <label for="registerNickname">
+            Nickname
+          </label>
+
+          <input
+            id="registerNickname"
+            type="text"
+            placeholder="QueenStranger"
+            maxlength="30"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerRole">
+            Rol
+          </label>
+
+          <select
+            id="registerRole"
+            required
+          >
+
+            <option value="">
+              Seleccioná tu rol
+            </option>
+
+            <option value="top">
+              Top
+            </option>
+
+            <option value="jungle">
+              Jungle
+            </option>
+
+            <option value="mid">
+              Mid
+            </option>
+
+            <option value="adc">
+              ADC
+            </option>
+
+            <option value="support">
+              Support
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerEmail">
+            Email
+          </label>
+
+          <input
+            id="registerEmail"
+            type="email"
+            placeholder="tu@email.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerPassword">
+            Contraseña
+          </label>
+
+          <input
+            id="registerPassword"
+            type="password"
+            placeholder="Mínimo 6 caracteres"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+
+        <button
+          class="btn btn-primary auth-submit"
+          type="submit"
+        >
+
+          <i class="fa-solid fa-user-plus"></i>
+
+          Crear cuenta
+
+        </button>
+
+      </form>
+
+
+      <div
+        id="authMessage"
+        class="auth-message"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <script
+    type="module"
+    src="js/auth.js"
+  ></script>
+
+</body>
+</html>

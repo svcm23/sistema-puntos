@@ -298,123 +298,6 @@
 
 
 /* ==================================================
-   GUEST
-================================================== */
-
-.guest-panel {
-  max-width: 650px;
-
-  position: relative;
-
-  margin:
-    0
-    auto
-    80px;
-
-  padding:
-    55px
-    45px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.055);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(26,8,15,.55),
-      rgba(7,5,7,.9)
-    );
-
-  text-align: center;
-}
-
-
-.guest-panel::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 70px;
-  height: 70px;
-
-  border-top:
-    1px solid
-    rgba(239,71,106,.45);
-
-  border-left:
-    1px solid
-    rgba(239,71,106,.45);
-}
-
-
-.guest-symbol {
-  display: block;
-
-  margin-bottom: 16px;
-
-  color:
-    var(--rose);
-
-  font-size: 18px;
-}
-
-
-.guest-panel h2 {
-  margin:
-    4px
-    0
-    17px;
-
-  color:
-    var(--white);
-
-  font-family:
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(
-      35px,
-      5vw,
-      48px
-    );
-
-  font-weight: 400;
-
-  line-height: 1;
-}
-
-
-.guest-panel h2 em {
-  color:
-    var(--rose-light);
-
-  font-weight: 400;
-}
-
-
-.guest-panel > p:not(.eyebrow) {
-  max-width: 430px;
-
-  margin:
-    0
-    auto
-    25px;
-
-  color:
-    var(--muted);
-
-  font-size: 10px;
-
-  line-height: 1.8;
-}
-
-
-/* ==================================================
    PLAYER AREA
 ================================================== */
 
@@ -1303,6 +1186,362 @@
 
 
 /* ==================================================
+   TOP 3 — VEIL PODIUM
+================================================== */
+
+.ranking-row.rank-first,
+.ranking-row.rank-second,
+.ranking-row.rank-third {
+  margin:
+    7px
+    0;
+
+  border:
+    1px solid
+    rgba(255,255,255,.055);
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.055);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.018),
+      transparent 72%
+    );
+}
+
+
+/* ==================================================
+   #1
+================================================== */
+
+.ranking-row.rank-first {
+  min-height:
+    102px;
+
+  margin-top:
+    13px;
+
+  padding:
+    17px
+    18px;
+
+  border-color:
+    rgba(226,190,104,.24);
+
+  background:
+    radial-gradient(
+      circle at 7% 50%,
+      rgba(226,190,104,.095),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(90,56,24,.09),
+      rgba(239,71,106,.018) 58%,
+      transparent
+    );
+
+  box-shadow:
+    inset 3px 0 0
+    rgba(226,190,104,.52),
+
+    0
+    18px
+    50px
+    rgba(0,0,0,.13);
+}
+
+
+.ranking-row.rank-first::before {
+  content:
+    "FIRST VEIL";
+
+  position:
+    absolute;
+
+  top:
+    9px;
+  right:
+    16px;
+
+  color:
+    rgba(226,190,104,.34);
+
+  font-size:
+    6px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    .24em;
+}
+
+
+.ranking-row.rank-first .ranking-position {
+  color:
+    #e3bd66;
+
+  font-size:
+    34px;
+}
+
+
+.ranking-row.rank-first .ranking-player strong {
+  color:
+    #f4e8d1;
+
+  font-size:
+    23px;
+}
+
+
+.ranking-row.rank-first .ranking-symbol-player {
+  color:
+    #e3bd66;
+
+  text-shadow:
+    0
+    0
+    13px
+    rgba(227,189,102,.25);
+}
+
+
+.ranking-row.rank-first .ranking-score strong {
+  color:
+    #e3bd66;
+
+  font-size:
+    30px;
+}
+
+
+/* ==================================================
+   #2
+================================================== */
+
+.ranking-row.rank-second {
+  border-color:
+    rgba(196,188,193,.14);
+
+  background:
+    radial-gradient(
+      circle at 7% 50%,
+      rgba(196,188,193,.055),
+      transparent 30%
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.022),
+      transparent 65%
+    );
+
+  box-shadow:
+    inset 2px 0 0
+    rgba(196,188,193,.24);
+}
+
+
+.ranking-row.rank-second .ranking-position {
+  color:
+    #c4bcc1;
+
+  font-size:
+    30px;
+}
+
+
+.ranking-row.rank-second .ranking-player strong {
+  color:
+    #eadfe2;
+
+  font-size:
+    21px;
+}
+
+
+.ranking-row.rank-second .ranking-score strong {
+  color:
+    #d5c9cd;
+}
+
+
+/* ==================================================
+   #3
+================================================== */
+
+.ranking-row.rank-third {
+  border-color:
+    rgba(183,114,81,.13);
+
+  background:
+    radial-gradient(
+      circle at 7% 50%,
+      rgba(183,114,81,.052),
+      transparent 30%
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(106,56,40,.027),
+      transparent 65%
+    );
+
+  box-shadow:
+    inset 2px 0 0
+    rgba(183,114,81,.22);
+}
+
+
+.ranking-row.rank-third .ranking-position {
+  color:
+    #b9795d;
+
+  font-size:
+    29px;
+}
+
+
+.ranking-row.rank-third .ranking-player strong {
+  color:
+    #e5d4d8;
+
+  font-size:
+    21px;
+}
+
+
+.ranking-row.rank-third .ranking-score strong {
+  color:
+    #c78b72;
+}
+
+
+/* ==================================================
+   CURRENT USER
+================================================== */
+
+.ranking-row.current-user {
+  position:
+    relative;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(239,71,106,.055),
+      rgba(239,71,106,.012) 62%,
+      transparent
+    );
+
+  box-shadow:
+    inset 2px 0 0
+    rgba(239,71,106,.55);
+}
+
+
+.ranking-row.current-user.rank-first,
+.ranking-row.current-user.rank-second,
+.ranking-row.current-user.rank-third {
+  box-shadow:
+    inset 3px 0 0
+    var(--rose),
+
+    0 0 0 1px
+    rgba(239,71,106,.055),
+
+    0
+    18px
+    50px
+    rgba(0,0,0,.13);
+}
+
+
+.ranking-you {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  min-height:
+    17px;
+
+  margin-left:
+    3px;
+
+  padding:
+    0
+    7px;
+
+  border:
+    1px solid
+    rgba(239,71,106,.19);
+
+  border-radius:
+    999px;
+
+  color:
+    var(--rose-light);
+
+  background:
+    rgba(239,71,106,.045);
+
+  font-family:
+    inherit;
+
+  font-size:
+    6px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    .13em;
+
+  vertical-align:
+    middle;
+}
+
+
+/* ==================================================
+   PODIUM HOVER
+================================================== */
+
+.ranking-row.rank-first:hover {
+  background:
+    radial-gradient(
+      circle at 7% 50%,
+      rgba(226,190,104,.12),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(90,56,24,.11),
+      rgba(239,71,106,.024) 58%,
+      transparent
+    );
+}
+
+
+.ranking-row.rank-second:hover,
+.ranking-row.rank-third:hover {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.03),
+      transparent 68%
+    );
+}
+
+
+/* ==================================================
    EMPTY / LOADING
 ================================================== */
 
@@ -1571,6 +1810,55 @@
   .ranking-player strong {
     font-size:
       17px;
+  }
+
+
+  /* TOP 3 MOBILE */
+
+  .ranking-row.rank-first {
+    min-height:
+      92px;
+
+    padding:
+      14px
+      10px;
+  }
+
+
+  .ranking-row.rank-first::before {
+    display:
+      none;
+  }
+
+
+  .ranking-row.rank-first .ranking-position {
+    font-size:
+      29px;
+  }
+
+
+  .ranking-row.rank-first .ranking-player strong {
+    font-size:
+      19px;
+  }
+
+
+  .ranking-row.rank-first .ranking-score strong {
+    font-size:
+      25px;
+  }
+
+
+  .ranking-row.rank-second .ranking-position,
+  .ranking-row.rank-third .ranking-position {
+    font-size:
+      26px;
+  }
+
+
+  .ranking-you {
+    display:
+      none;
   }
 
 }

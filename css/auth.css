@@ -1,6 +1,5 @@
 /* ============================================
-   CRIMSON VEIL
-   AUTH
+   CRIMSON VEIL — AUTH
 ============================================ */
 
 .auth-page {
@@ -26,7 +25,6 @@
   position: relative;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
@@ -54,7 +52,7 @@
 
   background-image:
     radial-gradient(
-      rgba(255, 160, 185, .45) .7px,
+      rgba(255,160,185,.45) .7px,
       transparent .8px
     );
 
@@ -77,7 +75,7 @@
   position: absolute;
 
   color:
-    rgba(239, 71, 106, .12);
+    rgba(239,71,106,.12);
 
   pointer-events: none;
 }
@@ -135,8 +133,8 @@
   background:
     linear-gradient(
       150deg,
-      rgba(26, 8, 15, .87),
-      rgba(7, 5, 7, .97)
+      rgba(26,8,15,.87),
+      rgba(7,5,7,.97)
     );
 
   box-shadow:
@@ -146,8 +144,6 @@
     rgba(0,0,0,.42);
 }
 
-
-/* ESQUINA SUPERIOR */
 
 .auth-card::before {
   content: "";
@@ -171,8 +167,6 @@
   opacity: .55;
 }
 
-
-/* ESQUINA INFERIOR */
 
 .auth-card::after {
   content: "";
@@ -274,7 +268,7 @@
   display: grid;
 
   grid-template-columns:
-    repeat(2, 1fr);
+    repeat(2,1fr);
 
   margin-bottom: 28px;
 
@@ -445,6 +439,32 @@
    PASSWORD
 ============================================ */
 
+.password-label-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.forgot-link {
+  color:
+    #71545d;
+
+  text-decoration: none;
+
+  font-size: 8px;
+
+  transition: .2s ease;
+}
+
+
+.forgot-link:hover {
+  color:
+    var(--rose-light);
+}
+
+
 .password-field {
   position: relative;
 }
@@ -510,39 +530,6 @@
   opacity: .45;
 
   cursor: wait;
-}
-
-
-/* ============================================
-   FORGOT
-============================================ */
-
-.forgot-button {
-  align-self: center;
-
-  padding:
-    4px
-    8px;
-
-  border: 0;
-
-  color:
-    #74565f;
-
-  background:
-    transparent;
-
-  cursor: pointer;
-
-  font-size: 9px;
-
-  transition: .2s ease;
-}
-
-
-.forgot-button:hover {
-  color:
-    var(--rose);
 }
 
 
@@ -626,8 +613,7 @@
 
 
   .form-row {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
 
 }

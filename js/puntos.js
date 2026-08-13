@@ -31,12 +31,6 @@ import {
    ELEMENTS
 ===================================================== */
 
-const guestPanel =
-  document.getElementById(
-    "guestPanel"
-  );
-
-
 const playerArea =
   document.getElementById(
     "playerArea"
@@ -136,8 +130,9 @@ let stopMatchesListener =
   null;
 
 
+
 /* =====================================================
-   MOTIVATIONAL MESSAGES
+   MESSAGES
 ===================================================== */
 
 const victoryMessages = [
@@ -197,8 +192,17 @@ onAuthStateChanged(
       user;
 
 
+    /*
+      Si cambia la sesión,
+      cerramos listeners anteriores.
+    */
+
     cleanUserListeners();
 
+
+    /* ==========================================
+       NO LOGUEADA
+    ========================================== */
 
     if (!user) {
 
@@ -206,25 +210,29 @@ onAuthStateChanged(
         null;
 
 
-      guestPanel.classList.remove(
-        "hidden"
-      );
-
-
       playerArea.classList.add(
         "hidden"
       );
 
+
+      /*
+        IMPORTANTE:
+
+        No hacemos return sobre el ranking.
+
+        El ranking tiene su propio listener
+        global más abajo y sigue funcionando.
+      */
 
       return;
 
     }
 
 
-    guestPanel.classList.add(
-      "hidden"
-    );
 
+    /* ==========================================
+       LOGUEADA
+    ========================================== */
 
     playerArea.classList.remove(
       "hidden"
@@ -306,7 +314,7 @@ function listenCurrentProfile(
 
 
 /* =====================================================
-   RENDER PLAYER
+   RENDER CURRENT PLAYER
 ===================================================== */
 
 function renderCurrentProfile() {
@@ -352,8 +360,11 @@ function renderCurrentProfile() {
 
   const matches =
     Number(
-      currentProfile.partidas ||
-      wins + losses
+      currentProfile.partidas ??
+      (
+        wins +
+        losses
+      )
     );
 
 
@@ -494,7 +505,7 @@ function renderStars(
 
 
 /* =====================================================
-   REGISTER MATCH
+   REGISTER MATCH BUTTONS
 ===================================================== */
 
 winButton.addEventListener(
@@ -527,6 +538,10 @@ lossButton.addEventListener(
 );
 
 
+
+/* =====================================================
+   REGISTER MATCH
+===================================================== */
 
 async function registerMatch(
   result
@@ -657,16 +672,17 @@ async function registerMatch(
           1;
 
 
-        /*
-          Actualizamos únicamente
-          LA CUENTA LOGUEADA.
-        */
+
+        /* ==========================================
+           UPDATE PROFILE
+        ========================================== */
 
         transaction.update(
 
           profileReference,
 
           {
+
             puntos:
               newPoints,
 
@@ -681,20 +697,23 @@ async function registerMatch(
 
             actualizadoPuntos:
               serverTimestamp()
+
           }
 
         );
 
 
-        /*
-          Historial individual.
-        */
+
+        /* ==========================================
+           MATCH HISTORY
+        ========================================== */
 
         transaction.set(
 
           matchReference,
 
           {
+
             usuarioId:
               currentUser.uid,
 
@@ -706,6 +725,7 @@ async function registerMatch(
 
             creado:
               serverTimestamp()
+
           }
 
         );
@@ -801,10 +821,12 @@ function listenRecentMatches(
           documentSnapshot => {
 
             matches.push({
+
               id:
                 documentSnapshot.id,
 
               ...documentSnapshot.data()
+
             });
 
           }
@@ -983,10 +1005,6 @@ onSnapshot(
           );
 
 
-        /*
-          Solo roles de juego.
-        */
-
         if (
           !isPlayerRole(
             role
@@ -1043,13 +1061,20 @@ onSnapshot(
     );
 
 
+
+    /* ==========================================
+       SORT
+    ========================================== */
+
     players.sort(
 
-      (a,b) => {
+      (
+        a,
+        b
+      ) => {
 
-        /*
-          Primero puntos.
-        */
+
+        /* MÁS PUNTOS */
 
         if (
           b.points !==
@@ -1064,10 +1089,7 @@ onSnapshot(
         }
 
 
-        /*
-          Empate:
-          más victorias.
-        */
+        /* MÁS VICTORIAS */
 
         if (
           b.wins !==
@@ -1082,14 +1104,16 @@ onSnapshot(
         }
 
 
-        /*
-          Después nickname.
-        */
+        /* NICKNAME */
 
         return (
           a.nickname.localeCompare(
             b.nickname,
-            "es"
+            "es",
+            {
+              sensitivity:
+                "base"
+            }
           )
         );
 
@@ -1245,6 +1269,7 @@ function renderRanking(
             ${formatRole(player.role)}
 
             ·
+
             ${player.wins}V
 
             ${player.losses}D
@@ -1284,7 +1309,7 @@ function renderRanking(
 
 
 /* =====================================================
-   MESSAGE
+   RESULT MESSAGE
 ===================================================== */
 
 function showResultMessage(
@@ -1330,6 +1355,10 @@ function showResultMessage(
 
 
 
+/* =====================================================
+   ERROR MESSAGE
+===================================================== */
+
 function showErrorMessage() {
 
   resultPopup.textContent =
@@ -1355,7 +1384,7 @@ function showErrorMessage() {
 
 
 /* =====================================================
-   EFFECTS
+   CONFETTI
 ===================================================== */
 
 function launchConfetti() {
@@ -1379,7 +1408,8 @@ function launchConfetti() {
       85,
 
     origin: {
-      y: .62
+      y:
+        .62
     }
 
   });
@@ -1388,12 +1418,23 @@ function launchConfetti() {
 
 
 
+/* =====================================================
+   SHAKE
+===================================================== */
+
 function shakePage() {
 
   const container =
     document.querySelector(
       ".points-container"
     );
+
+
+  if (!container) {
+
+    return;
+
+  }
 
 
   container.classList.add(
@@ -1417,7 +1458,7 @@ function shakePage() {
 
 
 /* =====================================================
-   BUTTON STATE
+   REGISTER BUTTON STATE
 ===================================================== */
 
 function setRegisterDisabled(
@@ -1436,7 +1477,7 @@ function setRegisterDisabled(
 
 
 /* =====================================================
-   USER LISTENER CLEANUP
+   CLEAN LISTENERS
 ===================================================== */
 
 function cleanUserListeners() {
@@ -1469,7 +1510,7 @@ function cleanUserListeners() {
 
 
 /* =====================================================
-   HELPERS
+   NORMALIZE ROLE
 ===================================================== */
 
 function normalizeRole(
@@ -1486,6 +1527,10 @@ function normalizeRole(
 }
 
 
+
+/* =====================================================
+   FORMAT ROLE
+===================================================== */
 
 function formatRole(
   role
@@ -1521,6 +1566,10 @@ function formatRole(
 
 
 
+/* =====================================================
+   PLAYER ROLE
+===================================================== */
+
 function isPlayerRole(
   role
 ) {
@@ -1538,6 +1587,10 @@ function isPlayerRole(
 }
 
 
+
+/* =====================================================
+   DATE
+===================================================== */
 
 function formatDate(
   timestamp
@@ -1558,6 +1611,7 @@ function formatDate(
     .toLocaleString(
       "es-UY",
       {
+
         day:
           "2-digit",
 
@@ -1572,12 +1626,17 @@ function formatDate(
 
         minute:
           "2-digit"
+
       }
     );
 
 }
 
 
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
 function escapeHTML(
   value

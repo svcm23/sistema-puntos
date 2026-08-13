@@ -7,12 +7,12 @@ import {
   db
 } from "./firebase.js";
 
+
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail
+  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
 
 import {
   doc,
@@ -30,24 +30,22 @@ const tabs =
     ".auth-tab"
   );
 
+
 const loginForm =
   document.getElementById(
     "loginForm"
   );
+
 
 const registerForm =
   document.getElementById(
     "registerForm"
   );
 
+
 const authMessage =
   document.getElementById(
     "authMessage"
-  );
-
-const forgotPassword =
-  document.getElementById(
-    "forgotPassword"
   );
 
 
@@ -101,7 +99,7 @@ tabs.forEach(tab => {
 
 
 // ============================================
-// PASSWORD VISIBILITY
+// PASSWORD TOGGLE
 // ============================================
 
 document
@@ -117,7 +115,7 @@ document
 
         const input =
           button
-            .parentElement
+            .closest(".password-field")
             .querySelector("input");
 
 
@@ -126,25 +124,20 @@ document
             .querySelector("i");
 
 
-        if (
-          input.type === "password"
-        ) {
+        const isVisible =
+          input.type === "text";
 
-          input.type =
-            "text";
 
-          icon.className =
-            "fa-regular fa-eye-slash";
+        input.type =
+          isVisible
+            ? "password"
+            : "text";
 
-        } else {
 
-          input.type =
-            "password";
-
-          icon.className =
-            "fa-regular fa-eye";
-
-        }
+        icon.className =
+          isVisible
+            ? "fa-regular fa-eye"
+            : "fa-regular fa-eye-slash";
 
       }
     );
@@ -216,16 +209,14 @@ registerForm.addEventListener(
 
     try {
 
-      setFormsDisabled(true);
+      setDisabled(true);
 
-      showLoading(
+      showMessage(
         "Creando tu cuenta..."
       );
 
 
-      // ==================================
-      // FIREBASE AUTH
-      // ==================================
+      // AUTH
 
       const credential =
         await createUserWithEmailAndPassword(
@@ -239,9 +230,7 @@ registerForm.addEventListener(
         credential.user;
 
 
-      // ==================================
-      // FIRESTORE PROFILE
-      // ==================================
+      // PERFIL FIRESTORE
 
       await setDoc(
 
@@ -304,23 +293,25 @@ registerForm.addEventListener(
             "perfil.html";
 
         },
-
-        800
+        750
       );
 
     } catch(error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
+
 
       showError(
-        firebaseErrorMessage(
+        getFirebaseError(
           error.code
         )
       );
 
     } finally {
 
-      setFormsDisabled(false);
+      setDisabled(false);
 
     }
 
@@ -373,9 +364,9 @@ loginForm.addEventListener(
 
     try {
 
-      setFormsDisabled(true);
+      setDisabled(true);
 
-      showLoading(
+      showMessage(
         "Ingresando..."
       );
 
@@ -399,107 +390,27 @@ loginForm.addEventListener(
             "index.html";
 
         },
-
-        650
+        600
       );
 
     } catch(error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
 
       showError(
-        firebaseErrorMessage(
+        getFirebaseError(
           error.code
         )
       );
 
     } finally {
 
-      setFormsDisabled(false);
+      setDisabled(false);
 
     }
-
-  }
-);
-
-
-// ============================================
-// PASSWORD RESET
-// ============================================
-
-forgotPassword?.addEventListener(
-  "click",
-
-  async () => {
-
-    const email =
-      document
-        .getElementById(
-          "loginEmail"
-        )
-        .value
-        .trim();
-
-
-    if (!email) {
-
-      showError(
-        "Escribí primero tu email."
-      );
-
-      return;
-
-    }
-
-
-    try {
-
-      await sendPasswordResetEmail(
-        auth,
-        email
-      );
-
-
-      showSuccess(
-        "Te enviamos un correo para cambiar tu contraseña."
-      );
-
-    } catch(error) {
-
-      console.error(error);
-
-
-      showError(
-        firebaseErrorMessage(
-          error.code
-        )
-      );
-
-    }
-
-  }
-);
-
-
-// ============================================
-// ALREADY LOGGED IN
-// ============================================
-
-onAuthStateChanged(
-  auth,
-
-  user => {
-
-    if (!user) {
-      return;
-    }
-
-
-    console.log(
-      "Sesión activa:",
-      user.uid
-    );
 
   }
 );
@@ -548,7 +459,7 @@ function getDefaultColor(role) {
 
 
 // ============================================
-// UI HELPERS
+// UI
 // ============================================
 
 function clearMessage() {
@@ -562,7 +473,7 @@ function clearMessage() {
 }
 
 
-function showLoading(text) {
+function showMessage(text) {
 
   authMessage.textContent =
     text;
@@ -595,7 +506,7 @@ function showError(text) {
 }
 
 
-function setFormsDisabled(disabled) {
+function setDisabled(disabled) {
 
   document
     .querySelectorAll(
@@ -612,56 +523,39 @@ function setFormsDisabled(disabled) {
 
 
 // ============================================
-// FIREBASE ERRORS
+// ERRORS
 // ============================================
 
-function firebaseErrorMessage(code) {
+function getFirebaseError(code) {
 
   switch(code) {
 
     case "auth/email-already-in-use":
-
       return "Ese email ya tiene una cuenta.";
 
-
     case "auth/invalid-email":
-
       return "El email ingresado no es válido.";
 
-
     case "auth/weak-password":
-
       return "La contraseña debe tener al menos 6 caracteres.";
 
-
-    case "auth/invalid-login-credentials":
     case "auth/invalid-credential":
-
+    case "auth/invalid-login-credentials":
       return "Email o contraseña incorrectos.";
 
-
     case "auth/user-not-found":
-
       return "No existe una cuenta con ese email.";
 
-
     case "auth/wrong-password":
-
       return "La contraseña es incorrecta.";
 
-
     case "auth/too-many-requests":
-
       return "Demasiados intentos. Probá nuevamente más tarde.";
 
-
     case "auth/network-request-failed":
-
-      return "No pudimos conectarnos. Revisá tu conexión.";
-
+      return "No se pudo conectar con Firebase.";
 
     default:
-
       return "Ocurrió un error. Probá nuevamente.";
 
   }

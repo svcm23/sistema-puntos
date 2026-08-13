@@ -1,36 +1,64 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
   <meta charset="UTF-8">
 
-  <title>Ingresar — Crimson Veil</title>
+
+  <title>
+    Ingresar — Crimson Veil
+  </title>
+
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
   >
 
+
   <link
     rel="stylesheet"
     href="css/styles.css"
   >
+
 
   <link
     rel="stylesheet"
     href="css/auth.css"
   >
 
+
+  <link
+    rel="stylesheet"
+    href="css/navbar.css"
+  >
+
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   >
+
 </head>
+
 
 <body class="auth-page">
 
+
+  <!-- ==========================================
+       NAV
+  =========================================== -->
+
   <nav class="site-nav">
 
-    <a href="index.html" class="brand">
+
+    <a
+      href="index.html"
+      class="brand"
+    >
+
 
       <div class="nav-logo-wrap">
 
@@ -42,252 +70,447 @@
 
       </div>
 
+
       <div class="brand-copy">
-        <strong>Crimson Veil</strong>
-        <small>Team Hub</small>
+
+        <strong>
+          Crimson Veil
+        </strong>
+
+        <small>
+          Team Hub
+        </small>
+
       </div>
 
     </a>
 
+
     <div class="menu">
 
       <a href="index.html">
+
         <i class="fa-solid fa-house"></i>
-        <span>Inicio</span>
+
+        <span>
+          Inicio
+        </span>
+
       </a>
 
     </div>
 
+
   </nav>
 
 
+
+  <!-- ==========================================
+       AUTH
+  =========================================== -->
+
   <main class="auth-main">
 
-    <div class="auth-decoration auth-star-one">✦</div>
-    <div class="auth-decoration auth-star-two">✧</div>
-    <div class="auth-decoration auth-moon">☾</div>
+
+    <div class="auth-stars"></div>
 
 
-    <section class="auth-container">
+    <span class="auth-decoration decoration-one">
+      ✦
+    </span>
 
-      <div class="auth-header">
+
+    <span class="auth-decoration decoration-two">
+      ✧
+    </span>
+
+
+    <span class="auth-decoration decoration-three">
+      ☾
+    </span>
+
+
+
+    <section class="auth-shell">
+
+
+      <!-- ========================================
+           LEFT
+      ========================================= -->
+
+      <div class="auth-left">
+
 
         <p class="eyebrow">
           PLAYER ACCESS
         </p>
 
+
         <h1>
+
           Enter the
-          <em>Veil.</em>
+
+          <em>
+            Veil.
+          </em>
+
         </h1>
 
-        <p>
-          Iniciá sesión o creá tu cuenta para acceder
-          a tu perfil dentro de Crimson Veil.
+
+        <p class="auth-intro">
+
+          Tu espacio dentro de Crimson Veil.
+
+          Accedé a tu perfil,
+          registrá tus partidas
+          y seguí tu progreso dentro del team.
+
         </p>
 
+
+        <div class="auth-ornament">
+
+          <span></span>
+
+          <i class="fa-solid fa-moon"></i>
+
+          <span></span>
+
+        </div>
+
+
+        <p class="auth-quote">
+
+          “Beneath the veil,
+          we rise together.”
+
+        </p>
+
+
       </div>
 
 
-      <div class="auth-tabs">
 
-        <button
-          id="loginTab"
-          class="auth-tab active"
-          type="button"
-        >
-          Iniciar sesión
-        </button>
+      <!-- ========================================
+           RIGHT
+      ========================================= -->
 
-        <button
-          id="registerTab"
-          class="auth-tab"
-          type="button"
+      <div class="auth-panel">
+
+
+        <!-- TABS -->
+
+        <div class="auth-tabs">
+
+
+          <button
+            type="button"
+            class="auth-tab active"
+            data-tab="login"
+          >
+
+            Iniciar sesión
+
+          </button>
+
+
+          <button
+            type="button"
+            class="auth-tab"
+            data-tab="register"
+          >
+
+            Crear cuenta
+
+          </button>
+
+
+        </div>
+
+
+
+        <!-- =====================================
+             LOGIN
+        ====================================== -->
+
+        <form
+          id="loginForm"
+          class="auth-form active"
         >
-          Crear cuenta
-        </button>
+
+
+          <div class="form-group">
+
+            <label for="loginEmail">
+              Email
+            </label>
+
+
+            <input
+              id="loginEmail"
+              type="email"
+              placeholder="tu@email.com"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+
+
+          <div class="form-group">
+
+            <label for="loginPassword">
+              Contraseña
+            </label>
+
+
+            <div class="password-field">
+
+
+              <input
+                id="loginPassword"
+                type="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+              >
+
+
+              <button
+                type="button"
+                class="password-toggle"
+                aria-label="Mostrar contraseña"
+              >
+
+                <i class="fa-regular fa-eye"></i>
+
+              </button>
+
+
+            </div>
+
+          </div>
+
+
+
+          <button
+            type="submit"
+            class="btn btn-primary auth-submit"
+          >
+
+            <i class="fa-solid fa-right-to-bracket"></i>
+
+            Entrar
+
+          </button>
+
+
+
+          <button
+            id="forgotPassword"
+            type="button"
+            class="forgot-button"
+          >
+
+            ¿Olvidaste tu contraseña?
+
+          </button>
+
+
+        </form>
+
+
+
+        <!-- =====================================
+             REGISTER
+        ====================================== -->
+
+        <form
+          id="registerForm"
+          class="auth-form"
+        >
+
+
+          <div class="form-row">
+
+
+            <div class="form-group">
+
+              <label for="registerNickname">
+                Nickname
+              </label>
+
+
+              <input
+                id="registerNickname"
+                type="text"
+                maxlength="25"
+                placeholder="QueenStranger"
+                autocomplete="nickname"
+                required
+              >
+
+            </div>
+
+
+
+            <div class="form-group">
+
+              <label for="registerRole">
+                Rol
+              </label>
+
+
+              <select
+                id="registerRole"
+                required
+              >
+
+                <option value="">
+                  Elegí tu rol
+                </option>
+
+                <option value="top">
+                  Top
+                </option>
+
+                <option value="jungle">
+                  Jungle
+                </option>
+
+                <option value="mid">
+                  Mid
+                </option>
+
+                <option value="adc">
+                  ADC
+                </option>
+
+                <option value="support">
+                  Support
+                </option>
+
+              </select>
+
+            </div>
+
+
+          </div>
+
+
+
+          <div class="form-group">
+
+            <label for="registerEmail">
+              Email
+            </label>
+
+
+            <input
+              id="registerEmail"
+              type="email"
+              placeholder="tu@email.com"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+
+
+          <div class="form-group">
+
+            <label for="registerPassword">
+              Contraseña
+            </label>
+
+
+            <div class="password-field">
+
+
+              <input
+                id="registerPassword"
+                type="password"
+                minlength="6"
+                placeholder="Mínimo 6 caracteres"
+                autocomplete="new-password"
+                required
+              >
+
+
+              <button
+                type="button"
+                class="password-toggle"
+                aria-label="Mostrar contraseña"
+              >
+
+                <i class="fa-regular fa-eye"></i>
+
+              </button>
+
+
+            </div>
+
+          </div>
+
+
+
+          <button
+            type="submit"
+            class="btn btn-primary auth-submit"
+          >
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            Crear cuenta
+
+          </button>
+
+
+
+          <p class="register-note">
+
+            Tu rol quedará asociado a tu perfil.
+
+            Después vas a poder personalizar
+            tu frase, símbolo y color.
+
+          </p>
+
+
+        </form>
+
+
+
+        <!-- MESSAGE -->
+
+        <div
+          id="authMessage"
+          class="auth-message"
+        ></div>
+
 
       </div>
 
-
-      <!-- LOGIN -->
-
-      <form
-        id="loginForm"
-        class="auth-form"
-      >
-
-        <div class="form-group">
-
-          <label for="loginEmail">
-            Email
-          </label>
-
-          <input
-            id="loginEmail"
-            type="email"
-            placeholder="tu@email.com"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="loginPassword">
-            Contraseña
-          </label>
-
-          <input
-            id="loginPassword"
-            type="password"
-            placeholder="••••••••"
-            required
-          >
-
-        </div>
-
-
-        <button
-          class="btn btn-primary auth-submit"
-          type="submit"
-        >
-
-          <i class="fa-solid fa-right-to-bracket"></i>
-
-          Ingresar
-
-        </button>
-
-      </form>
-
-
-      <!-- REGISTRO -->
-
-      <form
-        id="registerForm"
-        class="auth-form hidden"
-      >
-
-        <div class="form-group">
-
-          <label for="registerNickname">
-            Nickname
-          </label>
-
-          <input
-            id="registerNickname"
-            type="text"
-            placeholder="QueenStranger"
-            maxlength="30"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerRole">
-            Rol
-          </label>
-
-          <select
-            id="registerRole"
-            required
-          >
-
-            <option value="">
-              Seleccioná tu rol
-            </option>
-
-            <option value="top">
-              Top
-            </option>
-
-            <option value="jungle">
-              Jungle
-            </option>
-
-            <option value="mid">
-              Mid
-            </option>
-
-            <option value="adc">
-              ADC
-            </option>
-
-            <option value="support">
-              Support
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerEmail">
-            Email
-          </label>
-
-          <input
-            id="registerEmail"
-            type="email"
-            placeholder="tu@email.com"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerPassword">
-            Contraseña
-          </label>
-
-          <input
-            id="registerPassword"
-            type="password"
-            placeholder="Mínimo 6 caracteres"
-            minlength="6"
-            required
-          >
-
-        </div>
-
-
-        <button
-          class="btn btn-primary auth-submit"
-          type="submit"
-        >
-
-          <i class="fa-solid fa-user-plus"></i>
-
-          Crear cuenta
-
-        </button>
-
-      </form>
-
-
-      <div
-        id="authMessage"
-        class="auth-message"
-      ></div>
 
     </section>
 
+
   </main>
 
+
+
+  <!-- ==========================================
+       JS
+  =========================================== -->
 
   <script
     type="module"
     src="js/auth.js"
   ></script>
 
+
 </body>
+
 </html>

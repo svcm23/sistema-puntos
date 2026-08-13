@@ -49,7 +49,7 @@ onAuthStateChanged(
   auth,
 
   async user => {
-
+ console.log("🔥 AUTH STATE:", user);
     // ===========================
     // NO SESSION
     // ===========================

@@ -1,306 +1,1603 @@
-// ======================
-// 🔥 Firebase
-// ======================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+/* =====================================================
+   CRIMSON VEIL
+   POINTS SYSTEM
+===================================================== */
+
 import {
-  getFirestore, doc, getDoc, setDoc, onSnapshot
+  auth,
+  db
+} from "./firebase.js";
+
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+  runTransaction,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC8_wsFs6jfyva62xoBDLUeZJh42Orv7-I",
-  authDomain: "sistema-puntos-b46dd.firebaseapp.com",
-  projectId: "sistema-puntos-b46dd",
-  storageBucket: "sistema-puntos-b46dd.appspot.com",
-  messagingSenderId: "412750867994",
-  appId: "1:412750867994:web:0627943ce5605d99c3eba3",
-  measurementId: "G-5KCWW7FDC8"
-};
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-// Documento principal
-const docRef = doc(db, "sistemaPuntos_v1", "data");
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-// Estado local
-let store = { equipos: [], equipoActivo: null };
+const guestPanel =
+  document.getElementById(
+    "guestPanel"
+  );
 
-// ======================
-// 🔹 Sincronización
-// ======================
-onSnapshot(docRef, (docSnap) => {
-  if (docSnap.exists()) {
-    store = docSnap.data();
-    // Aseguramos estructura mínima
-    if (!store.equipos) store.equipos = [];
-    if (!store.equipoActivo) store.equipoActivo = null;
-    render();
-  } else {
-    // Si no existe, lo inicializamos vacío
-    setDoc(docRef, store);
-  }
-});
 
-async function save() {
-  await setDoc(docRef, store);
-}
+const playerArea =
+  document.getElementById(
+    "playerArea"
+  );
 
-// ======================
-// ⭐ Estrellas
-// ======================
-function getStars(puntos) {
-  const maxStars = 10;
-  let estrellas = puntos % maxStars;
-  if (estrellas === 0 && puntos > 0) estrellas = maxStars;
 
-  let colorClass = "bronze";
-  if (puntos >= 10 && puntos < 20) colorClass = "silver";
-  else if (puntos >= 20 && puntos < 30) colorClass = "gold";
-  else if (puntos >= 30) colorClass = "rainbow";
+const pointsNickname =
+  document.getElementById(
+    "pointsNickname"
+  );
 
-  return `<span class="stars ${colorClass}">${"★".repeat(estrellas)}</span>`;
-}
 
-// ======================
-// 📢 Frases
-// ======================
-const frasesVictoria = [
-  "¡Esa es la actitud! 💪","Victoria dulce, sigue así 🔥","¡Brillaste como una estrella! ⭐",
-  "El esfuerzo siempre paga 🏆","Increíble trabajo, GG 👑","¡Dominaste la grieta! ⚔️",
-  "Nada te detiene 💥","Eres imparable 🚀","¡Qué sinergia de equipo! 🤝","Ese es el espíritu de campeones 🏅"
+const pointsRole =
+  document.getElementById(
+    "pointsRole"
+  );
+
+
+const pointsTotal =
+  document.getElementById(
+    "pointsTotal"
+  );
+
+
+const winsTotal =
+  document.getElementById(
+    "winsTotal"
+  );
+
+
+const lossesTotal =
+  document.getElementById(
+    "lossesTotal"
+  );
+
+
+const matchesTotal =
+  document.getElementById(
+    "matchesTotal"
+  );
+
+
+const starDisplay =
+  document.getElementById(
+    "starDisplay"
+  );
+
+
+const winButton =
+  document.getElementById(
+    "winButton"
+  );
+
+
+const lossButton =
+  document.getElementById(
+    "lossButton"
+  );
+
+
+const recentMatches =
+  document.getElementById(
+    "recentMatches"
+  );
+
+
+const rankingList =
+  document.getElementById(
+    "rankingList"
+  );
+
+
+const resultPopup =
+  document.getElementById(
+    "resultPopup"
+  );
+
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentUser =
+  null;
+
+
+let currentProfile =
+  null;
+
+
+let stopProfileListener =
+  null;
+
+
+let stopMatchesListener =
+  null;
+
+
+/* =====================================================
+   MOTIVATIONAL MESSAGES
+===================================================== */
+
+const victoryMessages = [
+
+  "¡Esa es la actitud! ✦",
+
+  "Victoria dulce. Seguí así ♛",
+
+  "Una estrella más para el Veil ✧",
+
+  "GG. El esfuerzo siempre paga.",
+
+  "Dominaste la grieta ⚔",
+
+  "Nada te detiene.",
+
+  "The Veil rises again. ✦",
+
+  "Otra victoria bajo el velo."
+
 ];
-const frasesDerrota = [
-  "No pasa nada, cada derrota es una lección 📚","Lo importante es no rendirse 💜","Hoy se pierde, mañana se gana 💫",
-  "Respira, aprende y vuelve más fuerte ⚔️","Incluso Faker perdió alguna vez 😉","Esto es parte del camino 🚶",
-  "De los errores nacen los pros 🧠","La próxima es tuya 🔮","Perder también suma experiencia 🎯","Confía, que la remontada siempre llega 🔥"
+
+
+const defeatMessages = [
+
+  "Cada derrota también construye el camino.",
+
+  "Respirá. Aprendé. Volvé más fuerte. ☾",
+
+  "Hoy se pierde, mañana se remonta.",
+
+  "La próxima es tuya. ✦",
+
+  "Perder también suma experiencia.",
+
+  "Una partida no define tu progreso.",
+
+  "Beneath the Veil, we rise again.",
+
+  "Seguimos. Siempre."
+
 ];
 
-function mostrarFrase(resultado) {
-  const frases = resultado === "victoria" ? frasesVictoria : frasesDerrota;
-  const frase = frases[Math.floor(Math.random() * frases.length)];
-  const box = document.createElement("div");
-  box.className = `frase-popup ${resultado}`;
-  box.innerText = frase;
-  document.body.appendChild(box);
 
-  if (resultado === "victoria") lanzarConfetti();
-  else shakePantalla();
 
-  setTimeout(() => box.remove(), 3000);
-}
+/* =====================================================
+   AUTH
+===================================================== */
 
-// 🎉 Confetti
-function lanzarConfetti() {
-  if (typeof confetti !== "undefined") {
-    confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+onAuthStateChanged(
+
+  auth,
+
+  user => {
+
+    currentUser =
+      user;
+
+
+    cleanUserListeners();
+
+
+    if (!user) {
+
+      currentProfile =
+        null;
+
+
+      guestPanel.classList.remove(
+        "hidden"
+      );
+
+
+      playerArea.classList.add(
+        "hidden"
+      );
+
+
+      return;
+
+    }
+
+
+    guestPanel.classList.add(
+      "hidden"
+    );
+
+
+    playerArea.classList.remove(
+      "hidden"
+    );
+
+
+    listenCurrentProfile(
+      user.uid
+    );
+
+
+    listenRecentMatches(
+      user.uid
+    );
+
   }
+
+);
+
+
+
+/* =====================================================
+   CURRENT PROFILE
+===================================================== */
+
+function listenCurrentProfile(
+  uid
+) {
+
+  const profileReference =
+    doc(
+      db,
+      "usuarios",
+      uid
+    );
+
+
+  stopProfileListener =
+    onSnapshot(
+
+      profileReference,
+
+      snapshot => {
+
+        if (
+          !snapshot.exists()
+        ) {
+
+          console.error(
+            "Perfil no encontrado."
+          );
+
+          return;
+
+        }
+
+
+        currentProfile =
+          snapshot.data();
+
+
+        renderCurrentProfile();
+
+      },
+
+      error => {
+
+        console.error(
+          "Error cargando perfil:",
+          error
+        );
+
+      }
+
+    );
+
 }
-// 🔴 Shake
-function shakePantalla() {
-  document.body.classList.add("shake");
-  setTimeout(() => document.body.classList.remove("shake"), 600);
-}
 
-// ======================
-// 🔹 Render
-// ======================
-function getEquipoActivo() {
-  return store.equipos.find(e => e.nombre === store.equipoActivo) || null;
-}
 
-function render() {
-  const equipo = getEquipoActivo();
 
-  const cardEquipo = document.getElementById("cardEquipo");
-  const cardJugadores = document.getElementById("cardJugadores");
-  const cardPartidas = document.getElementById("cardPartidas");
-  const cardResumen = document.getElementById("cardResumen");
-  const cardRecientes = document.getElementById("cardRecientes");
-  const cardToggleRanking = document.getElementById("cardToggleRanking");
-  const cardRanking = document.getElementById("cardRanking");
+/* =====================================================
+   RENDER PLAYER
+===================================================== */
 
-  if (!equipo) {
-    cardEquipo.style.display = "block";
-    cardEquipo.innerHTML = `
-      <h2>Equipos</h2>
-      <div class="row">
-        <select id="equipoSelect">
-          ${store.equipos.map(e => `<option value="${e.nombre}">${e.nombre}</option>`).join("")}
-        </select>
-        <button class="btn btn-primary" onclick="usarEquipo()">Usar</button>
-        <button class="btn btn-outline" onclick="nuevoEquipo()">Nuevo equipo</button>
-      </div>
-    `;
-    cardJugadores.style.display = "none";
-    cardPartidas.style.display = "none";
-    cardResumen.style.display = "none";
-    cardRecientes.style.display = "none";
-    cardToggleRanking.style.display = "none";
-    cardRanking.style.display = "none";
+function renderCurrentProfile() {
+
+  if (!currentProfile) {
+
     return;
+
   }
 
-  // Equipo activo
-  cardEquipo.style.display = "block";
-  cardEquipo.innerHTML = `
-    <h2>Equipo actual: ${equipo.nombre}</h2>
-    <button class="btn btn-outline" onclick="resetEquipo()">Cambiar equipo</button>
-  `;
 
-  // Jugadores
-  cardJugadores.style.display = "block";
-  cardJugadores.innerHTML = `
-    <h3>Jugadores</h3>
-    <div class="row">
-      <input id="jugadorInput" placeholder="Nombre del jugador">
-      <button class="btn btn-primary" onclick="agregarJugador()">Agregar</button>
-    </div>
-    <div class="list" style="margin-top:12px;">
-      ${equipo.jugadores.map(j => `
-        <div class="match">
-          <div class="meta"><span>${j.nombre}</span></div>
-          <div class="points">${getStars(j.puntos)} <small>${j.puntos} pts</small></div>
+  const nickname =
+    currentProfile.nickname ||
+    "Player";
+
+
+  const role =
+    normalizeRole(
+      currentProfile.rol
+    );
+
+
+  const points =
+    Number(
+      currentProfile.puntos ||
+      0
+    );
+
+
+  const wins =
+    Number(
+      currentProfile.victorias ||
+      0
+    );
+
+
+  const losses =
+    Number(
+      currentProfile.derrotas ||
+      0
+    );
+
+
+  const matches =
+    Number(
+      currentProfile.partidas ||
+      wins + losses
+    );
+
+
+  pointsNickname.textContent =
+    nickname;
+
+
+  pointsRole.textContent =
+    formatRole(
+      role
+    );
+
+
+  pointsTotal.textContent =
+    points;
+
+
+  winsTotal.textContent =
+    wins;
+
+
+  lossesTotal.textContent =
+    losses;
+
+
+  matchesTotal.textContent =
+    matches;
+
+
+  renderStars(
+    points
+  );
+
+}
+
+
+
+/* =====================================================
+   STARS
+===================================================== */
+
+function renderStars(
+  points
+) {
+
+  const maximumVisible =
+    10;
+
+
+  let starCount =
+    points %
+    maximumVisible;
+
+
+  if (
+    starCount === 0 &&
+    points > 0
+  ) {
+
+    starCount =
+      maximumVisible;
+
+  }
+
+
+  let level =
+    "bronze";
+
+
+  if (
+    points >= 10 &&
+    points < 20
+  ) {
+
+    level =
+      "silver";
+
+  }
+
+
+  if (
+    points >= 20 &&
+    points < 30
+  ) {
+
+    level =
+      "gold";
+
+  }
+
+
+  if (
+    points >= 30
+  ) {
+
+    level =
+      "rainbow";
+
+  }
+
+
+  starDisplay.className =
+    `star-display ${level}`;
+
+
+  if (
+    starCount === 0
+  ) {
+
+    starDisplay.innerHTML = `
+
+      <span class="no-stars">
+
+        Tu primera estrella
+        está esperando. ✦
+
+      </span>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  starDisplay.innerHTML =
+    Array(
+      starCount
+    )
+      .fill(
+        `<span class="progress-star">★</span>`
+      )
+      .join("");
+
+}
+
+
+
+/* =====================================================
+   REGISTER MATCH
+===================================================== */
+
+winButton.addEventListener(
+
+  "click",
+
+  () => {
+
+    registerMatch(
+      "victoria"
+    );
+
+  }
+
+);
+
+
+lossButton.addEventListener(
+
+  "click",
+
+  () => {
+
+    registerMatch(
+      "derrota"
+    );
+
+  }
+
+);
+
+
+
+async function registerMatch(
+  result
+) {
+
+  if (
+    !currentUser ||
+    !currentProfile
+  ) {
+
+    return;
+
+  }
+
+
+  const pointsEarned =
+    result === "victoria"
+      ? 3
+      : 1;
+
+
+  try {
+
+    setRegisterDisabled(
+      true
+    );
+
+
+    const profileReference =
+      doc(
+        db,
+        "usuarios",
+        currentUser.uid
+      );
+
+
+    const matchReference =
+      doc(
+        collection(
+          db,
+          "usuarios",
+          currentUser.uid,
+          "partidas"
+        )
+      );
+
+
+    await runTransaction(
+
+      db,
+
+      async transaction => {
+
+        const profileSnapshot =
+          await transaction.get(
+            profileReference
+          );
+
+
+        if (
+          !profileSnapshot.exists()
+        ) {
+
+          throw new Error(
+            "Perfil inexistente."
+          );
+
+        }
+
+
+        const profileData =
+          profileSnapshot.data();
+
+
+        const previousPoints =
+          Number(
+            profileData.puntos ||
+            0
+          );
+
+
+        const previousWins =
+          Number(
+            profileData.victorias ||
+            0
+          );
+
+
+        const previousLosses =
+          Number(
+            profileData.derrotas ||
+            0
+          );
+
+
+        const previousMatches =
+          Number(
+            profileData.partidas ||
+            0
+          );
+
+
+        const newPoints =
+          previousPoints +
+          pointsEarned;
+
+
+        const newWins =
+          previousWins +
+          (
+            result === "victoria"
+              ? 1
+              : 0
+          );
+
+
+        const newLosses =
+          previousLosses +
+          (
+            result === "derrota"
+              ? 1
+              : 0
+          );
+
+
+        const newMatches =
+          previousMatches +
+          1;
+
+
+        /*
+          Actualizamos únicamente
+          LA CUENTA LOGUEADA.
+        */
+
+        transaction.update(
+
+          profileReference,
+
+          {
+            puntos:
+              newPoints,
+
+            victorias:
+              newWins,
+
+            derrotas:
+              newLosses,
+
+            partidas:
+              newMatches,
+
+            actualizadoPuntos:
+              serverTimestamp()
+          }
+
+        );
+
+
+        /*
+          Historial individual.
+        */
+
+        transaction.set(
+
+          matchReference,
+
+          {
+            usuarioId:
+              currentUser.uid,
+
+            resultado:
+              result,
+
+            puntos:
+              pointsEarned,
+
+            creado:
+              serverTimestamp()
+          }
+
+        );
+
+      }
+
+    );
+
+
+    showResultMessage(
+      result
+    );
+
+
+    if (
+      result ===
+      "victoria"
+    ) {
+
+      launchConfetti();
+
+    } else {
+
+      shakePage();
+
+    }
+
+  } catch(error) {
+
+    console.error(
+      "Error registrando partida:",
+      error
+    );
+
+
+    showErrorMessage();
+
+  } finally {
+
+    setRegisterDisabled(
+      false
+    );
+
+  }
+
+}
+
+
+
+/* =====================================================
+   RECENT MATCHES
+===================================================== */
+
+function listenRecentMatches(
+  uid
+) {
+
+  const matchesQuery =
+    query(
+
+      collection(
+        db,
+        "usuarios",
+        uid,
+        "partidas"
+      ),
+
+      orderBy(
+        "creado",
+        "desc"
+      ),
+
+      limit(
+        5
+      )
+
+    );
+
+
+  stopMatchesListener =
+    onSnapshot(
+
+      matchesQuery,
+
+      snapshot => {
+
+        const matches =
+          [];
+
+
+        snapshot.forEach(
+
+          documentSnapshot => {
+
+            matches.push({
+              id:
+                documentSnapshot.id,
+
+              ...documentSnapshot.data()
+            });
+
+          }
+
+        );
+
+
+        renderRecentMatches(
+          matches
+        );
+
+      },
+
+      error => {
+
+        console.error(
+          "Error cargando partidas:",
+          error
+        );
+
+
+        recentMatches.innerHTML = `
+
+          <div class="points-empty">
+
+            <span>
+              ✧
+            </span>
+
+            <p>
+              No pudimos cargar tus partidas.
+            </p>
+
+          </div>
+
+        `;
+
+      }
+
+    );
+
+}
+
+
+
+/* =====================================================
+   RENDER RECENT MATCHES
+===================================================== */
+
+function renderRecentMatches(
+  matches
+) {
+
+  recentMatches.innerHTML =
+    "";
+
+
+  if (
+    matches.length === 0
+  ) {
+
+    recentMatches.innerHTML = `
+
+      <div class="points-empty">
+
+        <span>
+          ☾
+        </span>
+
+        <p>
+          Todavía no registraste ninguna partida.
+        </p>
+
+      </div>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  matches.forEach(
+
+    match => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "recent-match";
+
+
+      const result =
+        match.resultado ===
+          "victoria"
+
+          ? "VICTORIA"
+          : "DERROTA";
+
+
+      row.innerHTML = `
+
+        <span
+          class="match-result ${escapeHTML(match.resultado)}"
+        >
+          ${result}
+        </span>
+
+
+        <span class="match-date">
+
+          ${formatDate(match.creado)}
+
+        </span>
+
+
+        <span class="match-earned">
+
+          +${Number(match.puntos || 0)}
+          pts
+
+        </span>
+
+      `;
+
+
+      recentMatches.appendChild(
+        row
+      );
+
+    }
+
+  );
+
+}
+
+
+
+/* =====================================================
+   GLOBAL RANKING
+===================================================== */
+
+const usersReference =
+  collection(
+    db,
+    "usuarios"
+  );
+
+
+onSnapshot(
+
+  usersReference,
+
+  snapshot => {
+
+    const players =
+      [];
+
+
+    snapshot.forEach(
+
+      documentSnapshot => {
+
+        const data =
+          documentSnapshot.data();
+
+
+        const role =
+          normalizeRole(
+            data.rol
+          );
+
+
+        /*
+          Solo roles de juego.
+        */
+
+        if (
+          !isPlayerRole(
+            role
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        players.push({
+
+          id:
+            documentSnapshot.id,
+
+          nickname:
+            data.nickname ||
+            "Player",
+
+          role:
+            role,
+
+          symbol:
+            data.simbolo ||
+            "✦",
+
+          color:
+            data.accentColor ||
+            "#ef476a",
+
+          points:
+            Number(
+              data.puntos ||
+              0
+            ),
+
+          wins:
+            Number(
+              data.victorias ||
+              0
+            ),
+
+          losses:
+            Number(
+              data.derrotas ||
+              0
+            )
+
+        });
+
+      }
+
+    );
+
+
+    players.sort(
+
+      (a,b) => {
+
+        /*
+          Primero puntos.
+        */
+
+        if (
+          b.points !==
+          a.points
+        ) {
+
+          return (
+            b.points -
+            a.points
+          );
+
+        }
+
+
+        /*
+          Empate:
+          más victorias.
+        */
+
+        if (
+          b.wins !==
+          a.wins
+        ) {
+
+          return (
+            b.wins -
+            a.wins
+          );
+
+        }
+
+
+        /*
+          Después nickname.
+        */
+
+        return (
+          a.nickname.localeCompare(
+            b.nickname,
+            "es"
+          )
+        );
+
+      }
+
+    );
+
+
+    renderRanking(
+      players
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Error cargando ranking:",
+      error
+    );
+
+
+    rankingList.innerHTML = `
+
+      <div class="points-empty">
+
+        <span>
+          ✧
+        </span>
+
+        <p>
+          No pudimos cargar el ranking.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+);
+
+
+
+/* =====================================================
+   RENDER RANKING
+===================================================== */
+
+function renderRanking(
+  players
+) {
+
+  rankingList.innerHTML =
+    "";
+
+
+  if (
+    players.length === 0
+  ) {
+
+    rankingList.innerHTML = `
+
+      <div class="points-empty">
+
+        <span>
+          ☾
+        </span>
+
+        <p>
+          El ranking todavía está vacío.
+        </p>
+
+      </div>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  players.forEach(
+
+    (
+      player,
+      index
+    ) => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      const leader =
+        index === 0;
+
+
+      const current =
+        currentUser &&
+        player.id ===
+          currentUser.uid;
+
+
+      row.className =
+        `
+          ranking-row
+          ${leader ? "leader" : ""}
+          ${current ? "current-user" : ""}
+        `;
+
+
+      row.style.setProperty(
+        "--player-color",
+        player.color
+      );
+
+
+      row.innerHTML = `
+
+        <div class="ranking-position">
+
+          ${String(index + 1).padStart(2,"0")}
+
         </div>
-      `).join("")}
-    </div>
-  `;
 
-  // Registrar partidas
-  if (equipo.jugadores.length > 0) {
-    cardPartidas.style.display = "block";
-    cardPartidas.innerHTML = `
-      <h3>Registrar partida</h3>
-      <div class="row">
-        <select id="jugadorSelect">
-          ${equipo.jugadores.map(j => `
-            <option value="${j.nombre}" ${j.nombre===equipo.currentPlayerName?"selected":""}>${j.nombre}</option>
-          `).join("")}
-        </select>
-        <button class="btn btn-win" onclick="registrarPartida('victoria')">Victoria (+3)</button>
-        <button class="btn btn-lose" onclick="registrarPartida('derrota')">Derrota (+1)</button>
-      </div>
-    `;
-  } else cardPartidas.style.display = "none";
 
-  // Resumen
-  if (equipo.jugadores.length > 0) {
-    cardResumen.style.display = "grid";
-    cardResumen.innerHTML = `
-      <div class="stat"><div class="k">Jugadores</div><div class="v">${equipo.jugadores.length}</div></div>
-      <div class="stat"><div class="k">Partidas</div><div class="v">${equipo.partidas.length}</div></div>
-      <div class="stat"><div class="k">Líder</div><div class="v">${equipo.jugadores.sort((a,b)=>b.puntos-a.puntos)[0]?.nombre || "—"}</div></div>
-    `;
-  } else cardResumen.style.display = "none";
+        <div class="ranking-player">
 
-  // Partidas recientes
-  if (equipo.partidas.length > 0) {
-    cardRecientes.style.display = "block";
-    cardRecientes.innerHTML = `
-      <h3>Últimas partidas</h3>
-      <div class="list">
-        ${equipo.partidas.slice(0,5).map(p=> `
-          <div class="match">
-            <div class="meta">
-              <span class="badge ${p.resultado}">${p.resultado.toUpperCase()}</span> ${p.jugador}
-            </div>
-            <small>${p.fecha}</small>
+          <div class="ranking-player-top">
+
+            <span class="ranking-symbol-player">
+
+              ${escapeHTML(player.symbol)}
+
+            </span>
+
+
+            <strong>
+
+              ${escapeHTML(player.nickname)}
+
+              ${leader ? " ♛" : ""}
+
+            </strong>
+
           </div>
-        `).join("")}
-      </div>
-    `;
-  } else cardRecientes.style.display = "none";
 
-  // Botón toggle ranking
-  cardToggleRanking.style.display = "block";
-  cardToggleRanking.innerHTML = `
-    <button class="btn btn-primary" onclick="toggleRanking()">
-      ${cardRanking.style.display === "block" ? "Ocultar ranking" : "Ver ranking"}
-    </button>
-  `;
 
-  // Ranking
-  if (cardRanking.style.display === "block") {
-    const orden = [...equipo.jugadores].sort((a,b)=> b.puntos - a.puntos);
-    cardRanking.innerHTML = `
-      <h3>Ranking</h3>
-      <div class="list">
-        ${orden.map((j,i)=> `
-          <div class="rank-row ${i===0 ? "leader":""}">
-            <div class="left">
-              <div class="pos">${i+1}</div>
-              <span>${j.nombre} ${i===0 ? "👑":""}</span>
-            </div>
-            <div>${getStars(j.puntos)} <small>${j.puntos} pts</small> (${j.victorias||0}V-${j.derrotas||0}D)</div>
-          </div>
-        `).join("")}
-      </div>
-    `;
-  }
+          <small>
+
+            ${formatRole(player.role)}
+
+            ·
+            ${player.wins}V
+
+            ${player.losses}D
+
+          </small>
+
+        </div>
+
+
+        <div class="ranking-score">
+
+          <strong>
+
+            ${player.points}
+
+          </strong>
+
+          <span>
+            PUNTOS
+          </span>
+
+        </div>
+
+      `;
+
+
+      rankingList.appendChild(
+        row
+      );
+
+    }
+
+  );
+
 }
 
-// ======================
-// 🔹 Acciones
-// ======================
-window.nuevoEquipo = function() {
-  document.getElementById("modalEquipo").style.display = "flex";
-};
-window.cerrarModal = function() {
-  document.getElementById("modalEquipo").style.display = "none";
-};
-window.confirmarNuevoEquipo = async function() {
-  const nombre = document.getElementById("nuevoEquipoInput").value.trim();
-  if (!nombre) return;
-  if (!store.equipos) store.equipos = [];
 
-  if (store.equipos.some(e => e.nombre.toLowerCase() === nombre.toLowerCase())) {
-    alert("Ese equipo ya existe.");
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showResultMessage(
+  result
+) {
+
+  const messages =
+    result ===
+      "victoria"
+
+      ? victoryMessages
+      : defeatMessages;
+
+
+  const message =
+    messages[
+      Math.floor(
+        Math.random() *
+        messages.length
+      )
+    ];
+
+
+  resultPopup.textContent =
+    message;
+
+
+  resultPopup.className =
+    `result-popup visible ${result}`;
+
+
+  setTimeout(
+    () => {
+
+      resultPopup.className =
+        "result-popup";
+
+    },
+    2800
+  );
+
+}
+
+
+
+function showErrorMessage() {
+
+  resultPopup.textContent =
+    "No pudimos registrar la partida. ✧";
+
+
+  resultPopup.className =
+    "result-popup visible derrota";
+
+
+  setTimeout(
+    () => {
+
+      resultPopup.className =
+        "result-popup";
+
+    },
+    2800
+  );
+
+}
+
+
+
+/* =====================================================
+   EFFECTS
+===================================================== */
+
+function launchConfetti() {
+
+  if (
+    typeof confetti ===
+    "undefined"
+  ) {
+
     return;
+
   }
 
-  store.equipos.push({ nombre, jugadores:[], partidas:[], currentPlayerName:null });
-  store.equipoActivo = nombre;
 
-  await save();
-  cerrarModal();
-  document.getElementById("nuevoEquipoInput").value = "";
-};
+  confetti({
 
-window.usarEquipo = async function() {
-  const sel = document.getElementById("equipoSelect").value;
-  store.equipoActivo = sel;
-  await save();
-};
-window.resetEquipo = async function() {
-  store.equipoActivo = null;
-  await save();
-};
-window.agregarJugador = async function() {
-  const equipo = getEquipoActivo();
-  if (!equipo.jugadores) equipo.jugadores = [];
-  const nombre = document.getElementById("jugadorInput").value.trim();
-  if (!nombre) return;
-  equipo.jugadores.push({ nombre, puntos:0, victorias:0, derrotas:0 });
-  equipo.currentPlayerName = nombre;
-  document.getElementById("jugadorInput").value = "";
-  await save();
-};
-window.registrarPartida = async function(resultado) {
-  const equipo = getEquipoActivo();
-  const jugadorNombre = document.getElementById("jugadorSelect").value;
-  equipo.currentPlayerName = jugadorNombre;
-  const jugador = equipo.jugadores.find(j => j.nombre === jugadorNombre);
+    particleCount:
+      100,
 
-  if (resultado === "victoria") { jugador.puntos+=3; jugador.victorias=(jugador.victorias||0)+1; }
-  else { jugador.puntos+=1; jugador.derrotas=(jugador.derrotas||0)+1; }
+    spread:
+      85,
 
-  if (!equipo.partidas) equipo.partidas = [];
-  equipo.partidas.unshift({ jugador:jugadorNombre, resultado, fecha:new Date().toLocaleString() });
+    origin: {
+      y: .62
+    }
 
-  await save();
-  mostrarFrase(resultado);
-};
-window.toggleRanking = function() {
-  const cardRanking = document.getElementById("cardRanking");
-  cardRanking.style.display = cardRanking.style.display === "block" ? "none" : "block";
-  render();
-};
+  });
+
+}
+
+
+
+function shakePage() {
+
+  const container =
+    document.querySelector(
+      ".points-container"
+    );
+
+
+  container.classList.add(
+    "points-shake"
+  );
+
+
+  setTimeout(
+    () => {
+
+      container.classList.remove(
+        "points-shake"
+      );
+
+    },
+    500
+  );
+
+}
+
+
+
+/* =====================================================
+   BUTTON STATE
+===================================================== */
+
+function setRegisterDisabled(
+  disabled
+) {
+
+  winButton.disabled =
+    disabled;
+
+
+  lossButton.disabled =
+    disabled;
+
+}
+
+
+
+/* =====================================================
+   USER LISTENER CLEANUP
+===================================================== */
+
+function cleanUserListeners() {
+
+  if (
+    stopProfileListener
+  ) {
+
+    stopProfileListener();
+
+    stopProfileListener =
+      null;
+
+  }
+
+
+  if (
+    stopMatchesListener
+  ) {
+
+    stopMatchesListener();
+
+    stopMatchesListener =
+      null;
+
+  }
+
+}
+
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function normalizeRole(
+  role
+) {
+
+  return String(
+    role ||
+    ""
+  )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+
+function formatRole(
+  role
+) {
+
+  const roles = {
+
+    top:
+      "TOP",
+
+    jungle:
+      "JUNGLE",
+
+    mid:
+      "MID",
+
+    adc:
+      "ADC",
+
+    support:
+      "SUPPORT"
+
+  };
+
+
+  return (
+    roles[role] ||
+    String(role)
+      .toUpperCase()
+  );
+
+}
+
+
+
+function isPlayerRole(
+  role
+) {
+
+  return [
+    "top",
+    "jungle",
+    "mid",
+    "adc",
+    "support"
+  ].includes(
+    role
+  );
+
+}
+
+
+
+function formatDate(
+  timestamp
+) {
+
+  if (
+    !timestamp ||
+    !timestamp.toDate
+  ) {
+
+    return "Ahora";
+
+  }
+
+
+  return timestamp
+    .toDate()
+    .toLocaleString(
+      "es-UY",
+      {
+        day:
+          "2-digit",
+
+        month:
+          "2-digit",
+
+        year:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit"
+      }
+    );
+
+}
+
+
+
+function escapeHTML(
+  value
+) {
+
+  const element =
+    document.createElement(
+      "div"
+    );
+
+
+  element.textContent =
+    String(
+      value ??
+      ""
+    );
+
+
+  return (
+    element.innerHTML
+  );
+
+}

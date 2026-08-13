@@ -1,0 +1,422 @@
+/* ============================================
+   CRIMSON VEIL — PASSWORD RECOVERY
+============================================ */
+
+.recovery-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(129,13,41,.12),
+      transparent 31%
+    ),
+    #050405;
+}
+
+
+/* MAIN */
+
+.recovery-main {
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    115px
+    20px
+    65px;
+
+  overflow: hidden;
+}
+
+
+/* BACKGROUND */
+
+.recovery-stars {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: .20;
+
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(
+      rgba(255,160,185,.45) .7px,
+      transparent .8px
+    );
+
+  background-size:
+    65px
+    65px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent,
+      black 15%,
+      black 80%,
+      transparent
+    );
+}
+
+
+.recovery-decoration {
+  position: absolute;
+
+  pointer-events: none;
+}
+
+
+.recovery-star {
+  top: 25%;
+  left: 15%;
+
+  color:
+    rgba(239,71,106,.12);
+
+  font-size: 30px;
+}
+
+
+.recovery-moon {
+  right: 16%;
+  top: 23%;
+
+  color:
+    rgba(239,71,106,.045);
+
+  font-size: 90px;
+}
+
+
+/* CARD */
+
+.recovery-card {
+  width:
+    min(
+      430px,
+      100%
+    );
+
+  position: relative;
+
+  z-index: 2;
+
+  padding:
+    40px;
+
+  border:
+    1px solid
+    rgba(239,71,106,.22);
+
+  background:
+    linear-gradient(
+      150deg,
+      rgba(26,8,15,.87),
+      rgba(7,5,7,.97)
+    );
+
+  box-shadow:
+    0
+    32px
+    110px
+    rgba(0,0,0,.42);
+}
+
+
+.recovery-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -1px;
+  left: -1px;
+
+  width: 62px;
+  height: 62px;
+
+  border-top:
+    1px solid
+    var(--crimson-light);
+
+  border-left:
+    1px solid
+    var(--crimson-light);
+
+  opacity: .55;
+}
+
+
+.recovery-card::after {
+  content: "";
+
+  position: absolute;
+
+  right: -1px;
+  bottom: -1px;
+
+  width: 62px;
+  height: 62px;
+
+  border-right:
+    1px solid
+    var(--crimson-light);
+
+  border-bottom:
+    1px solid
+    var(--crimson-light);
+
+  opacity: .26;
+}
+
+
+/* HEADER */
+
+.recovery-header {
+  margin-bottom: 30px;
+
+  text-align: center;
+}
+
+
+.recovery-header h1 {
+  margin:
+    0
+    0
+    17px;
+
+  color:
+    var(--white);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      42px,
+      6vw,
+      55px
+    );
+
+  font-weight: 400;
+
+  line-height: .92;
+
+  letter-spacing: -.045em;
+}
+
+
+.recovery-header h1 em {
+  color:
+    var(--rose-light);
+
+  font-weight: 400;
+}
+
+
+.recovery-header > p:last-child {
+  max-width: 320px;
+
+  margin:
+    0
+    auto;
+
+  color:
+    var(--muted);
+
+  font-size: 11px;
+
+  line-height: 1.7;
+}
+
+
+/* FORM */
+
+#recoveryForm {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 17px;
+}
+
+
+.recovery-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.recovery-field label {
+  color:
+    #c397a4;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: .17em;
+
+  text-transform: uppercase;
+}
+
+
+.recovery-field input {
+  width: 100%;
+
+  height: 48px;
+
+  padding:
+    0
+    14px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.075);
+
+  border-radius: 3px;
+
+  outline: none;
+
+  color:
+    var(--white);
+
+  background:
+    rgba(255,255,255,.018);
+
+  transition: .2s ease;
+}
+
+
+.recovery-field input::placeholder {
+  color:
+    #59434a;
+}
+
+
+.recovery-field input:focus {
+  border-color:
+    rgba(239,71,106,.42);
+
+  box-shadow:
+    0
+    0
+    0
+    3px
+    rgba(239,71,106,.045);
+}
+
+
+/* BUTTON */
+
+.recovery-submit {
+  width: 100%;
+
+  min-height: 48px;
+
+  border-radius: 3px;
+}
+
+
+.recovery-submit:disabled {
+  opacity: .45;
+
+  cursor: wait;
+}
+
+
+/* MESSAGE */
+
+.recovery-message {
+  min-height: 18px;
+
+  margin-top: 17px;
+
+  color:
+    #80616a;
+
+  text-align: center;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+.recovery-message.success {
+  color:
+    var(--rose-light);
+}
+
+
+.recovery-message.error {
+  color:
+    #ff6982;
+}
+
+
+/* BACK */
+
+.back-to-login {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 15px;
+
+  color:
+    #70545d;
+
+  text-decoration: none;
+
+  font-size: 8px;
+
+  transition: .2s ease;
+}
+
+
+.back-to-login:hover {
+  color:
+    var(--rose-light);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 550px) {
+
+  .recovery-main {
+    padding:
+      95px
+      12px
+      35px;
+  }
+
+
+  .recovery-card {
+    padding:
+      32px
+      22px;
+  }
+
+
+  .recovery-header h1 {
+    font-size: 44px;
+  }
+
+}

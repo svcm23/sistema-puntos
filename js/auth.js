@@ -1,170 +1,160 @@
-/* ============================================
-   FIREBASE
-============================================ */
+// ============================================
+// CRIMSON VEIL — AUTH
+// ============================================
 
 import {
-  initializeApp
-} from
-  "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-
+  auth,
+  db
+} from "./firebase.js";
 
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged
-} from
-  "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
+  onAuthStateChanged,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 import {
-  getFirestore,
   doc,
-  setDoc
-} from
-  "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 
-const firebaseConfig = {
+// ============================================
+// ELEMENTS
+// ============================================
 
-  apiKey:
-    "AIzaSyC8_wsFs6jfyva62xoBDLUeZJh42Orv7-I",
-
-  authDomain:
-    "sistema-puntos-b46dd.firebaseapp.com",
-
-  projectId:
-    "sistema-puntos-b46dd",
-
-  storageBucket:
-    "sistema-puntos-b46dd.appspot.com",
-
-  messagingSenderId:
-    "412750867994",
-
-  appId:
-    "1:412750867994:web:0627943ce5605d99c3eba3",
-
-  measurementId:
-    "G-5KCWW7FDC8"
-};
-
-
-const app =
-  initializeApp(
-    firebaseConfig
+const tabs =
+  document.querySelectorAll(
+    ".auth-tab"
   );
-
-
-const auth =
-  getAuth(app);
-
-
-const db =
-  getFirestore(app);
-
-
-
-/* ============================================
-   ELEMENTOS
-============================================ */
-
-const loginTab =
-  document.getElementById(
-    "loginTab"
-  );
-
-
-const registerTab =
-  document.getElementById(
-    "registerTab"
-  );
-
 
 const loginForm =
   document.getElementById(
     "loginForm"
   );
 
-
 const registerForm =
   document.getElementById(
     "registerForm"
   );
 
-
-const message =
+const authMessage =
   document.getElementById(
     "authMessage"
   );
 
+const forgotPassword =
+  document.getElementById(
+    "forgotPassword"
+  );
 
 
-/* ============================================
-   TABS
-============================================ */
+// ============================================
+// TABS
+// ============================================
 
-loginTab.addEventListener(
-  "click",
-  () => {
+tabs.forEach(tab => {
 
-    loginTab.classList.add(
-      "active"
+  tab.addEventListener(
+    "click",
+
+    () => {
+
+      const target =
+        tab.dataset.tab;
+
+
+      tabs.forEach(item => {
+
+        item.classList.remove(
+          "active"
+        );
+
+      });
+
+
+      tab.classList.add(
+        "active"
+      );
+
+
+      loginForm.classList.toggle(
+        "active",
+        target === "login"
+      );
+
+
+      registerForm.classList.toggle(
+        "active",
+        target === "register"
+      );
+
+
+      clearMessage();
+
+    }
+  );
+
+});
+
+
+// ============================================
+// PASSWORD VISIBILITY
+// ============================================
+
+document
+  .querySelectorAll(
+    ".password-toggle"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+
+      () => {
+
+        const input =
+          button
+            .parentElement
+            .querySelector("input");
+
+
+        const icon =
+          button
+            .querySelector("i");
+
+
+        if (
+          input.type === "password"
+        ) {
+
+          input.type =
+            "text";
+
+          icon.className =
+            "fa-regular fa-eye-slash";
+
+        } else {
+
+          input.type =
+            "password";
+
+          icon.className =
+            "fa-regular fa-eye";
+
+        }
+
+      }
     );
 
-    registerTab.classList.remove(
-      "active"
-    );
+  });
 
 
-    loginForm.classList.remove(
-      "hidden"
-    );
-
-    registerForm.classList.add(
-      "hidden"
-    );
-
-
-    clearMessage();
-
-  }
-);
-
-
-
-registerTab.addEventListener(
-  "click",
-  () => {
-
-    registerTab.classList.add(
-      "active"
-    );
-
-    loginTab.classList.remove(
-      "active"
-    );
-
-
-    registerForm.classList.remove(
-      "hidden"
-    );
-
-    loginForm.classList.add(
-      "hidden"
-    );
-
-
-    clearMessage();
-
-  }
-);
-
-
-
-/* ============================================
-   REGISTRO
-============================================ */
+// ============================================
+// REGISTER
+// ============================================
 
 registerForm.addEventListener(
   "submit",
@@ -226,22 +216,22 @@ registerForm.addEventListener(
 
     try {
 
-      showMessage(
+      setFormsDisabled(true);
+
+      showLoading(
         "Creando tu cuenta..."
       );
 
 
-      /* Crear usuario */
+      // ==================================
+      // FIREBASE AUTH
+      // ==================================
 
       const credential =
         await createUserWithEmailAndPassword(
-
           auth,
-
           email,
-
           password
-
         );
 
 
@@ -249,13 +239,9 @@ registerForm.addEventListener(
         credential.user;
 
 
-
-      /*
-        Crear perfil Firestore.
-
-        El UID del usuario se convierte
-        en el ID de su perfil.
-      */
+      // ==================================
+      // FIRESTORE PROFILE
+      // ==================================
 
       await setDoc(
 
@@ -266,7 +252,6 @@ registerForm.addEventListener(
         ),
 
         {
-
           uid:
             user.uid,
 
@@ -279,7 +264,6 @@ registerForm.addEventListener(
           email:
             email,
 
-
           simbolo:
             getDefaultSymbol(role),
 
@@ -288,7 +272,6 @@ registerForm.addEventListener(
 
           accentColor:
             getDefaultColor(role),
-
 
           puntos:
             0,
@@ -299,17 +282,18 @@ registerForm.addEventListener(
           derrotas:
             0,
 
+          partidas:
+            0,
 
           creado:
-            new Date()
-
+            serverTimestamp()
         }
 
       );
 
 
       showSuccess(
-        "Cuenta creada ✦"
+        "Bienvenida al Veil ✦"
       );
 
 
@@ -317,19 +301,16 @@ registerForm.addEventListener(
         () => {
 
           window.location.href =
-            "index.html";
+            "perfil.html";
 
         },
-        900
-      );
 
+        800
+      );
 
     } catch(error) {
 
-      console.error(
-        error
-      );
-
+      console.error(error);
 
       showError(
         firebaseErrorMessage(
@@ -337,19 +318,21 @@ registerForm.addEventListener(
         )
       );
 
+    } finally {
+
+      setFormsDisabled(false);
+
     }
 
   }
 );
 
 
-
-/* ============================================
-   LOGIN
-============================================ */
+// ============================================
+// LOGIN
+// ============================================
 
 loginForm.addEventListener(
-
   "submit",
 
   async event => {
@@ -374,26 +357,38 @@ loginForm.addEventListener(
         .value;
 
 
+    if (
+      !email ||
+      !password
+    ) {
+
+      showError(
+        "Ingresá tu email y contraseña."
+      );
+
+      return;
+
+    }
+
+
     try {
 
-      showMessage(
+      setFormsDisabled(true);
+
+      showLoading(
         "Ingresando..."
       );
 
 
       await signInWithEmailAndPassword(
-
         auth,
-
         email,
-
         password
-
       );
 
 
       showSuccess(
-        "Bienvenida al Veil ✦"
+        "Bienvenida nuevamente ✦"
       );
 
 
@@ -404,15 +399,75 @@ loginForm.addEventListener(
             "index.html";
 
         },
-        700
-      );
 
+        650
+      );
 
     } catch(error) {
 
-      console.error(
-        error
+      console.error(error);
+
+
+      showError(
+        firebaseErrorMessage(
+          error.code
+        )
       );
+
+    } finally {
+
+      setFormsDisabled(false);
+
+    }
+
+  }
+);
+
+
+// ============================================
+// PASSWORD RESET
+// ============================================
+
+forgotPassword?.addEventListener(
+  "click",
+
+  async () => {
+
+    const email =
+      document
+        .getElementById(
+          "loginEmail"
+        )
+        .value
+        .trim();
+
+
+    if (!email) {
+
+      showError(
+        "Escribí primero tu email."
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      await sendPasswordResetEmail(
+        auth,
+        email
+      );
+
+
+      showSuccess(
+        "Te enviamos un correo para cambiar tu contraseña."
+      );
+
+    } catch(error) {
+
+      console.error(error);
 
 
       showError(
@@ -424,59 +479,44 @@ loginForm.addEventListener(
     }
 
   }
-
 );
 
 
-
-/* ============================================
-   SI YA ESTÁ LOGUEADA
-============================================ */
+// ============================================
+// ALREADY LOGGED IN
+// ============================================
 
 onAuthStateChanged(
-
   auth,
 
   user => {
 
-    if (user) {
-
-      console.log(
-        "Usuario autenticado:",
-        user.uid
-      );
-
+    if (!user) {
+      return;
     }
 
-  }
 
+    console.log(
+      "Sesión activa:",
+      user.uid
+    );
+
+  }
 );
 
 
-
-/* ============================================
-   DEFAULT PROFILE
-============================================ */
+// ============================================
+// DEFAULT PROFILE
+// ============================================
 
 function getDefaultSymbol(role) {
 
   const symbols = {
-
-    top:
-      "✦",
-
-    jungle:
-      "☾",
-
-    mid:
-      "✧",
-
-    adc:
-      "❀",
-
-    support:
-      "♡"
-
+    top: "✦",
+    jungle: "☾",
+    mid: "✧",
+    adc: "❀",
+    support: "♡"
   };
 
 
@@ -488,26 +528,14 @@ function getDefaultSymbol(role) {
 }
 
 
-
 function getDefaultColor(role) {
 
   const colors = {
-
-    top:
-      "#df526f",
-
-    jungle:
-      "#c34462",
-
-    mid:
-      "#f68aa1",
-
-    adc:
-      "#ed5878",
-
-    support:
-      "#ffa0b4"
-
+    top: "#df526f",
+    jungle: "#c34462",
+    mid: "#f68aa1",
+    adc: "#ed5878",
+    support: "#ffa0b4"
   };
 
 
@@ -519,62 +547,73 @@ function getDefaultColor(role) {
 }
 
 
-
-/* ============================================
-   MENSAJES
-============================================ */
+// ============================================
+// UI HELPERS
+// ============================================
 
 function clearMessage() {
 
-  message.textContent =
+  authMessage.textContent =
     "";
 
-  message.className =
+  authMessage.className =
     "auth-message";
 
 }
 
 
+function showLoading(text) {
 
-function showMessage(text) {
-
-  message.textContent =
+  authMessage.textContent =
     text;
 
-  message.className =
+  authMessage.className =
     "auth-message";
 
 }
-
 
 
 function showSuccess(text) {
 
-  message.textContent =
+  authMessage.textContent =
     text;
 
-  message.className =
+  authMessage.className =
     "auth-message success";
 
 }
 
 
-
 function showError(text) {
 
-  message.textContent =
+  authMessage.textContent =
     text;
 
-  message.className =
+  authMessage.className =
     "auth-message error";
 
 }
 
 
+function setFormsDisabled(disabled) {
 
-/* ============================================
-   FIREBASE ERRORS
-============================================ */
+  document
+    .querySelectorAll(
+      ".auth-form input, .auth-form select, .auth-form button"
+    )
+    .forEach(element => {
+
+      element.disabled =
+        disabled;
+
+    });
+
+}
+
+
+// ============================================
+// FIREBASE ERRORS
+// ============================================
 
 function firebaseErrorMessage(code) {
 
@@ -587,12 +626,18 @@ function firebaseErrorMessage(code) {
 
     case "auth/invalid-email":
 
-      return "El email no es válido.";
+      return "El email ingresado no es válido.";
 
 
     case "auth/weak-password":
 
       return "La contraseña debe tener al menos 6 caracteres.";
+
+
+    case "auth/invalid-login-credentials":
+    case "auth/invalid-credential":
+
+      return "Email o contraseña incorrectos.";
 
 
     case "auth/user-not-found":
@@ -605,14 +650,14 @@ function firebaseErrorMessage(code) {
       return "La contraseña es incorrecta.";
 
 
-    case "auth/invalid-login-credentials":
-
-      return "Email o contraseña incorrectos.";
-
-
     case "auth/too-many-requests":
 
       return "Demasiados intentos. Probá nuevamente más tarde.";
+
+
+    case "auth/network-request-failed":
+
+      return "No pudimos conectarnos. Revisá tu conexión.";
 
 
     default:

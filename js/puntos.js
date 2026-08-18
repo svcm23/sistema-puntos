@@ -196,13 +196,17 @@ onAuthStateChanged(
     cleanUserListeners();
 
 
+    // ==========================================
+    // NO SESSION
+    // ==========================================
+
     if (!user) {
 
       currentProfile =
         null;
 
 
-      playerArea.classList.add(
+      playerArea?.classList.add(
         "hidden"
       );
 
@@ -215,17 +219,19 @@ onAuthStateChanged(
     }
 
 
-    playerArea.classList.remove(
+    /*
+      No mostramos playerArea todavía.
+
+      Primero esperamos a cargar el perfil
+      para saber si es PLAYER o COACH.
+    */
+
+    playerArea?.classList.add(
       "hidden"
     );
 
 
     listenCurrentProfile(
-      user.uid
-    );
-
-
-    listenRecentMatches(
       user.uid
     );
 
@@ -264,6 +270,12 @@ function listenCurrentProfile(uid) {
             "Perfil no encontrado."
           );
 
+
+          playerArea?.classList.add(
+            "hidden"
+          );
+
+
           return;
 
         }
@@ -273,9 +285,80 @@ function listenCurrentProfile(uid) {
           snapshot.data();
 
 
+        const userType =
+          currentProfile.tipoUsuario ||
+          "player";
+
+
+        // ========================================
+        // COACH
+        // ========================================
+
+        if (
+          userType ===
+          "coach"
+        ) {
+
+          /*
+            El coach puede ver el ranking,
+            pero no tiene progreso personal
+            ni registra partidas.
+          */
+
+          playerArea?.classList.add(
+            "hidden"
+          );
+
+
+          closeMatchForm();
+
+
+          if (
+            stopMatchesListener
+          ) {
+
+            stopMatchesListener();
+
+            stopMatchesListener =
+              null;
+
+          }
+
+
+          return;
+
+        }
+
+
+        // ========================================
+        // PLAYER
+        // ========================================
+
+        playerArea?.classList.remove(
+          "hidden"
+        );
+
+
         renderCurrentProfile();
 
+
+        /*
+          Escuchamos únicamente las partidas
+          de una jugadora.
+        */
+
+        if (
+          !stopMatchesListener
+        ) {
+
+          listenRecentMatches(
+            uid
+          );
+
+        }
+
       },
+
 
       error => {
 
@@ -284,13 +367,16 @@ function listenCurrentProfile(uid) {
           error
         );
 
+
+        playerArea?.classList.add(
+          "hidden"
+        );
+
       }
 
     );
 
 }
-
-
 
 /* =====================================================
    RENDER CURRENT PROFILE
@@ -709,6 +795,24 @@ async function registerMatch() {
     !currentProfile ||
     !selectedResult
   ) {
+
+    return;
+
+  }
+
+
+  // ==========================================
+  // SECURITY — PLAYERS ONLY
+  // ==========================================
+
+  if (
+    currentProfile.tipoUsuario ===
+    "coach"
+  ) {
+
+    console.warn(
+      "Los coaches no pueden registrar partidas."
+    );
 
     return;
 

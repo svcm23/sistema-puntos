@@ -1,5 +1,5 @@
 /* ==================================================
-   MATCH DETAILS — PRODUCTION
+   MATCH DETAILS — SIMPLE VERSION
 ================================================== */
 
 .match-form-section {
@@ -173,12 +173,6 @@
 .form-grid-two {
   grid-template-columns:
     repeat(2,1fr);
-}
-
-
-.form-grid-three {
-  grid-template-columns:
-    repeat(3,1fr);
 }
 
 
@@ -366,53 +360,6 @@
 }
 
 
-/* SUFFIX */
-
-.input-suffix-wrap {
-  position: relative;
-}
-
-
-.input-suffix-wrap input {
-  padding-right: 45px;
-}
-
-
-.input-suffix-wrap > span {
-  position: absolute;
-
-  top: 50%;
-  right: 13px;
-
-  transform:
-    translateY(-50%);
-
-  color:
-    #6d5058;
-
-  font-size: 8px;
-}
-
-
-/* PRIORIDAD POR ROL */
-
-.match-field.field-priority label {
-  color:
-    var(--rose-light);
-}
-
-
-.match-field.field-priority input {
-  border-color:
-    rgba(239,71,106,.20);
-}
-
-
-.match-field.field-muted {
-  opacity: .65;
-}
-
-
 /* COUNTER */
 
 .field-counter {
@@ -443,8 +390,6 @@
   align-items: center;
 
   gap: 10px;
-
-  margin-top: 3px;
 }
 
 
@@ -453,9 +398,7 @@
 }
 
 
-/* ==================================================
-   DETAILED MATCH HISTORY
-================================================== */
+/* HISTORY */
 
 .detailed-match {
   min-height: 86px;
@@ -511,6 +454,8 @@
 
   align-items: center;
 
+  flex-wrap: wrap;
+
   gap: 8px;
 
   margin-bottom: 5px;
@@ -531,7 +476,7 @@
 }
 
 
-.detailed-match-title span {
+.detailed-match-title > span {
   padding:
     3px
     6px;
@@ -554,20 +499,34 @@
 }
 
 
+.match-elo {
+  color:
+    var(--rose-light) !important;
+
+  border-color:
+    rgba(239,71,106,.14) !important;
+
+  background:
+    rgba(239,71,106,.025);
+}
+
+
 .detailed-match-stats {
   color:
-    #745860;
+    #8f6974;
 
-  font-size: 8px;
+  font-family:
+    Georgia,
+    serif;
 
-  line-height: 1.65;
+  font-size: 13px;
 }
 
 
 .detailed-match-note {
   max-width: 620px;
 
-  margin-top: 4px;
+  margin-top: 5px;
 
   overflow: hidden;
 
@@ -598,14 +557,9 @@
 }
 
 
-/* ==================================================
-   MATCH FORM RESPONSIVE
-================================================== */
-
 @media (max-width: 760px) {
 
-  .form-grid-two,
-  .form-grid-three {
+  .form-grid-two {
     grid-template-columns:
       1fr;
   }
@@ -651,8 +605,7 @@
 @media (max-width: 520px) {
 
   .kda-grid {
-    gap:
-      6px;
+    gap: 6px;
   }
 
 
@@ -666,8 +619,7 @@
 
 
   .save-match-button {
-    min-width:
-      0;
+    min-width: 0;
   }
 
 }

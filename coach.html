@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Coach Dashboard — Crimson Veil</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <!-- GENERAL -->
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  >
+
+  <!-- NAVBAR -->
+  <link
+    rel="stylesheet"
+    href="css/navbar.css"
+  >
+
+  <!-- COACH -->
+  <link
+    rel="stylesheet"
+    href="css/coach.css"
+  >
+
+  <!-- ICONS -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+</head>
+
+
+<body class="coach-page">
+
+
+  <!-- ==================================================
+       NAVBAR
+  =================================================== -->
+
+  <nav
+    id="main-nav"
+    class="site-nav"
+  >
+
+    <!-- BRAND -->
+
+    <a
+      href="index.html"
+      class="brand"
+    >
+
+      <div class="nav-logo-wrap">
+
+        <img
+          src="img/crimson-veil-logo.jpeg"
+          alt="Crimson Veil"
+          class="nav-logo"
+        >
+
+      </div>
+
+
+      <div class="brand-copy">
+
+        <strong>
+          Crimson Veil
+        </strong>
+
+        <small>
+          Coach Hub
+        </small>
+
+      </div>
+
+    </a>
+
+
+
+    <!-- MENU -->
+
+    <div class="menu">
+
+
+      <a href="index.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>
+          Inicio
+        </span>
+
+      </a>
+
+
+      <a href="index.html#roster">
+
+        <i class="fa-solid fa-users"></i>
+
+        <span>
+          Team
+        </span>
+
+      </a>
+
+
+      <a href="puntos.html">
+
+        <i class="fa-solid fa-star"></i>
+
+        <span>
+          Ranking
+        </span>
+
+      </a>
+
+
+      <a
+        href="coach.html"
+        class="active"
+      >
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        <span>
+          Coach
+        </span>
+
+      </a>
+
+
+
+      <!-- USER -->
+
+      <div class="user-area">
+
+
+        <a
+          id="loginLink"
+          href="login.html"
+          class="login-link"
+        >
+
+          <i class="fa-solid fa-user"></i>
+
+          <span>
+            Ingresar
+          </span>
+
+        </a>
+
+
+        <div
+          id="loggedUser"
+          class="logged-user hidden"
+        >
+
+          <button
+            id="userMenuButton"
+            class="user-menu-button"
+            type="button"
+          >
+
+            <i class="fa-solid fa-user"></i>
+
+            <span id="navNickname">
+              Coach
+            </span>
+
+            <i
+              class="fa-solid fa-chevron-down user-chevron"
+            ></i>
+
+          </button>
+
+
+          <div
+            id="userDropdown"
+            class="user-dropdown"
+          >
+
+            <a href="coach.html">
+
+              <i class="fa-solid fa-chart-line"></i>
+
+              <span>
+                Coach Dashboard
+              </span>
+
+            </a>
+
+
+            <a href="index.html">
+
+              <i class="fa-solid fa-house"></i>
+
+              <span>
+                Team Hub
+              </span>
+
+            </a>
+
+
+            <button
+              id="logoutButton"
+              type="button"
+            >
+
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+              <span>
+                Cerrar sesión
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </nav>
+
+
+
+  <!-- ==================================================
+       LOADING
+  =================================================== -->
+
+  <main
+    id="coachLoading"
+    class="coach-state-screen"
+  >
+
+    <span class="coach-state-symbol">
+      ✦
+    </span>
+
+    <p>
+      Abriendo el Veil...
+    </p>
+
+  </main>
+
+
+
+  <!-- ==================================================
+       ACCESS DENIED
+  =================================================== -->
+
+  <main
+    id="coachDenied"
+    class="coach-state-screen hidden"
+  >
+
+    <span class="coach-state-symbol">
+      ☾
+    </span>
+
+    <p class="eyebrow">
+      RESTRICTED ACCESS
+    </p>
+
+    <h1>
+      Behind the
+      <em>Veil.</em>
+    </h1>
+
+    <p class="coach-denied-copy">
+
+      Esta sección está reservada
+      para el staff de Crimson Veil.
+
+    </p>
+
+
+    <a
+      href="index.html"
+      class="btn btn-primary"
+    >
+
+      Volver al Team Hub
+
+    </a>
+
+  </main>
+
+
+
+  <!-- ==================================================
+       DASHBOARD
+  =================================================== -->
+
+  <main
+    id="coachDashboard"
+    class="coach-main hidden"
+  >
+
+
+    <!-- BACKGROUND -->
+
+    <div class="coach-stars"></div>
+
+    <div class="coach-glow coach-glow-left"></div>
+
+    <div class="coach-glow coach-glow-right"></div>
+
+
+    <span class="coach-decoration coach-decoration-one">
+      ✦
+    </span>
+
+    <span class="coach-decoration coach-decoration-two">
+      ☾
+    </span>
+
+
+
+    <div class="coach-container">
+
+
+      <!-- ==================================================
+           HEADER
+      =================================================== -->
+
+      <header class="coach-header">
+
+
+        <div>
+
+          <p class="eyebrow">
+            CRIMSON VEIL · STAFF
+          </p>
+
+
+          <h1>
+
+            Coach
+            <em>Dashboard.</em>
+
+          </h1>
+
+
+          <p class="coach-header-copy">
+
+            Rendimiento, tendencias y partidas
+            del equipo en un solo lugar.
+
+          </p>
+
+        </div>
+
+
+
+        <div class="coach-header-mark">
+
+          <span>
+            ✦
+          </span>
+
+          <small>
+            PERFORMANCE
+          </small>
+
+        </div>
+
+
+      </header>
+
+
+
+      <div class="coach-divider">
+
+        <span></span>
+
+        <i class="fa-solid fa-moon"></i>
+
+        <span></span>
+
+      </div>
+
+
+
+      <!-- ==================================================
+           TEAM SUMMARY
+      =================================================== -->
+
+      <section class="coach-summary-section">
+
+
+        <div class="section-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              TEAM OVERVIEW
+            </p>
+
+            <h2>
+              The Veil
+              <em>at a glance.</em>
+            </h2>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="coach-summary-grid">
+
+
+          <!-- TOTAL MATCHES -->
+
+          <article class="coach-stat-card">
+
+            <span class="coach-stat-icon">
+
+              <i class="fa-solid fa-gamepad"></i>
+
+            </span>
+
+
+            <div>
+
+              <small>
+                PARTIDAS
+              </small>
+
+              <strong id="teamMatches">
+                0
+              </strong>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- WINRATE -->
+
+          <article class="coach-stat-card">
+
+            <span class="coach-stat-icon">
+
+              <i class="fa-solid fa-crown"></i>
+
+            </span>
+
+
+            <div>
+
+              <small>
+                WINRATE
+              </small>
+
+              <strong id="teamWinrate">
+                0%
+              </strong>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- AVERAGE KDA -->
+
+          <article class="coach-stat-card">
+
+            <span class="coach-stat-icon">
+
+              <i class="fa-solid fa-crosshairs"></i>
+
+            </span>
+
+
+            <div>
+
+              <small>
+                KDA PROMEDIO
+              </small>
+
+              <strong id="teamKda">
+                0.00
+              </strong>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- PLAYERS -->
+
+          <article class="coach-stat-card">
+
+            <span class="coach-stat-icon">
+
+              <i class="fa-solid fa-users"></i>
+
+            </span>
+
+
+            <div>
+
+              <small>
+                JUGADORAS
+              </small>
+
+              <strong id="teamPlayers">
+                0
+              </strong>
+
+            </div>
+
+          </article>
+
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ==================================================
+           PLAYERS
+      =================================================== -->
+
+      <section class="coach-players-section">
+
+
+        <div class="section-heading coach-player-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              PLAYER PERFORMANCE
+            </p>
+
+            <h2>
+              Meet their
+              <em>numbers.</em>
+            </h2>
+
+          </div>
+
+
+          <!-- FILTER -->
+
+          <div class="coach-filter">
+
+            <label for="playerFilter">
+              Jugadora
+            </label>
+
+            <select id="playerFilter">
+
+              <option value="all">
+                Todo el equipo
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- PLAYER CARDS -->
+
+        <div
+          id="coachPlayers"
+          class="coach-player-grid"
+        >
+
+          <div class="coach-inline-loading">
+
+            <span>
+              ✦
+            </span>
+
+            <p>
+              Reuniendo estadísticas...
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ==================================================
+           PLAYER DETAIL
+      =================================================== -->
+
+      <section
+        id="playerDetailSection"
+        class="coach-detail-section hidden"
+      >
+
+
+        <!-- DETAIL HEADER -->
+
+        <div class="player-detail-header">
+
+
+          <div>
+
+            <p class="eyebrow">
+              PLAYER DETAIL
+            </p>
+
+
+            <div class="player-detail-name-row">
+
+              <h2 id="detailNickname">
+                Player
+              </h2>
+
+              <span
+                id="detailRole"
+                class="coach-role-badge"
+              >
+                MID
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <span
+            id="detailSymbol"
+            class="player-detail-symbol"
+          >
+            ✦
+          </span>
+
+
+        </div>
+
+
+
+        <!-- STATS -->
+
+        <div class="player-detail-stats">
+
+
+          <div class="detail-stat">
+
+            <small>
+              PARTIDAS
+            </small>
+
+            <strong id="detailMatches">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="detail-stat">
+
+            <small>
+              VICTORIAS
+            </small>
+
+            <strong id="detailWins">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="detail-stat">
+
+            <small>
+              DERROTAS
+            </small>
+
+            <strong id="detailLosses">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="detail-stat">
+
+            <small>
+              WINRATE
+            </small>
+
+            <strong id="detailWinrate">
+              0%
+            </strong>
+
+          </div>
+
+
+          <div class="detail-stat">
+
+            <small>
+              KDA PROM.
+            </small>
+
+            <strong id="detailKda">
+              0.00
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- ==================================================
+             CHAMPION PERFORMANCE
+        =================================================== -->
+
+        <div class="coach-detail-block">
+
+
+          <div class="coach-block-heading">
+
+            <div>
+
+              <p class="eyebrow">
+                CHAMPION POOL
+              </p>
+
+              <h3>
+                Champion
+                <em>performance.</em>
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="championStats"
+            class="champion-stats-list"
+          ></div>
+
+
+        </div>
+
+
+
+        <!-- ==================================================
+             RECENT MATCHES
+        =================================================== -->
+
+        <div class="coach-detail-block">
+
+
+          <div class="coach-block-heading">
+
+            <div>
+
+              <p class="eyebrow">
+                MATCH HISTORY
+              </p>
+
+              <h3>
+                Últimas
+                <em>partidas.</em>
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="coachMatchHistory"
+            class="coach-match-history"
+          ></div>
+
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- ==================================================
+           GLOBAL RECENT ACTIVITY
+      =================================================== -->
+
+      <section
+        id="teamActivitySection"
+        class="coach-activity-section"
+      >
+
+
+        <div class="section-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              RECENT ACTIVITY
+            </p>
+
+            <h2>
+              Latest from
+              <em>the Veil.</em>
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="teamMatchHistory"
+          class="team-match-history"
+        >
+
+          <div class="coach-inline-loading">
+
+            <span>
+              ☾
+            </span>
+
+            <p>
+              Cargando actividad...
+            </p>
+
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ==================================================
+       FOOTER
+  =================================================== -->
+
+  <footer>
+
+    <div class="footer-symbol">
+      ✦
+    </div>
+
+    <div class="footer-name">
+      CRIMSON VEIL
+    </div>
+
+    <p>
+      League of Legends · LAS · Staff
+    </p>
+
+    <span class="footer-moon">
+      ☾
+    </span>
+
+  </footer>
+
+
+
+  <!-- ==================================================
+       JS
+  =================================================== -->
+
+  <script
+    type="module"
+    src="js/navbar.js"
+  ></script>
+
+
+  <script
+    type="module"
+    src="js/coach.js"
+  ></script>
+
+
+</body>
+
+</html>

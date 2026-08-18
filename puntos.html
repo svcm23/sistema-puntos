@@ -12,31 +12,26 @@
     content="width=device-width, initial-scale=1"
   >
 
-  <!-- GENERAL -->
   <link
     rel="stylesheet"
     href="css/styles.css"
   >
 
-  <!-- NAVBAR -->
   <link
     rel="stylesheet"
     href="css/navbar.css"
   >
 
-  <!-- PUNTOS -->
   <link
     rel="stylesheet"
     href="css/puntos.css"
   >
 
-  <!-- ICONOS -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   >
 
-  <!-- CONFETTI -->
   <script
     src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
   ></script>
@@ -87,8 +82,8 @@
     </a>
 
 
-    <div class="menu">
 
+    <div class="menu">
 
       <a href="index.html">
 
@@ -126,14 +121,10 @@
       </a>
 
 
-      <!-- ======================================
-           USUARIO
-      ======================================= -->
+
+      <!-- USUARIO -->
 
       <div class="user-area">
-
-
-        <!-- NO LOGUEADA -->
 
         <a
           id="loginLink"
@@ -149,8 +140,6 @@
 
         </a>
 
-
-        <!-- LOGUEADA -->
 
         <div
           id="loggedUser"
@@ -175,8 +164,6 @@
 
           </button>
 
-
-          <!-- DROPDOWN -->
 
           <div
             id="userDropdown"
@@ -235,11 +222,6 @@
   =========================================== -->
 
   <main class="points-main">
-
-
-    <!-- ======================================
-         FONDO
-    ======================================= -->
 
     <div class="points-stars"></div>
 
@@ -302,8 +284,6 @@
 
       <!-- =====================================
            ÁREA PRIVADA
-           
-           SOLO SE MUESTRA SI HAY SESIÓN
       ====================================== -->
 
       <section
@@ -312,9 +292,9 @@
       >
 
 
-        <!-- =================================
-             PLAYER PROGRESS
-        ================================== -->
+        <!-- =====================================
+             PROGRESO + NUEVA PARTIDA
+        ====================================== -->
 
         <div class="player-progress">
 
@@ -322,7 +302,6 @@
           <!-- PROGRESO -->
 
           <div class="progress-card">
-
 
             <div class="progress-top">
 
@@ -350,8 +329,6 @@
 
 
 
-            <!-- ESTRELLAS -->
-
             <div class="star-progress">
 
               <div
@@ -376,10 +353,7 @@
 
 
 
-            <!-- STATS -->
-
             <div class="points-stats">
-
 
               <div class="points-stat">
 
@@ -419,19 +393,15 @@
 
               </div>
 
-
             </div>
 
           </div>
 
 
 
-          <!-- =================================
-               REGISTRAR PARTIDA
-          ================================== -->
+          <!-- NUEVA PARTIDA -->
 
           <div class="match-register-card">
-
 
             <div class="register-heading">
 
@@ -445,18 +415,15 @@
               </h3>
 
               <p>
-                El resultado se registra únicamente
-                en tu propia cuenta.
+                Elegí el resultado y completá los
+                datos de la partida.
               </p>
 
             </div>
 
 
-
             <div class="match-actions">
 
-
-              <!-- VICTORIA -->
 
               <button
                 id="winButton"
@@ -469,7 +436,6 @@
                   <i class="fa-solid fa-crown"></i>
 
                 </span>
-
 
                 <span class="result-copy">
 
@@ -487,8 +453,6 @@
 
 
 
-              <!-- DERROTA -->
-
               <button
                 id="lossButton"
                 type="button"
@@ -500,7 +464,6 @@
                   <i class="fa-solid fa-moon"></i>
 
                 </span>
-
 
                 <span class="result-copy">
 
@@ -516,7 +479,6 @@
 
               </button>
 
-
             </div>
 
 
@@ -524,8 +486,8 @@
 
               <i class="fa-solid fa-lock"></i>
 
-              Firebase identifica automáticamente
-              tu usuario.
+              La partida se registra únicamente
+              en tu usuario.
 
             </p>
 
@@ -535,12 +497,369 @@
 
 
 
-        <!-- =================================
+        <!-- =====================================
+             DETALLES DE LA PARTIDA
+        ====================================== -->
+
+        <section
+          id="matchFormSection"
+          class="match-form-section hidden"
+        >
+
+          <div class="match-form-card">
+
+
+            <div class="match-form-heading">
+
+              <div>
+
+                <p class="eyebrow">
+                  MATCH DETAILS
+                </p>
+
+                <h2>
+                  Contanos un poco más de
+                  <em>la partida.</em>
+                </h2>
+
+              </div>
+
+
+              <span
+                id="selectedResultBadge"
+                class="selected-result-badge"
+              >
+                VICTORIA · +3
+              </span>
+
+            </div>
+
+
+
+            <form
+              id="matchDetailsForm"
+              autocomplete="off"
+            >
+
+
+              <!-- CAMPEÓN + ROL -->
+
+              <div class="form-grid form-grid-two">
+
+                <div class="match-field">
+
+                  <label for="championInput">
+                    Campeón
+                  </label>
+
+                  <input
+                    id="championInput"
+                    type="text"
+                    maxlength="30"
+                    placeholder="Ej. Ahri"
+                    required
+                  >
+
+                  <small>
+                    El campeón que jugaste.
+                  </small>
+
+                </div>
+
+
+                <div class="match-field">
+
+                  <label for="playedRoleInput">
+                    Rol jugado
+                  </label>
+
+                  <select
+                    id="playedRoleInput"
+                    required
+                  >
+
+                    <option value="top">
+                      Top
+                    </option>
+
+                    <option value="jungle">
+                      Jungle
+                    </option>
+
+                    <option value="mid">
+                      Mid
+                    </option>
+
+                    <option value="adc">
+                      ADC
+                    </option>
+
+                    <option value="support">
+                      Support
+                    </option>
+
+                  </select>
+
+                  <small>
+                    Se completa con tu rol habitual,
+                    pero podés cambiarlo si jugaste off-role.
+                  </small>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- KDA -->
+
+              <div class="match-field">
+
+                <label>
+                  K / D / A
+                </label>
+
+
+                <div class="kda-grid">
+
+                  <div class="number-field">
+
+                    <span>
+                      K
+                    </span>
+
+                    <input
+                      id="killsInput"
+                      type="number"
+                      min="0"
+                      max="99"
+                      value="0"
+                      required
+                    >
+
+                  </div>
+
+
+                  <div class="kda-separator">
+                    /
+                  </div>
+
+
+                  <div class="number-field">
+
+                    <span>
+                      D
+                    </span>
+
+                    <input
+                      id="deathsInput"
+                      type="number"
+                      min="0"
+                      max="99"
+                      value="0"
+                      required
+                    >
+
+                  </div>
+
+
+                  <div class="kda-separator">
+                    /
+                  </div>
+
+
+                  <div class="number-field">
+
+                    <span>
+                      A
+                    </span>
+
+                    <input
+                      id="assistsInput"
+                      type="number"
+                      min="0"
+                      max="99"
+                      value="0"
+                      required
+                    >
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- CS / VISIÓN / DURACIÓN -->
+
+              <div class="form-grid form-grid-three">
+
+
+                <div
+                  id="csField"
+                  class="match-field"
+                >
+
+                  <label for="csInput">
+                    CS / Minions
+                  </label>
+
+                  <input
+                    id="csInput"
+                    type="number"
+                    min="0"
+                    max="999"
+                    placeholder="214"
+                  >
+
+                  <small id="csHelp">
+                    Farm total de la partida.
+                  </small>
+
+                </div>
+
+
+
+                <div
+                  id="visionField"
+                  class="match-field"
+                >
+
+                  <label for="visionInput">
+                    Puntos de visión
+                  </label>
+
+                  <input
+                    id="visionInput"
+                    type="number"
+                    min="0"
+                    max="999"
+                    placeholder="48"
+                  >
+
+                  <small id="visionHelp">
+                    Opcional.
+                  </small>
+
+                </div>
+
+
+
+                <div class="match-field">
+
+                  <label for="durationInput">
+                    Duración
+                  </label>
+
+                  <div class="input-suffix-wrap">
+
+                    <input
+                      id="durationInput"
+                      type="number"
+                      min="1"
+                      max="120"
+                      placeholder="31"
+                      required
+                    >
+
+                    <span>
+                      min
+                    </span>
+
+                  </div>
+
+                  <small>
+                    Duración aproximada.
+                  </small>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- NOTA -->
+
+              <div class="match-field">
+
+                <label for="noteInput">
+
+                  Nota personal
+
+                  <span class="optional-label">
+                    OPCIONAL
+                  </span>
+
+                </label>
+
+
+                <textarea
+                  id="noteInput"
+                  maxlength="160"
+                  rows="3"
+                  placeholder="Ej. Buen early, me costó jugar side después del minuto 20..."
+                ></textarea>
+
+
+                <div class="field-counter">
+
+                  <small>
+                    Después también puede darle contexto al coach.
+                  </small>
+
+                  <span id="noteCounter">
+                    0 / 160
+                  </span>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- ACCIONES -->
+
+              <div class="match-form-actions">
+
+                <button
+                  id="saveMatchButton"
+                  type="submit"
+                  class="btn btn-primary save-match-button"
+                >
+
+                  <i class="fa-solid fa-check"></i>
+
+                  Guardar partida
+
+                </button>
+
+
+                <button
+                  id="cancelMatchButton"
+                  type="button"
+                  class="btn btn-ghost"
+                >
+
+                  Cancelar
+
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =====================================
              HISTORIAL
-        ================================== -->
+        ====================================== -->
 
         <section class="recent-section">
-
 
           <div class="subsection-heading">
 
@@ -592,7 +911,6 @@
 
       <section class="ranking-section">
 
-
         <div class="subsection-heading ranking-heading">
 
           <div>
@@ -607,11 +925,6 @@
             </h2>
 
           </div>
-
-
-          <span class="ranking-symbol">
-            ♛
-          </span>
 
         </div>
 
@@ -637,16 +950,13 @@
 
       </section>
 
-
     </div>
 
   </main>
 
 
 
-  <!-- ==========================================
-       RESULT POPUP
-  =========================================== -->
+  <!-- POPUP -->
 
   <div
     id="resultPopup"
@@ -656,9 +966,7 @@
 
 
 
-  <!-- ==========================================
-       FOOTER
-  =========================================== -->
+  <!-- FOOTER -->
 
   <footer>
 
@@ -681,10 +989,6 @@
   </footer>
 
 
-
-  <!-- ==========================================
-       JS
-  =========================================== -->
 
   <script
     type="module"

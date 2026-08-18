@@ -82,7 +82,6 @@
     </a>
 
 
-
     <div class="menu">
 
       <a href="index.html">
@@ -122,9 +121,8 @@
 
 
 
-      <!-- USUARIO -->
-
       <div class="user-area">
+
 
         <a
           id="loginLink"
@@ -247,9 +245,7 @@
     <div class="points-container">
 
 
-      <!-- =====================================
-           HEADER
-      ====================================== -->
+      <!-- HEADER -->
 
       <header class="points-heading">
 
@@ -292,16 +288,13 @@
       >
 
 
-        <!-- =====================================
-             PROGRESO + NUEVA PARTIDA
-        ====================================== -->
-
         <div class="player-progress">
 
 
           <!-- PROGRESO -->
 
           <div class="progress-card">
+
 
             <div class="progress-top">
 
@@ -355,6 +348,7 @@
 
             <div class="points-stats">
 
+
               <div class="points-stat">
 
                 <span>
@@ -403,6 +397,7 @@
 
           <div class="match-register-card">
 
+
             <div class="register-heading">
 
               <p class="eyebrow">
@@ -415,8 +410,8 @@
               </h3>
 
               <p>
-                Elegí el resultado y completá los
-                datos de la partida.
+                Elegí el resultado y completá
+                los datos de tu partida.
               </p>
 
             </div>
@@ -436,6 +431,7 @@
                   <i class="fa-solid fa-crown"></i>
 
                 </span>
+
 
                 <span class="result-copy">
 
@@ -465,6 +461,7 @@
 
                 </span>
 
+
                 <span class="result-copy">
 
                   <strong>
@@ -486,8 +483,8 @@
 
               <i class="fa-solid fa-lock"></i>
 
-              La partida se registra únicamente
-              en tu usuario.
+              Solo podés registrar partidas
+              en tu propia cuenta.
 
             </p>
 
@@ -498,7 +495,7 @@
 
 
         <!-- =====================================
-             DETALLES DE LA PARTIDA
+             DETALLES
         ====================================== -->
 
         <section
@@ -546,6 +543,7 @@
 
               <div class="form-grid form-grid-two">
 
+
                 <div class="match-field">
 
                   <label for="championInput">
@@ -565,6 +563,7 @@
                   </small>
 
                 </div>
+
 
 
                 <div class="match-field">
@@ -601,8 +600,7 @@
                   </select>
 
                   <small>
-                    Se completa con tu rol habitual,
-                    pero podés cambiarlo si jugaste off-role.
+                    Podés cambiarlo si jugaste off-role.
                   </small>
 
                 </div>
@@ -621,6 +619,7 @@
 
 
                 <div class="kda-grid">
+
 
                   <div class="number-field">
 
@@ -691,89 +690,30 @@
 
 
 
-              <!-- CS / VISIÓN / DURACIÓN -->
+              <!-- ELO -->
 
-              <div class="form-grid form-grid-three">
+              <div class="match-field">
 
+                <label for="eloInput">
 
-                <div
-                  id="csField"
-                  class="match-field"
+                  Elo
+
+                  <span class="optional-label">
+                    OPCIONAL
+                  </span>
+
+                </label>
+
+                <input
+                  id="eloInput"
+                  type="text"
+                  maxlength="40"
+                  placeholder="Ej. Esmeralda 3"
                 >
 
-                  <label for="csInput">
-                    CS / Minions
-                  </label>
-
-                  <input
-                    id="csInput"
-                    type="number"
-                    min="0"
-                    max="999"
-                    placeholder="214"
-                  >
-
-                  <small id="csHelp">
-                    Farm total de la partida.
-                  </small>
-
-                </div>
-
-
-
-                <div
-                  id="visionField"
-                  class="match-field"
-                >
-
-                  <label for="visionInput">
-                    Puntos de visión
-                  </label>
-
-                  <input
-                    id="visionInput"
-                    type="number"
-                    min="0"
-                    max="999"
-                    placeholder="48"
-                  >
-
-                  <small id="visionHelp">
-                    Opcional.
-                  </small>
-
-                </div>
-
-
-
-                <div class="match-field">
-
-                  <label for="durationInput">
-                    Duración
-                  </label>
-
-                  <div class="input-suffix-wrap">
-
-                    <input
-                      id="durationInput"
-                      type="number"
-                      min="1"
-                      max="120"
-                      placeholder="31"
-                      required
-                    >
-
-                    <span>
-                      min
-                    </span>
-
-                  </div>
-
-                  <small>
-                    Duración aproximada.
-                  </small>
-
-                </div>
+                <small>
+                  Podés dejarlo vacío si no corresponde.
+                </small>
 
               </div>
 
@@ -798,14 +738,14 @@
                   id="noteInput"
                   maxlength="160"
                   rows="3"
-                  placeholder="Ej. Buen early, me costó jugar side después del minuto 20..."
+                  placeholder="Ej. Buen early, me costó cerrar la partida..."
                 ></textarea>
 
 
                 <div class="field-counter">
 
                   <small>
-                    Después también puede darle contexto al coach.
+                    Sirve para darle contexto al coach.
                   </small>
 
                   <span id="noteCounter">
@@ -818,9 +758,10 @@
 
 
 
-              <!-- ACCIONES -->
+              <!-- ACTIONS -->
 
               <div class="match-form-actions">
+
 
                 <button
                   id="saveMatchButton"
@@ -861,6 +802,7 @@
 
         <section class="recent-section">
 
+
           <div class="subsection-heading">
 
             <div>
@@ -900,16 +842,16 @@
 
         </section>
 
-
       </section>
 
 
 
       <!-- =====================================
-           RANKING PÚBLICO
+           RANKING
       ====================================== -->
 
       <section class="ranking-section">
+
 
         <div class="subsection-heading ranking-heading">
 
@@ -949,6 +891,7 @@
         </div>
 
       </section>
+
 
     </div>
 
@@ -990,11 +933,12 @@
 
 
 
+  <!-- JS -->
+
   <script
     type="module"
     src="js/navbar.js"
   ></script>
-
 
   <script
     type="module"

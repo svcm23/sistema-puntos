@@ -1,6 +1,6 @@
 /* =====================================================
    CRIMSON VEIL
-   POINTS SYSTEM
+   POINTS SYSTEM + MATCH DETAILS
 ===================================================== */
 
 import {
@@ -32,81 +32,100 @@ import {
 ===================================================== */
 
 const playerArea =
-  document.getElementById(
-    "playerArea"
-  );
-
+  document.getElementById("playerArea");
 
 const pointsNickname =
-  document.getElementById(
-    "pointsNickname"
-  );
-
+  document.getElementById("pointsNickname");
 
 const pointsRole =
-  document.getElementById(
-    "pointsRole"
-  );
-
+  document.getElementById("pointsRole");
 
 const pointsTotal =
-  document.getElementById(
-    "pointsTotal"
-  );
-
+  document.getElementById("pointsTotal");
 
 const winsTotal =
-  document.getElementById(
-    "winsTotal"
-  );
-
+  document.getElementById("winsTotal");
 
 const lossesTotal =
-  document.getElementById(
-    "lossesTotal"
-  );
-
+  document.getElementById("lossesTotal");
 
 const matchesTotal =
-  document.getElementById(
-    "matchesTotal"
-  );
-
+  document.getElementById("matchesTotal");
 
 const starDisplay =
-  document.getElementById(
-    "starDisplay"
-  );
-
+  document.getElementById("starDisplay");
 
 const winButton =
-  document.getElementById(
-    "winButton"
-  );
-
+  document.getElementById("winButton");
 
 const lossButton =
-  document.getElementById(
-    "lossButton"
-  );
+  document.getElementById("lossButton");
 
+const matchFormSection =
+  document.getElementById("matchFormSection");
+
+const selectedResultBadge =
+  document.getElementById("selectedResultBadge");
+
+const matchDetailsForm =
+  document.getElementById("matchDetailsForm");
+
+const championInput =
+  document.getElementById("championInput");
+
+const playedRoleInput =
+  document.getElementById("playedRoleInput");
+
+const killsInput =
+  document.getElementById("killsInput");
+
+const deathsInput =
+  document.getElementById("deathsInput");
+
+const assistsInput =
+  document.getElementById("assistsInput");
+
+const csInput =
+  document.getElementById("csInput");
+
+const visionInput =
+  document.getElementById("visionInput");
+
+const durationInput =
+  document.getElementById("durationInput");
+
+const noteInput =
+  document.getElementById("noteInput");
+
+const noteCounter =
+  document.getElementById("noteCounter");
+
+const csField =
+  document.getElementById("csField");
+
+const visionField =
+  document.getElementById("visionField");
+
+const csHelp =
+  document.getElementById("csHelp");
+
+const visionHelp =
+  document.getElementById("visionHelp");
+
+const saveMatchButton =
+  document.getElementById("saveMatchButton");
+
+const cancelMatchButton =
+  document.getElementById("cancelMatchButton");
 
 const recentMatches =
-  document.getElementById(
-    "recentMatches"
-  );
-
+  document.getElementById("recentMatches");
 
 const rankingList =
-  document.getElementById(
-    "rankingList"
-  );
-
+  document.getElementById("rankingList");
 
 const resultPopup =
-  document.getElementById(
-    "resultPopup"
-  );
+  document.getElementById("resultPopup");
 
 
 
@@ -114,20 +133,15 @@ const resultPopup =
    STATE
 ===================================================== */
 
-let currentUser =
-  null;
+let currentUser = null;
 
+let currentProfile = null;
 
-let currentProfile =
-  null;
+let selectedResult = null;
 
+let stopProfileListener = null;
 
-let stopProfileListener =
-  null;
-
-
-let stopMatchesListener =
-  null;
+let stopMatchesListener = null;
 
 
 
@@ -188,37 +202,24 @@ onAuthStateChanged(
 
   user => {
 
-    currentUser =
-      user;
-
+    currentUser = user;
 
     cleanUserListeners();
 
 
-    /* ==========================================
-       NO LOGUEADA
-    ========================================== */
-
     if (!user) {
 
-      currentProfile =
-        null;
-
+      currentProfile = null;
 
       playerArea.classList.add(
         "hidden"
       );
 
+      closeMatchForm();
 
       return;
-
     }
 
-
-
-    /* ==========================================
-       LOGUEADA
-    ========================================== */
 
     playerArea.classList.remove(
       "hidden"
@@ -241,12 +242,10 @@ onAuthStateChanged(
 
 
 /* =====================================================
-   CURRENT PROFILE
+   PROFILE
 ===================================================== */
 
-function listenCurrentProfile(
-  uid
-) {
+function listenCurrentProfile(uid) {
 
   const profileReference =
     doc(
@@ -263,16 +262,13 @@ function listenCurrentProfile(
 
       snapshot => {
 
-        if (
-          !snapshot.exists()
-        ) {
+        if (!snapshot.exists()) {
 
           console.error(
             "Perfil no encontrado."
           );
 
           return;
-
         }
 
 
@@ -300,15 +296,13 @@ function listenCurrentProfile(
 
 
 /* =====================================================
-   RENDER CURRENT PLAYER
+   RENDER PROFILE
 ===================================================== */
 
 function renderCurrentProfile() {
 
   if (!currentProfile) {
-
     return;
-
   }
 
 
@@ -325,22 +319,19 @@ function renderCurrentProfile() {
 
   const points =
     Number(
-      currentProfile.puntos ||
-      0
+      currentProfile.puntos || 0
     );
 
 
   const wins =
     Number(
-      currentProfile.victorias ||
-      0
+      currentProfile.victorias || 0
     );
 
 
   const losses =
     Number(
-      currentProfile.derrotas ||
-      0
+      currentProfile.derrotas || 0
     );
 
 
@@ -359,9 +350,7 @@ function renderCurrentProfile() {
 
 
   pointsRole.textContent =
-    formatRole(
-      role
-    );
+    formatRole(role);
 
 
   pointsTotal.textContent =
@@ -380,9 +369,25 @@ function renderCurrentProfile() {
     matches;
 
 
-  renderStars(
-    points
-  );
+  /*
+    Por defecto el formulario se abre
+    con el rol del perfil.
+  */
+
+  if (
+    !selectedResult &&
+    isPlayerRole(role)
+  ) {
+
+    playedRoleInput.value =
+      role;
+
+    updateRoleFields();
+
+  }
+
+
+  renderStars(points);
 
 }
 
@@ -392,17 +397,13 @@ function renderCurrentProfile() {
    STARS
 ===================================================== */
 
-function renderStars(
-  points
-) {
+function renderStars(points) {
 
-  const maximumVisible =
-    10;
+  const maximumVisible = 10;
 
 
   let starCount =
-    points %
-    maximumVisible;
+    points % maximumVisible;
 
 
   if (
@@ -456,31 +457,22 @@ function renderStars(
     `star-display ${level}`;
 
 
-  if (
-    starCount === 0
-  ) {
+  if (starCount === 0) {
 
     starDisplay.innerHTML = `
 
       <span class="no-stars">
-
-        Tu primera estrella
-        está esperando. ✦
-
+        Tu primera estrella está esperando. ✦
       </span>
 
     `;
 
-
     return;
-
   }
 
 
   starDisplay.innerHTML =
-    Array(
-      starCount
-    )
+    Array(starCount)
       .fill(
         `<span class="progress-star">★</span>`
       )
@@ -491,7 +483,7 @@ function renderStars(
 
 
 /* =====================================================
-   REGISTER MATCH BUTTONS
+   RESULT BUTTONS
 ===================================================== */
 
 winButton.addEventListener(
@@ -500,7 +492,7 @@ winButton.addEventListener(
 
   () => {
 
-    registerMatch(
+    openMatchForm(
       "victoria"
     );
 
@@ -515,9 +507,296 @@ lossButton.addEventListener(
 
   () => {
 
-    registerMatch(
+    openMatchForm(
       "derrota"
     );
+
+  }
+
+);
+
+
+
+/* =====================================================
+   OPEN FORM
+===================================================== */
+
+function openMatchForm(result) {
+
+  if (
+    !currentUser ||
+    !currentProfile
+  ) {
+
+    return;
+  }
+
+
+  selectedResult =
+    result;
+
+
+  winButton.classList.toggle(
+    "selected",
+    result === "victoria"
+  );
+
+
+  lossButton.classList.toggle(
+    "selected",
+    result === "derrota"
+  );
+
+
+  if (
+    result === "victoria"
+  ) {
+
+    selectedResultBadge.textContent =
+      "VICTORIA · +3";
+
+
+    selectedResultBadge.className =
+      "selected-result-badge";
+
+  } else {
+
+    selectedResultBadge.textContent =
+      "DERROTA · +1";
+
+
+    selectedResultBadge.className =
+      "selected-result-badge derrota";
+
+  }
+
+
+  const profileRole =
+    normalizeRole(
+      currentProfile.rol
+    );
+
+
+  if (
+    isPlayerRole(profileRole)
+  ) {
+
+    playedRoleInput.value =
+      profileRole;
+
+  }
+
+
+  updateRoleFields();
+
+
+  matchFormSection.classList.remove(
+    "hidden"
+  );
+
+
+  setTimeout(
+    () => {
+
+      matchFormSection.scrollIntoView({
+
+        behavior:
+          "smooth",
+
+        block:
+          "center"
+
+      });
+
+    },
+    80
+  );
+
+
+  championInput.focus();
+
+}
+
+
+
+/* =====================================================
+   CANCEL
+===================================================== */
+
+cancelMatchButton.addEventListener(
+
+  "click",
+
+  closeMatchForm
+
+);
+
+
+
+function closeMatchForm() {
+
+  selectedResult =
+    null;
+
+
+  winButton?.classList.remove(
+    "selected"
+  );
+
+
+  lossButton?.classList.remove(
+    "selected"
+  );
+
+
+  matchFormSection?.classList.add(
+    "hidden"
+  );
+
+
+  resetForm();
+
+}
+
+
+
+/* =====================================================
+   ROLE FIELDS
+===================================================== */
+
+playedRoleInput.addEventListener(
+
+  "change",
+
+  updateRoleFields
+
+);
+
+
+
+function updateRoleFields() {
+
+  const role =
+    playedRoleInput.value;
+
+
+  const isSupport =
+    role === "support";
+
+
+  if (isSupport) {
+
+    visionField.classList.add(
+      "field-priority"
+    );
+
+
+    visionField.classList.remove(
+      "field-muted"
+    );
+
+
+    csField.classList.add(
+      "field-muted"
+    );
+
+
+    csField.classList.remove(
+      "field-priority"
+    );
+
+
+    visionInput.required =
+      true;
+
+
+    csInput.required =
+      false;
+
+
+    visionHelp.textContent =
+      "Dato principal para Support.";
+
+
+    csHelp.textContent =
+      "Opcional para Support.";
+
+  } else {
+
+    csField.classList.add(
+      "field-priority"
+    );
+
+
+    csField.classList.remove(
+      "field-muted"
+    );
+
+
+    visionField.classList.add(
+      "field-muted"
+    );
+
+
+    visionField.classList.remove(
+      "field-priority"
+    );
+
+
+    csInput.required =
+      true;
+
+
+    visionInput.required =
+      false;
+
+
+    csHelp.textContent =
+      "Dato principal para este rol.";
+
+
+    visionHelp.textContent =
+      "Opcional para este rol.";
+
+  }
+
+}
+
+
+
+/* =====================================================
+   NOTE COUNTER
+===================================================== */
+
+noteInput.addEventListener(
+
+  "input",
+
+  () => {
+
+    noteCounter.textContent =
+      `${noteInput.value.length} / 160`;
+
+  }
+
+);
+
+
+
+/* =====================================================
+   SUBMIT
+===================================================== */
+
+matchDetailsForm.addEventListener(
+
+  "submit",
+
+  event => {
+
+    event.preventDefault();
+
+
+    registerDetailedMatch();
 
   }
 
@@ -529,13 +808,12 @@ lossButton.addEventListener(
    REGISTER MATCH
 ===================================================== */
 
-async function registerMatch(
-  result
-) {
+async function registerDetailedMatch() {
 
   if (
     !currentUser ||
-    !currentProfile
+    !currentProfile ||
+    !selectedResult
   ) {
 
     return;
@@ -543,10 +821,128 @@ async function registerMatch(
   }
 
 
+  const result =
+    selectedResult;
+
+
   const pointsEarned =
     result === "victoria"
       ? 3
       : 1;
+
+
+  const champion =
+    championInput.value
+      .trim();
+
+
+  const role =
+    playedRoleInput.value;
+
+
+  const kills =
+    numberValue(
+      killsInput.value
+    );
+
+
+  const deaths =
+    numberValue(
+      deathsInput.value
+    );
+
+
+  const assists =
+    numberValue(
+      assistsInput.value
+    );
+
+
+  const cs =
+    optionalNumber(
+      csInput.value
+    );
+
+
+  const vision =
+    optionalNumber(
+      visionInput.value
+    );
+
+
+  const duration =
+    numberValue(
+      durationInput.value
+    );
+
+
+  const note =
+    noteInput.value
+      .trim();
+
+
+
+  /* VALIDACIONES */
+
+  if (!champion) {
+
+    championInput.focus();
+
+    return;
+  }
+
+
+  if (
+    !isPlayerRole(role)
+  ) {
+
+    return;
+  }
+
+
+  if (
+    duration < 1
+  ) {
+
+    durationInput.focus();
+
+    return;
+  }
+
+
+  if (
+    role === "support" &&
+    vision === null
+  ) {
+
+    visionInput.focus();
+
+
+    showErrorMessage(
+      "Para Support necesitamos los puntos de visión."
+    );
+
+
+    return;
+  }
+
+
+  if (
+    role !== "support" &&
+    cs === null
+  ) {
+
+    csInput.focus();
+
+
+    showErrorMessage(
+      "Falta ingresar el CS de la partida."
+    );
+
+
+    return;
+  }
+
 
 
   try {
@@ -587,9 +983,7 @@ async function registerMatch(
           );
 
 
-        if (
-          !profileSnapshot.exists()
-        ) {
+        if (!profileSnapshot.exists()) {
 
           throw new Error(
             "Perfil inexistente."
@@ -604,29 +998,25 @@ async function registerMatch(
 
         const previousPoints =
           Number(
-            profileData.puntos ||
-            0
+            profileData.puntos || 0
           );
 
 
         const previousWins =
           Number(
-            profileData.victorias ||
-            0
+            profileData.victorias || 0
           );
 
 
         const previousLosses =
           Number(
-            profileData.derrotas ||
-            0
+            profileData.derrotas || 0
           );
 
 
         const previousMatches =
           Number(
-            profileData.partidas ||
-            0
+            profileData.partidas || 0
           );
 
 
@@ -654,14 +1044,11 @@ async function registerMatch(
 
 
         const newMatches =
-          previousMatches +
-          1;
+          previousMatches + 1;
 
 
 
-        /* ==========================================
-           UPDATE PROFILE
-        ========================================== */
+        /* ACTUALIZAR STATS GENERALES */
 
         transaction.update(
 
@@ -690,9 +1077,7 @@ async function registerMatch(
 
 
 
-        /* ==========================================
-           MATCH HISTORY
-        ========================================== */
+        /* GUARDAR PARTIDA DETALLADA */
 
         transaction.set(
 
@@ -708,6 +1093,33 @@ async function registerMatch(
 
             puntos:
               pointsEarned,
+
+            campeon:
+              champion,
+
+            rolJugado:
+              role,
+
+            kills:
+              kills,
+
+            deaths:
+              deaths,
+
+            assists:
+              assists,
+
+            cs:
+              cs,
+
+            vision:
+              vision,
+
+            duracion:
+              duration,
+
+            nota:
+              note,
 
             creado:
               serverTimestamp()
@@ -727,8 +1139,7 @@ async function registerMatch(
 
 
     if (
-      result ===
-      "victoria"
+      result === "victoria"
     ) {
 
       launchConfetti();
@@ -739,6 +1150,10 @@ async function registerMatch(
 
     }
 
+
+    closeMatchForm();
+
+
   } catch(error) {
 
     console.error(
@@ -747,7 +1162,10 @@ async function registerMatch(
     );
 
 
-    showErrorMessage();
+    showErrorMessage(
+      "No pudimos registrar la partida. ✧"
+    );
+
 
   } finally {
 
@@ -765,9 +1183,7 @@ async function registerMatch(
    RECENT MATCHES
 ===================================================== */
 
-function listenRecentMatches(
-  uid
-) {
+function listenRecentMatches(uid) {
 
   const matchesQuery =
     query(
@@ -784,9 +1200,7 @@ function listenRecentMatches(
         "desc"
       ),
 
-      limit(
-        5
-      )
+      limit(8)
 
     );
 
@@ -798,12 +1212,10 @@ function listenRecentMatches(
 
       snapshot => {
 
-        const matches =
-          [];
+        const matches = [];
 
 
         snapshot.forEach(
-
           documentSnapshot => {
 
             matches.push({
@@ -816,7 +1228,6 @@ function listenRecentMatches(
             });
 
           }
-
         );
 
 
@@ -838,9 +1249,7 @@ function listenRecentMatches(
 
           <div class="points-empty">
 
-            <span>
-              ✧
-            </span>
+            <span>✧</span>
 
             <p>
               No pudimos cargar tus partidas.
@@ -859,12 +1268,10 @@ function listenRecentMatches(
 
 
 /* =====================================================
-   RENDER RECENT MATCHES
+   RENDER HISTORY
 ===================================================== */
 
-function renderRecentMatches(
-  matches
-) {
+function renderRecentMatches(matches) {
 
   recentMatches.innerHTML =
     "";
@@ -878,9 +1285,7 @@ function renderRecentMatches(
 
       <div class="points-empty">
 
-        <span>
-          ☾
-        </span>
+        <span>☾</span>
 
         <p>
           Todavía no registraste ninguna partida.
@@ -890,14 +1295,11 @@ function renderRecentMatches(
 
     `;
 
-
     return;
-
   }
 
 
   matches.forEach(
-
     match => {
 
       const row =
@@ -907,15 +1309,79 @@ function renderRecentMatches(
 
 
       row.className =
-        "recent-match";
+        "recent-match detailed-match";
 
 
-      const result =
-        match.resultado ===
-          "victoria"
-
+      const resultLabel =
+        match.resultado === "victoria"
           ? "VICTORIA"
           : "DERROTA";
+
+
+      /*
+        Compatibilidad con partidas antiguas
+        que no tengan todavía detalles.
+      */
+
+      const hasDetails =
+        Boolean(
+          match.campeon
+        );
+
+
+      if (!hasDetails) {
+
+        row.innerHTML = `
+
+          <span
+            class="match-result ${escapeHTML(match.resultado)}"
+          >
+            ${resultLabel}
+          </span>
+
+
+          <div class="detailed-match-main">
+
+            <strong>
+              Partida anterior
+            </strong>
+
+            <small>
+              Sin estadísticas detalladas.
+            </small>
+
+          </div>
+
+
+          <div class="detailed-match-right">
+
+            <span class="match-earned">
+              +${Number(match.puntos || 0)} pts
+            </span>
+
+            <span class="match-date">
+              ${formatDate(match.creado)}
+            </span>
+
+          </div>
+
+        `;
+
+
+        recentMatches.appendChild(
+          row
+        );
+
+
+        return;
+      }
+
+
+
+      const extraStats =
+        buildExtraStats(
+          match
+        );
 
 
       row.innerHTML = `
@@ -923,23 +1389,72 @@ function renderRecentMatches(
         <span
           class="match-result ${escapeHTML(match.resultado)}"
         >
-          ${result}
+          ${resultLabel}
         </span>
 
 
-        <span class="match-date">
+        <div class="detailed-match-main">
 
-          ${formatDate(match.creado)}
+          <div class="detailed-match-title">
 
-        </span>
+            <strong>
+              ${escapeHTML(match.campeon)}
+            </strong>
+
+            <span>
+              ${formatRole(match.rolJugado)}
+            </span>
+
+          </div>
 
 
-        <span class="match-earned">
+          <div class="detailed-match-stats">
 
-          +${Number(match.puntos || 0)}
-          pts
+            ${Number(match.kills || 0)}
+            /
+            ${Number(match.deaths || 0)}
+            /
+            ${Number(match.assists || 0)}
 
-        </span>
+            ·
+
+            ${extraStats}
+
+            ·
+
+            ${Number(match.duracion || 0)} min
+
+          </div>
+
+
+          ${
+            match.nota
+
+              ? `
+
+                <div class="detailed-match-note">
+                  “${escapeHTML(match.nota)}”
+                </div>
+
+              `
+
+              : ""
+          }
+
+        </div>
+
+
+        <div class="detailed-match-right">
+
+          <span class="match-earned">
+            +${Number(match.puntos || 0)} pts
+          </span>
+
+          <span class="match-date">
+            ${formatDate(match.creado)}
+          </span>
+
+        </div>
 
       `;
 
@@ -949,7 +1464,6 @@ function renderRecentMatches(
       );
 
     }
-
   );
 
 }
@@ -957,7 +1471,50 @@ function renderRecentMatches(
 
 
 /* =====================================================
-   GLOBAL RANKING
+   EXTRA STATS
+===================================================== */
+
+function buildExtraStats(match) {
+
+  const values = [];
+
+
+  if (
+    match.cs !== null &&
+    match.cs !== undefined
+  ) {
+
+    values.push(
+      `${match.cs} CS`
+    );
+
+  }
+
+
+  if (
+    match.vision !== null &&
+    match.vision !== undefined
+  ) {
+
+    values.push(
+      `${match.vision} visión`
+    );
+
+  }
+
+
+  return (
+    values.length
+      ? values.join(" · ")
+      : "Sin datos extra"
+  );
+
+}
+
+
+
+/* =====================================================
+   RANKING
 ===================================================== */
 
 const usersReference =
@@ -973,12 +1530,10 @@ onSnapshot(
 
   snapshot => {
 
-    const players =
-      [];
+    const players = [];
 
 
     snapshot.forEach(
-
       documentSnapshot => {
 
         const data =
@@ -992,13 +1547,10 @@ onSnapshot(
 
 
         if (
-          !isPlayerRole(
-            role
-          )
+          !isPlayerRole(role)
         ) {
 
           return;
-
         }
 
 
@@ -1024,47 +1576,31 @@ onSnapshot(
 
           points:
             Number(
-              data.puntos ||
-              0
+              data.puntos || 0
             ),
 
           wins:
             Number(
-              data.victorias ||
-              0
+              data.victorias || 0
             ),
 
           losses:
             Number(
-              data.derrotas ||
-              0
+              data.derrotas || 0
             )
 
         });
 
       }
-
     );
 
 
 
-    /* ==========================================
-       SORT
-    ========================================== */
-
     players.sort(
-
-      (
-        a,
-        b
-      ) => {
-
-
-        /* MÁS PUNTOS */
+      (a,b) => {
 
         if (
-          b.points !==
-          a.points
+          b.points !== a.points
         ) {
 
           return (
@@ -1075,11 +1611,8 @@ onSnapshot(
         }
 
 
-        /* MÁS VICTORIAS */
-
         if (
-          b.wins !==
-          a.wins
+          b.wins !== a.wins
         ) {
 
           return (
@@ -1089,8 +1622,6 @@ onSnapshot(
 
         }
 
-
-        /* NICKNAME */
 
         return (
           a.nickname.localeCompare(
@@ -1104,7 +1635,6 @@ onSnapshot(
         );
 
       }
-
     );
 
 
@@ -1126,9 +1656,7 @@ onSnapshot(
 
       <div class="points-empty">
 
-        <span>
-          ✧
-        </span>
+        <span>✧</span>
 
         <p>
           No pudimos cargar el ranking.
@@ -1148,9 +1676,7 @@ onSnapshot(
    RENDER RANKING
 ===================================================== */
 
-function renderRanking(
-  players
-) {
+function renderRanking(players) {
 
   rankingList.innerHTML =
     "";
@@ -1164,9 +1690,7 @@ function renderRanking(
 
       <div class="points-empty">
 
-        <span>
-          ☾
-        </span>
+        <span>☾</span>
 
         <p>
           El ranking todavía está vacío.
@@ -1176,14 +1700,11 @@ function renderRanking(
 
     `;
 
-
     return;
-
   }
 
 
   players.forEach(
-
     (
       player,
       index
@@ -1195,28 +1716,15 @@ function renderRanking(
         );
 
 
-      const leader =
-        index === 0;
-
-
       const current =
         currentUser &&
-        player.id ===
-          currentUser.uid;
+        player.id === currentUser.uid;
 
 
-
-      /* ==========================================
-         TOP 3
-      ========================================== */
-
-      let podiumClass =
-        "";
+      let podiumClass = "";
 
 
-      if (
-        index === 0
-      ) {
+      if (index === 0) {
 
         podiumClass =
           "rank-first";
@@ -1238,14 +1746,11 @@ function renderRanking(
       }
 
 
-
-      row.className =
-        `
-          ranking-row
-          ${leader ? "leader" : ""}
-          ${podiumClass}
-          ${current ? "current-user" : ""}
-        `;
+      row.className = `
+        ranking-row
+        ${podiumClass}
+        ${current ? "current-user" : ""}
+      `;
 
 
       row.style.setProperty(
@@ -1268,18 +1773,12 @@ function renderRanking(
           <div class="ranking-player-top">
 
             <span class="ranking-symbol-player">
-
               ${escapeHTML(player.symbol)}
-
             </span>
 
 
             <strong>
-
               ${escapeHTML(player.nickname)}
-
-              ${leader ? " ♛" : ""}
-
             </strong>
 
 
@@ -1316,9 +1815,7 @@ function renderRanking(
         <div class="ranking-score">
 
           <strong>
-
             ${player.points}
-
           </strong>
 
           <span>
@@ -1335,8 +1832,89 @@ function renderRanking(
       );
 
     }
-
   );
+
+}
+
+
+
+/* =====================================================
+   RESET FORM
+===================================================== */
+
+function resetForm() {
+
+  if (
+    !matchDetailsForm
+  ) {
+
+    return;
+  }
+
+
+  matchDetailsForm.reset();
+
+
+  killsInput.value =
+    0;
+
+
+  deathsInput.value =
+    0;
+
+
+  assistsInput.value =
+    0;
+
+
+  noteCounter.textContent =
+    "0 / 160";
+
+
+  if (
+    currentProfile
+  ) {
+
+    const role =
+      normalizeRole(
+        currentProfile.rol
+      );
+
+
+    if (
+      isPlayerRole(role)
+    ) {
+
+      playedRoleInput.value =
+        role;
+
+    }
+
+  }
+
+
+  updateRoleFields();
+
+}
+
+
+
+/* =====================================================
+   BUTTON STATE
+===================================================== */
+
+function setRegisterDisabled(disabled) {
+
+  winButton.disabled =
+    disabled;
+
+
+  lossButton.disabled =
+    disabled;
+
+
+  saveMatchButton.disabled =
+    disabled;
 
 }
 
@@ -1346,14 +1924,10 @@ function renderRanking(
    RESULT MESSAGE
 ===================================================== */
 
-function showResultMessage(
-  result
-) {
+function showResultMessage(result) {
 
   const messages =
-    result ===
-      "victoria"
-
+    result === "victoria"
       ? victoryMessages
       : defeatMessages;
 
@@ -1367,22 +1941,9 @@ function showResultMessage(
     ];
 
 
-  resultPopup.textContent =
-    message;
-
-
-  resultPopup.className =
-    `result-popup visible ${result}`;
-
-
-  setTimeout(
-    () => {
-
-      resultPopup.className =
-        "result-popup";
-
-    },
-    2800
+  showPopup(
+    message,
+    result
   );
 
 }
@@ -1393,25 +1954,52 @@ function showResultMessage(
    ERROR MESSAGE
 ===================================================== */
 
-function showErrorMessage() {
+function showErrorMessage(
+  message =
+    "No pudimos registrar la partida. ✧"
+) {
+
+  showPopup(
+    message,
+    "derrota"
+  );
+
+}
+
+
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+function showPopup(
+  message,
+  type
+) {
 
   resultPopup.textContent =
-    "No pudimos registrar la partida. ✧";
+    message;
 
 
   resultPopup.className =
-    "result-popup visible derrota";
+    `result-popup visible ${type}`;
 
 
-  setTimeout(
-    () => {
-
-      resultPopup.className =
-        "result-popup";
-
-    },
-    2800
+  window.clearTimeout(
+    showPopup.timeout
   );
+
+
+  showPopup.timeout =
+    window.setTimeout(
+      () => {
+
+        resultPopup.className =
+          "result-popup";
+
+      },
+      2800
+    );
 
 }
 
@@ -1429,7 +2017,6 @@ function launchConfetti() {
   ) {
 
     return;
-
   }
 
 
@@ -1465,9 +2052,7 @@ function shakePage() {
 
 
   if (!container) {
-
     return;
-
   }
 
 
@@ -1486,25 +2071,6 @@ function shakePage() {
     },
     500
   );
-
-}
-
-
-
-/* =====================================================
-   REGISTER BUTTON STATE
-===================================================== */
-
-function setRegisterDisabled(
-  disabled
-) {
-
-  winButton.disabled =
-    disabled;
-
-
-  lossButton.disabled =
-    disabled;
 
 }
 
@@ -1544,16 +2110,13 @@ function cleanUserListeners() {
 
 
 /* =====================================================
-   NORMALIZE ROLE
+   HELPERS
 ===================================================== */
 
-function normalizeRole(
-  role
-) {
+function normalizeRole(role) {
 
   return String(
-    role ||
-    ""
+    role || ""
   )
     .trim()
     .toLowerCase();
@@ -1562,13 +2125,7 @@ function normalizeRole(
 
 
 
-/* =====================================================
-   FORMAT ROLE
-===================================================== */
-
-function formatRole(
-  role
-) {
+function formatRole(role) {
 
   const roles = {
 
@@ -1600,13 +2157,7 @@ function formatRole(
 
 
 
-/* =====================================================
-   PLAYER ROLE
-===================================================== */
-
-function isPlayerRole(
-  role
-) {
+function isPlayerRole(role) {
 
   return [
     "top",
@@ -1614,21 +2165,56 @@ function isPlayerRole(
     "mid",
     "adc",
     "support"
-  ].includes(
-    role
+  ].includes(role);
+
+}
+
+
+
+function numberValue(value) {
+
+  const number =
+    Number(value);
+
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    return 0;
+  }
+
+
+  return Math.max(
+    0,
+    Math.floor(number)
   );
 
 }
 
 
 
-/* =====================================================
-   DATE
-===================================================== */
+function optionalNumber(value) {
 
-function formatDate(
-  timestamp
-) {
+  if (
+    value === null ||
+    value === undefined ||
+    String(value).trim() === ""
+  ) {
+
+    return null;
+  }
+
+
+  return numberValue(
+    value
+  );
+
+}
+
+
+
+function formatDate(timestamp) {
 
   if (
     !timestamp ||
@@ -1636,7 +2222,6 @@ function formatDate(
   ) {
 
     return "Ahora";
-
   }
 
 
@@ -1668,13 +2253,7 @@ function formatDate(
 
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(
-  value
-) {
+function escapeHTML(value) {
 
   const element =
     document.createElement(
@@ -1684,13 +2263,10 @@ function escapeHTML(
 
   element.textContent =
     String(
-      value ??
-      ""
+      value ?? ""
     );
 
 
-  return (
-    element.innerHTML
-  );
+  return element.innerHTML;
 
 }

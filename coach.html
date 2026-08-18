@@ -46,183 +46,191 @@
        NAVBAR
   =================================================== -->
 
-  <nav
-    id="main-nav"
-    class="site-nav"
+ <nav
+  id="main-nav"
+  class="site-nav"
+>
+
+  <a
+    href="index.html"
+    class="brand"
   >
 
-    <!-- BRAND -->
+    <div class="nav-logo-wrap">
 
-    <a
-      href="index.html"
-      class="brand"
-    >
+      <img
+        src="img/crimson-veil-logo.jpeg"
+        alt="Crimson Veil"
+        class="nav-logo"
+      >
 
-      <div class="nav-logo-wrap">
-
-        <img
-          src="img/crimson-veil-logo.jpeg"
-          alt="Crimson Veil"
-          class="nav-logo"
-        >
-
-      </div>
+    </div>
 
 
-      <div class="brand-copy">
+    <div class="brand-copy">
 
-        <strong>
-          Crimson Veil
-        </strong>
+      <strong>
+        Crimson Veil
+      </strong>
 
-        <small>
-          Coach Hub
-        </small>
+      <small>
+        Coach Hub
+      </small>
 
-      </div>
+    </div>
+
+  </a>
+
+
+  <div class="menu">
+
+    <a href="index.html">
+
+      <i class="fa-solid fa-house"></i>
+
+      <span>
+        Inicio
+      </span>
 
     </a>
 
 
+    <a href="index.html#roster">
 
-    <!-- MENU -->
+      <i class="fa-solid fa-users"></i>
 
-    <div class="menu">
+      <span>
+        Team
+      </span>
 
-
-      <a href="index.html">
-
-        <i class="fa-solid fa-house"></i>
-
-        <span>
-          Inicio
-        </span>
-
-      </a>
+    </a>
 
 
-      <a href="index.html#roster">
+    <a href="puntos.html">
 
-        <i class="fa-solid fa-users"></i>
+      <i class="fa-solid fa-star"></i>
 
-        <span>
-          Team
-        </span>
+      <span>
+        Ranking
+      </span>
 
-      </a>
+    </a>
 
 
-      <a href="puntos.html">
+    <a
+      id="coachNavLink"
+      href="coach.html"
+      class="active"
+    >
 
-        <i class="fa-solid fa-star"></i>
+      <i class="fa-solid fa-chart-line"></i>
 
-        <span>
-          Ranking
-        </span>
+      <span>
+        Estadísticas
+      </span>
 
-      </a>
+    </a>
 
+
+    <div class="user-area">
 
       <a
-        href="coach.html"
-        class="active"
+        id="loginLink"
+        href="login.html"
+        class="login-link"
       >
 
-        <i class="fa-solid fa-chart-line"></i>
+        <i class="fa-solid fa-user"></i>
 
         <span>
-          Coach
+          Ingresar
         </span>
 
       </a>
 
 
+      <div
+        id="loggedUser"
+        class="logged-user hidden"
+      >
 
-      <!-- USER -->
-
-      <div class="user-area">
-
-
-        <a
-          id="loginLink"
-          href="login.html"
-          class="login-link"
+        <button
+          id="userMenuButton"
+          class="user-menu-button"
+          type="button"
         >
 
           <i class="fa-solid fa-user"></i>
 
-          <span>
-            Ingresar
+          <span id="navNickname">
+            Coach
           </span>
 
-        </a>
+          <i
+            class="fa-solid fa-chevron-down user-chevron"
+          ></i>
+
+        </button>
 
 
         <div
-          id="loggedUser"
-          class="logged-user hidden"
+          id="userDropdown"
+          class="user-dropdown"
         >
 
+          <!-- PLAYER: navbar.js lo ocultará al coach -->
+
+          <a
+            id="profileDropdownLink"
+            href="perfil.html"
+          >
+
+            <i class="fa-regular fa-user"></i>
+
+            <span>
+              Mi perfil
+            </span>
+
+          </a>
+
+
+          <a href="puntos.html">
+
+            <i class="fa-regular fa-star"></i>
+
+            <span>
+              Ranking
+            </span>
+
+          </a>
+
+
+          <a
+            id="coachDropdownLink"
+            href="coach.html"
+          >
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>
+              Coach Dashboard
+            </span>
+
+          </a>
+
+
           <button
-            id="userMenuButton"
-            class="user-menu-button"
+            id="logoutButton"
             type="button"
           >
 
-            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
 
-            <span id="navNickname">
-              Coach
+            <span>
+              Cerrar sesión
             </span>
 
-            <i
-              class="fa-solid fa-chevron-down user-chevron"
-            ></i>
-
           </button>
-
-
-          <div
-            id="userDropdown"
-            class="user-dropdown"
-          >
-
-            <a href="coach.html">
-
-              <i class="fa-solid fa-chart-line"></i>
-
-              <span>
-                Coach Dashboard
-              </span>
-
-            </a>
-
-
-            <a href="index.html">
-
-              <i class="fa-solid fa-house"></i>
-
-              <span>
-                Team Hub
-              </span>
-
-            </a>
-
-
-            <button
-              id="logoutButton"
-              type="button"
-            >
-
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-
-              <span>
-                Cerrar sesión
-              </span>
-
-            </button>
-
-          </div>
 
         </div>
 
@@ -230,7 +238,9 @@
 
     </div>
 
-  </nav>
+  </div>
+
+</nav>
 
 
 

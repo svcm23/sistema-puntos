@@ -7,10 +7,12 @@ import {
   db
 } from "./firebase.js";
 
+
 import {
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
 
 import {
   doc,
@@ -18,27 +20,69 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 
+
 // ============================================
 // ELEMENTS
 // ============================================
 
 const loginLink =
-  document.getElementById("loginLink");
+  document.getElementById(
+    "loginLink"
+  );
+
 
 const loggedUser =
-  document.getElementById("loggedUser");
+  document.getElementById(
+    "loggedUser"
+  );
+
 
 const navNickname =
-  document.getElementById("navNickname");
+  document.getElementById(
+    "navNickname"
+  );
+
 
 const userMenuButton =
-  document.getElementById("userMenuButton");
+  document.getElementById(
+    "userMenuButton"
+  );
+
 
 const userDropdown =
-  document.getElementById("userDropdown");
+  document.getElementById(
+    "userDropdown"
+  );
+
 
 const logoutButton =
-  document.getElementById("logoutButton");
+  document.getElementById(
+    "logoutButton"
+  );
+
+
+
+// ============================================
+// OPTIONAL ROLE LINKS
+// ============================================
+
+const coachNavLink =
+  document.getElementById(
+    "coachNavLink"
+  );
+
+
+const profileDropdownLink =
+  document.getElementById(
+    "profileDropdownLink"
+  );
+
+
+const coachDropdownLink =
+  document.getElementById(
+    "coachDropdownLink"
+  );
+
 
 
 // ============================================
@@ -46,31 +90,54 @@ const logoutButton =
 // ============================================
 
 onAuthStateChanged(
+
   auth,
 
   async user => {
- console.log("🔥 AUTH STATE:", user);
-    // ===========================
+
+    console.log(
+      "🔥 AUTH STATE:",
+      user
+    );
+
+
+    // ==========================================
     // NO SESSION
-    // ===========================
+    // ==========================================
 
     if (!user) {
 
-      loginLink?.classList.remove("hidden");
+      loginLink?.classList.remove(
+        "hidden"
+      );
 
-      loggedUser?.classList.add("hidden");
+
+      loggedUser?.classList.add(
+        "hidden"
+      );
+
+
+      resetRoleLinks();
+
 
       return;
+
     }
 
 
-    // ===========================
+
+    // ==========================================
     // SESSION ACTIVE
-    // ===========================
+    // ==========================================
 
-    loginLink?.classList.add("hidden");
+    loginLink?.classList.add(
+      "hidden"
+    );
 
-    loggedUser?.classList.remove("hidden");
+
+    loggedUser?.classList.remove(
+      "hidden"
+    );
 
 
     try {
@@ -84,18 +151,42 @@ onAuthStateChanged(
 
 
       const profileSnap =
-        await getDoc(profileRef);
+        await getDoc(
+          profileRef
+        );
 
 
-      if (profileSnap.exists()) {
+      // ========================================
+      // PROFILE EXISTS
+      // ========================================
+
+      if (
+        profileSnap.exists()
+      ) {
 
         const profile =
           profileSnap.data();
 
 
-        navNickname.textContent =
+        const nickname =
           profile.nickname ||
+          user.email?.split("@")[0] ||
           "Player";
+
+
+        navNickname.textContent =
+          nickname;
+
+
+        const userType =
+          profile.tipoUsuario ||
+          "player";
+
+
+        applyUserType(
+          userType
+        );
+
 
       } else {
 
@@ -103,7 +194,13 @@ onAuthStateChanged(
           user.email?.split("@")[0] ||
           "Player";
 
+
+        applyUserType(
+          "player"
+        );
+
       }
+
 
     } catch(error) {
 
@@ -117,10 +214,99 @@ onAuthStateChanged(
         user.email?.split("@")[0] ||
         "Player";
 
+
+      applyUserType(
+        "player"
+      );
+
     }
 
   }
+
 );
+
+
+
+// ============================================
+// USER TYPE UI
+// ============================================
+
+function applyUserType(
+  userType
+) {
+
+  resetRoleLinks();
+
+
+  // ==========================================
+  // COACH
+  // ==========================================
+
+  if (
+    userType ===
+    "coach"
+  ) {
+
+    coachNavLink?.classList.remove(
+      "hidden"
+    );
+
+
+    coachDropdownLink?.classList.remove(
+      "hidden"
+    );
+
+
+    /*
+      El coach no necesita perfil
+      de jugadora.
+    */
+
+    profileDropdownLink?.classList.add(
+      "hidden"
+    );
+
+
+    return;
+
+  }
+
+
+
+  // ==========================================
+  // PLAYER
+  // ==========================================
+
+  profileDropdownLink?.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+
+// ============================================
+// RESET ROLE LINKS
+// ============================================
+
+function resetRoleLinks() {
+
+  coachNavLink?.classList.add(
+    "hidden"
+  );
+
+
+  coachDropdownLink?.classList.add(
+    "hidden"
+  );
+
+
+  profileDropdownLink?.classList.remove(
+    "hidden"
+  );
+
+}
+
 
 
 // ============================================
@@ -128,29 +314,38 @@ onAuthStateChanged(
 // ============================================
 
 userMenuButton?.addEventListener(
+
   "click",
 
   event => {
 
     event.stopPropagation();
 
+
     userDropdown?.classList.toggle(
       "visible"
     );
 
   }
+
 );
 
 
-// Cerrar al hacer clic afuera
+
+// ============================================
+// CLOSE DROPDOWN OUTSIDE
+// ============================================
 
 document.addEventListener(
+
   "click",
 
   event => {
 
     if (
-      !loggedUser?.contains(event.target)
+      !loggedUser?.contains(
+        event.target
+      )
     ) {
 
       userDropdown?.classList.remove(
@@ -160,7 +355,9 @@ document.addEventListener(
     }
 
   }
+
 );
+
 
 
 // ============================================
@@ -168,16 +365,21 @@ document.addEventListener(
 // ============================================
 
 logoutButton?.addEventListener(
+
   "click",
 
   async () => {
 
     try {
 
-      await signOut(auth);
+      await signOut(
+        auth
+      );
+
 
       window.location.href =
         "index.html";
+
 
     } catch(error) {
 
@@ -189,4 +391,5 @@ logoutButton?.addEventListener(
     }
 
   }
+
 );

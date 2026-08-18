@@ -16,9 +16,11 @@ import {
 
 import {
   doc,
+  getDoc,
   setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
 
 
 // ============================================
@@ -47,6 +49,7 @@ const authMessage =
   document.getElementById(
     "authMessage"
   );
+
 
 
 // ============================================
@@ -98,6 +101,7 @@ tabs.forEach(tab => {
 });
 
 
+
 // ============================================
 // PASSWORD TOGGLE
 // ============================================
@@ -145,11 +149,13 @@ document
   });
 
 
+
 // ============================================
 // REGISTER
 // ============================================
 
 registerForm.addEventListener(
+
   "submit",
 
   async event => {
@@ -211,12 +217,15 @@ registerForm.addEventListener(
 
       setDisabled(true);
 
+
       showMessage(
         "Creando tu cuenta..."
       );
 
 
+      // ==========================================
       // AUTH
+      // ==========================================
 
       const credential =
         await createUserWithEmailAndPassword(
@@ -230,7 +239,10 @@ registerForm.addEventListener(
         credential.user;
 
 
-      // PERFIL FIRESTORE
+
+      // ==========================================
+      // FIRESTORE PROFILE
+      // ==========================================
 
       await setDoc(
 
@@ -241,41 +253,63 @@ registerForm.addEventListener(
         ),
 
         {
+
           uid:
             user.uid,
+
 
           nickname:
             nickname,
 
+
+          /*
+            Todas las cuentas creadas desde
+            el registro público son PLAYER.
+          */
+
+          tipoUsuario:
+            "player",
+
+
           rol:
             role,
+
 
           email:
             email,
 
+
           simbolo:
             getDefaultSymbol(role),
+
 
           frase:
             "",
 
+
           accentColor:
             getDefaultColor(role),
+
 
           puntos:
             0,
 
+
           victorias:
             0,
+
 
           derrotas:
             0,
 
+
           partidas:
             0,
 
+
           creado:
             serverTimestamp()
+
         }
 
       );
@@ -287,14 +321,17 @@ registerForm.addEventListener(
 
 
       setTimeout(
+
         () => {
 
           window.location.href =
             "perfil.html";
 
         },
+
         750
       );
+
 
     } catch(error) {
 
@@ -309,6 +346,7 @@ registerForm.addEventListener(
         )
       );
 
+
     } finally {
 
       setDisabled(false);
@@ -316,7 +354,9 @@ registerForm.addEventListener(
     }
 
   }
+
 );
+
 
 
 // ============================================
@@ -324,6 +364,7 @@ registerForm.addEventListener(
 // ============================================
 
 loginForm.addEventListener(
+
   "submit",
 
   async event => {
@@ -366,17 +407,97 @@ loginForm.addEventListener(
 
       setDisabled(true);
 
+
       showMessage(
         "Ingresando..."
       );
 
 
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const credential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
 
+
+      const user =
+        credential.user;
+
+
+
+      // ==========================================
+      // LOAD PROFILE
+      // ==========================================
+
+      const profileReference =
+        doc(
+          db,
+          "usuarios",
+          user.uid
+        );
+
+
+      const profileSnapshot =
+        await getDoc(
+          profileReference
+        );
+
+
+
+      // Si por algún motivo no existe perfil
+      if (
+        !profileSnapshot.exists()
+      ) {
+
+        throw new Error(
+          "profile-not-found"
+        );
+
+      }
+
+
+      const profile =
+        profileSnapshot.data();
+
+
+
+      // ==========================================
+      // COACH
+      // ==========================================
+
+      if (
+        profile.tipoUsuario ===
+        "coach"
+      ) {
+
+        showSuccess(
+          "Bienvenido al Coach Hub ✦"
+        );
+
+
+        setTimeout(
+
+          () => {
+
+            window.location.href =
+              "coach.html";
+
+          },
+
+          600
+        );
+
+
+        return;
+
+      }
+
+
+
+      // ==========================================
+      // PLAYER
+      // ==========================================
 
       showSuccess(
         "Bienvenida nuevamente ✦"
@@ -384,14 +505,17 @@ loginForm.addEventListener(
 
 
       setTimeout(
+
         () => {
 
           window.location.href =
             "index.html";
 
         },
+
         600
       );
+
 
     } catch(error) {
 
@@ -400,11 +524,26 @@ loginForm.addEventListener(
       );
 
 
+      if (
+        error.message ===
+        "profile-not-found"
+      ) {
+
+        showError(
+          "Tu cuenta existe, pero no encontramos tu perfil."
+        );
+
+        return;
+
+      }
+
+
       showError(
         getFirebaseError(
           error.code
         )
       );
+
 
     } finally {
 
@@ -413,7 +552,9 @@ loginForm.addEventListener(
     }
 
   }
+
 );
+
 
 
 // ============================================
@@ -423,11 +564,22 @@ loginForm.addEventListener(
 function getDefaultSymbol(role) {
 
   const symbols = {
-    top: "✦",
-    jungle: "☾",
-    mid: "✧",
-    adc: "❀",
-    support: "♡"
+
+    top:
+      "✦",
+
+    jungle:
+      "☾",
+
+    mid:
+      "✧",
+
+    adc:
+      "❀",
+
+    support:
+      "♡"
+
   };
 
 
@@ -439,14 +591,26 @@ function getDefaultSymbol(role) {
 }
 
 
+
 function getDefaultColor(role) {
 
   const colors = {
-    top: "#df526f",
-    jungle: "#c34462",
-    mid: "#f68aa1",
-    adc: "#ed5878",
-    support: "#ffa0b4"
+
+    top:
+      "#df526f",
+
+    jungle:
+      "#c34462",
+
+    mid:
+      "#f68aa1",
+
+    adc:
+      "#ed5878",
+
+    support:
+      "#ffa0b4"
+
   };
 
 
@@ -458,6 +622,7 @@ function getDefaultColor(role) {
 }
 
 
+
 // ============================================
 // UI
 // ============================================
@@ -467,10 +632,12 @@ function clearMessage() {
   authMessage.textContent =
     "";
 
+
   authMessage.className =
     "auth-message";
 
 }
+
 
 
 function showMessage(text) {
@@ -478,10 +645,12 @@ function showMessage(text) {
   authMessage.textContent =
     text;
 
+
   authMessage.className =
     "auth-message";
 
 }
+
 
 
 function showSuccess(text) {
@@ -489,10 +658,12 @@ function showSuccess(text) {
   authMessage.textContent =
     text;
 
+
   authMessage.className =
     "auth-message success";
 
 }
+
 
 
 function showError(text) {
@@ -500,10 +671,12 @@ function showError(text) {
   authMessage.textContent =
     text;
 
+
   authMessage.className =
     "auth-message error";
 
 }
+
 
 
 function setDisabled(disabled) {
@@ -522,6 +695,7 @@ function setDisabled(disabled) {
 }
 
 
+
 // ============================================
 // ERRORS
 // ============================================
@@ -533,27 +707,35 @@ function getFirebaseError(code) {
     case "auth/email-already-in-use":
       return "Ese email ya tiene una cuenta.";
 
+
     case "auth/invalid-email":
       return "El email ingresado no es válido.";
 
+
     case "auth/weak-password":
       return "La contraseña debe tener al menos 6 caracteres.";
+
 
     case "auth/invalid-credential":
     case "auth/invalid-login-credentials":
       return "Email o contraseña incorrectos.";
 
+
     case "auth/user-not-found":
       return "No existe una cuenta con ese email.";
+
 
     case "auth/wrong-password":
       return "La contraseña es incorrecta.";
 
+
     case "auth/too-many-requests":
       return "Demasiados intentos. Probá nuevamente más tarde.";
 
+
     case "auth/network-request-failed":
       return "No se pudo conectar con Firebase.";
+
 
     default:
       return "Ocurrió un error. Probá nuevamente.";

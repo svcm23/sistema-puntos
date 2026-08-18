@@ -2227,3 +2227,27 @@
   color: #b48692;
   font-size: 9px;
 }
+/* ==================================================
+   MATCH NOTE — MÁS LEGIBLE
+================================================== */
+
+.detailed-match-note {
+  max-width: 750px;
+
+  margin-top: 8px;
+
+  color: #d3a4b1;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  line-height: 1.55;
+
+  font-style: italic;
+
+  letter-spacing: .01em;
+
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}

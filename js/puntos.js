@@ -1,6 +1,6 @@
 /* =====================================================
    CRIMSON VEIL
-   POINTS SYSTEM + MATCH DETAILS
+   POINTS SYSTEM
 ===================================================== */
 
 import {
@@ -85,32 +85,14 @@ const deathsInput =
 const assistsInput =
   document.getElementById("assistsInput");
 
-const csInput =
-  document.getElementById("csInput");
-
-const visionInput =
-  document.getElementById("visionInput");
-
-const durationInput =
-  document.getElementById("durationInput");
+const eloInput =
+  document.getElementById("eloInput");
 
 const noteInput =
   document.getElementById("noteInput");
 
 const noteCounter =
   document.getElementById("noteCounter");
-
-const csField =
-  document.getElementById("csField");
-
-const visionField =
-  document.getElementById("visionField");
-
-const csHelp =
-  document.getElementById("csHelp");
-
-const visionHelp =
-  document.getElementById("visionHelp");
 
 const saveMatchButton =
   document.getElementById("saveMatchButton");
@@ -133,15 +115,20 @@ const resultPopup =
    STATE
 ===================================================== */
 
-let currentUser = null;
+let currentUser =
+  null;
 
-let currentProfile = null;
+let currentProfile =
+  null;
 
-let selectedResult = null;
+let selectedResult =
+  null;
 
-let stopProfileListener = null;
+let stopProfileListener =
+  null;
 
-let stopMatchesListener = null;
+let stopMatchesListener =
+  null;
 
 
 
@@ -202,22 +189,29 @@ onAuthStateChanged(
 
   user => {
 
-    currentUser = user;
+    currentUser =
+      user;
+
 
     cleanUserListeners();
 
 
     if (!user) {
 
-      currentProfile = null;
+      currentProfile =
+        null;
+
 
       playerArea.classList.add(
         "hidden"
       );
 
+
       closeMatchForm();
 
+
       return;
+
     }
 
 
@@ -262,13 +256,16 @@ function listenCurrentProfile(uid) {
 
       snapshot => {
 
-        if (!snapshot.exists()) {
+        if (
+          !snapshot.exists()
+        ) {
 
           console.error(
             "Perfil no encontrado."
           );
 
           return;
+
         }
 
 
@@ -296,7 +293,7 @@ function listenCurrentProfile(uid) {
 
 
 /* =====================================================
-   RENDER PROFILE
+   RENDER CURRENT PROFILE
 ===================================================== */
 
 function renderCurrentProfile() {
@@ -369,25 +366,20 @@ function renderCurrentProfile() {
     matches;
 
 
-  /*
-    Por defecto el formulario se abre
-    con el rol del perfil.
-  */
-
   if (
-    !selectedResult &&
-    isPlayerRole(role)
+    isPlayerRole(role) &&
+    !selectedResult
   ) {
 
     playedRoleInput.value =
       role;
 
-    updateRoleFields();
-
   }
 
 
-  renderStars(points);
+  renderStars(
+    points
+  );
 
 }
 
@@ -399,11 +391,13 @@ function renderCurrentProfile() {
 
 function renderStars(points) {
 
-  const maximumVisible = 10;
+  const maximumVisible =
+    10;
 
 
   let starCount =
-    points % maximumVisible;
+    points %
+    maximumVisible;
 
 
   if (
@@ -457,7 +451,9 @@ function renderStars(points) {
     `star-display ${level}`;
 
 
-  if (starCount === 0) {
+  if (
+    starCount === 0
+  ) {
 
     starDisplay.innerHTML = `
 
@@ -467,12 +463,16 @@ function renderStars(points) {
 
     `;
 
+
     return;
+
   }
 
 
   starDisplay.innerHTML =
-    Array(starCount)
+    Array(
+      starCount
+    )
       .fill(
         `<span class="progress-star">★</span>`
       )
@@ -518,7 +518,7 @@ lossButton.addEventListener(
 
 
 /* =====================================================
-   OPEN FORM
+   OPEN MATCH FORM
 ===================================================== */
 
 function openMatchForm(result) {
@@ -529,6 +529,7 @@ function openMatchForm(result) {
   ) {
 
     return;
+
   }
 
 
@@ -585,9 +586,6 @@ function openMatchForm(result) {
       profileRole;
 
   }
-
-
-  updateRoleFields();
 
 
   matchFormSection.classList.remove(
@@ -661,110 +659,6 @@ function closeMatchForm() {
 
 
 /* =====================================================
-   ROLE FIELDS
-===================================================== */
-
-playedRoleInput.addEventListener(
-
-  "change",
-
-  updateRoleFields
-
-);
-
-
-
-function updateRoleFields() {
-
-  const role =
-    playedRoleInput.value;
-
-
-  const isSupport =
-    role === "support";
-
-
-  if (isSupport) {
-
-    visionField.classList.add(
-      "field-priority"
-    );
-
-
-    visionField.classList.remove(
-      "field-muted"
-    );
-
-
-    csField.classList.add(
-      "field-muted"
-    );
-
-
-    csField.classList.remove(
-      "field-priority"
-    );
-
-
-    visionInput.required =
-      true;
-
-
-    csInput.required =
-      false;
-
-
-    visionHelp.textContent =
-      "Dato principal para Support.";
-
-
-    csHelp.textContent =
-      "Opcional para Support.";
-
-  } else {
-
-    csField.classList.add(
-      "field-priority"
-    );
-
-
-    csField.classList.remove(
-      "field-muted"
-    );
-
-
-    visionField.classList.add(
-      "field-muted"
-    );
-
-
-    visionField.classList.remove(
-      "field-priority"
-    );
-
-
-    csInput.required =
-      true;
-
-
-    visionInput.required =
-      false;
-
-
-    csHelp.textContent =
-      "Dato principal para este rol.";
-
-
-    visionHelp.textContent =
-      "Opcional para este rol.";
-
-  }
-
-}
-
-
-
-/* =====================================================
    NOTE COUNTER
 ===================================================== */
 
@@ -796,7 +690,7 @@ matchDetailsForm.addEventListener(
     event.preventDefault();
 
 
-    registerDetailedMatch();
+    registerMatch();
 
   }
 
@@ -808,7 +702,7 @@ matchDetailsForm.addEventListener(
    REGISTER MATCH
 ===================================================== */
 
-async function registerDetailedMatch() {
+async function registerMatch() {
 
   if (
     !currentUser ||
@@ -837,7 +731,9 @@ async function registerDetailedMatch() {
 
 
   const role =
-    playedRoleInput.value;
+    normalizeRole(
+      playedRoleInput.value
+    );
 
 
   const kills =
@@ -858,22 +754,9 @@ async function registerDetailedMatch() {
     );
 
 
-  const cs =
-    optionalNumber(
-      csInput.value
-    );
-
-
-  const vision =
-    optionalNumber(
-      visionInput.value
-    );
-
-
-  const duration =
-    numberValue(
-      durationInput.value
-    );
+  const elo =
+    eloInput.value
+      .trim();
 
 
   const note =
@@ -889,6 +772,7 @@ async function registerDetailedMatch() {
     championInput.focus();
 
     return;
+
   }
 
 
@@ -897,52 +781,8 @@ async function registerDetailedMatch() {
   ) {
 
     return;
+
   }
-
-
-  if (
-    duration < 1
-  ) {
-
-    durationInput.focus();
-
-    return;
-  }
-
-
-  if (
-    role === "support" &&
-    vision === null
-  ) {
-
-    visionInput.focus();
-
-
-    showErrorMessage(
-      "Para Support necesitamos los puntos de visión."
-    );
-
-
-    return;
-  }
-
-
-  if (
-    role !== "support" &&
-    cs === null
-  ) {
-
-    csInput.focus();
-
-
-    showErrorMessage(
-      "Falta ingresar el CS de la partida."
-    );
-
-
-    return;
-  }
-
 
 
   try {
@@ -983,7 +823,9 @@ async function registerDetailedMatch() {
           );
 
 
-        if (!profileSnapshot.exists()) {
+        if (
+          !profileSnapshot.exists()
+        ) {
 
           throw new Error(
             "Perfil inexistente."
@@ -1044,11 +886,14 @@ async function registerDetailedMatch() {
 
 
         const newMatches =
-          previousMatches + 1;
+          previousMatches +
+          1;
 
 
 
-        /* ACTUALIZAR STATS GENERALES */
+        /* ==========================================
+           UPDATE PROFILE
+        ========================================== */
 
         transaction.update(
 
@@ -1077,7 +922,9 @@ async function registerDetailedMatch() {
 
 
 
-        /* GUARDAR PARTIDA DETALLADA */
+        /* ==========================================
+           MATCH
+        ========================================== */
 
         transaction.set(
 
@@ -1109,14 +956,8 @@ async function registerDetailedMatch() {
             assists:
               assists,
 
-            cs:
-              cs,
-
-            vision:
-              vision,
-
-            duracion:
-              duration,
+            elo:
+              elo,
 
             nota:
               note,
@@ -1162,9 +1003,7 @@ async function registerDetailedMatch() {
     );
 
 
-    showErrorMessage(
-      "No pudimos registrar la partida. ✧"
-    );
+    showErrorMessage();
 
 
   } finally {
@@ -1200,7 +1039,9 @@ function listenRecentMatches(uid) {
         "desc"
       ),
 
-      limit(8)
+      limit(
+        8
+      )
 
     );
 
@@ -1212,10 +1053,12 @@ function listenRecentMatches(uid) {
 
       snapshot => {
 
-        const matches = [];
+        const matches =
+          [];
 
 
         snapshot.forEach(
+
           documentSnapshot => {
 
             matches.push({
@@ -1228,6 +1071,7 @@ function listenRecentMatches(uid) {
             });
 
           }
+
         );
 
 
@@ -1249,7 +1093,9 @@ function listenRecentMatches(uid) {
 
           <div class="points-empty">
 
-            <span>✧</span>
+            <span>
+              ✧
+            </span>
 
             <p>
               No pudimos cargar tus partidas.
@@ -1285,7 +1131,9 @@ function renderRecentMatches(matches) {
 
       <div class="points-empty">
 
-        <span>☾</span>
+        <span>
+          ☾
+        </span>
 
         <p>
           Todavía no registraste ninguna partida.
@@ -1295,11 +1143,14 @@ function renderRecentMatches(matches) {
 
     `;
 
+
     return;
+
   }
 
 
   matches.forEach(
+
     match => {
 
       const row =
@@ -1312,31 +1163,28 @@ function renderRecentMatches(matches) {
         "recent-match detailed-match";
 
 
-      const resultLabel =
-        match.resultado === "victoria"
+      const result =
+        match.resultado ===
+          "victoria"
+
           ? "VICTORIA"
           : "DERROTA";
 
 
       /*
-        Compatibilidad con partidas antiguas
-        que no tengan todavía detalles.
+        Compatibilidad con partidas viejas.
       */
 
-      const hasDetails =
-        Boolean(
-          match.campeon
-        );
-
-
-      if (!hasDetails) {
+      if (!match.campeon) {
 
         row.innerHTML = `
 
           <span
             class="match-result ${escapeHTML(match.resultado)}"
           >
-            ${resultLabel}
+
+            ${result}
+
           </span>
 
 
@@ -1356,11 +1204,16 @@ function renderRecentMatches(matches) {
           <div class="detailed-match-right">
 
             <span class="match-earned">
+
               +${Number(match.puntos || 0)} pts
+
             </span>
 
+
             <span class="match-date">
+
               ${formatDate(match.creado)}
+
             </span>
 
           </div>
@@ -1374,14 +1227,21 @@ function renderRecentMatches(matches) {
 
 
         return;
+
       }
 
 
 
-      const extraStats =
-        buildExtraStats(
-          match
-        );
+      const eloHTML =
+        match.elo
+
+          ? `
+            <span class="match-elo">
+              ${escapeHTML(match.elo)}
+            </span>
+          `
+
+          : "";
 
 
       row.innerHTML = `
@@ -1389,21 +1249,32 @@ function renderRecentMatches(matches) {
         <span
           class="match-result ${escapeHTML(match.resultado)}"
         >
-          ${resultLabel}
+
+          ${result}
+
         </span>
 
 
         <div class="detailed-match-main">
 
+
           <div class="detailed-match-title">
 
             <strong>
+
               ${escapeHTML(match.campeon)}
+
             </strong>
 
+
             <span>
+
               ${formatRole(match.rolJugado)}
+
             </span>
+
+
+            ${eloHTML}
 
           </div>
 
@@ -1416,14 +1287,6 @@ function renderRecentMatches(matches) {
             /
             ${Number(match.assists || 0)}
 
-            ·
-
-            ${extraStats}
-
-            ·
-
-            ${Number(match.duracion || 0)} min
-
           </div>
 
 
@@ -1433,7 +1296,9 @@ function renderRecentMatches(matches) {
               ? `
 
                 <div class="detailed-match-note">
+
                   “${escapeHTML(match.nota)}”
+
                 </div>
 
               `
@@ -1447,11 +1312,16 @@ function renderRecentMatches(matches) {
         <div class="detailed-match-right">
 
           <span class="match-earned">
+
             +${Number(match.puntos || 0)} pts
+
           </span>
 
+
           <span class="match-date">
+
             ${formatDate(match.creado)}
+
           </span>
 
         </div>
@@ -1464,6 +1334,7 @@ function renderRecentMatches(matches) {
       );
 
     }
+
   );
 
 }
@@ -1471,50 +1342,7 @@ function renderRecentMatches(matches) {
 
 
 /* =====================================================
-   EXTRA STATS
-===================================================== */
-
-function buildExtraStats(match) {
-
-  const values = [];
-
-
-  if (
-    match.cs !== null &&
-    match.cs !== undefined
-  ) {
-
-    values.push(
-      `${match.cs} CS`
-    );
-
-  }
-
-
-  if (
-    match.vision !== null &&
-    match.vision !== undefined
-  ) {
-
-    values.push(
-      `${match.vision} visión`
-    );
-
-  }
-
-
-  return (
-    values.length
-      ? values.join(" · ")
-      : "Sin datos extra"
-  );
-
-}
-
-
-
-/* =====================================================
-   RANKING
+   GLOBAL RANKING
 ===================================================== */
 
 const usersReference =
@@ -1530,10 +1358,12 @@ onSnapshot(
 
   snapshot => {
 
-    const players = [];
+    const players =
+      [];
 
 
     snapshot.forEach(
+
       documentSnapshot => {
 
         const data =
@@ -1551,6 +1381,7 @@ onSnapshot(
         ) {
 
           return;
+
         }
 
 
@@ -1592,15 +1423,22 @@ onSnapshot(
         });
 
       }
+
     );
 
 
 
     players.sort(
-      (a,b) => {
+
+      (
+        a,
+        b
+      ) => {
+
 
         if (
-          b.points !== a.points
+          b.points !==
+          a.points
         ) {
 
           return (
@@ -1612,7 +1450,8 @@ onSnapshot(
 
 
         if (
-          b.wins !== a.wins
+          b.wins !==
+          a.wins
         ) {
 
           return (
@@ -1635,6 +1474,7 @@ onSnapshot(
         );
 
       }
+
     );
 
 
@@ -1656,7 +1496,9 @@ onSnapshot(
 
       <div class="points-empty">
 
-        <span>✧</span>
+        <span>
+          ✧
+        </span>
 
         <p>
           No pudimos cargar el ranking.
@@ -1690,7 +1532,9 @@ function renderRanking(players) {
 
       <div class="points-empty">
 
-        <span>☾</span>
+        <span>
+          ☾
+        </span>
 
         <p>
           El ranking todavía está vacío.
@@ -1700,11 +1544,14 @@ function renderRanking(players) {
 
     `;
 
+
     return;
+
   }
 
 
   players.forEach(
+
     (
       player,
       index
@@ -1718,13 +1565,17 @@ function renderRanking(players) {
 
       const current =
         currentUser &&
-        player.id === currentUser.uid;
+        player.id ===
+          currentUser.uid;
 
 
-      let podiumClass = "";
+      let podiumClass =
+        "";
 
 
-      if (index === 0) {
+      if (
+        index === 0
+      ) {
 
         podiumClass =
           "rank-first";
@@ -1746,11 +1597,12 @@ function renderRanking(players) {
       }
 
 
-      row.className = `
-        ranking-row
-        ${podiumClass}
-        ${current ? "current-user" : ""}
-      `;
+      row.className =
+        `
+          ranking-row
+          ${podiumClass}
+          ${current ? "current-user" : ""}
+        `;
 
 
       row.style.setProperty(
@@ -1773,12 +1625,16 @@ function renderRanking(players) {
           <div class="ranking-player-top">
 
             <span class="ranking-symbol-player">
+
               ${escapeHTML(player.symbol)}
+
             </span>
 
 
             <strong>
+
               ${escapeHTML(player.nickname)}
+
             </strong>
 
 
@@ -1815,7 +1671,9 @@ function renderRanking(players) {
         <div class="ranking-score">
 
           <strong>
+
             ${player.points}
+
           </strong>
 
           <span>
@@ -1832,6 +1690,7 @@ function renderRanking(players) {
       );
 
     }
+
   );
 
 }
@@ -1839,15 +1698,12 @@ function renderRanking(players) {
 
 
 /* =====================================================
-   RESET FORM
+   RESET
 ===================================================== */
 
 function resetForm() {
 
-  if (
-    !matchDetailsForm
-  ) {
-
+  if (!matchDetailsForm) {
     return;
   }
 
@@ -1871,9 +1727,7 @@ function resetForm() {
     "0 / 160";
 
 
-  if (
-    currentProfile
-  ) {
+  if (currentProfile) {
 
     const role =
       normalizeRole(
@@ -1892,9 +1746,6 @@ function resetForm() {
 
   }
 
-
-  updateRoleFields();
-
 }
 
 
@@ -1903,7 +1754,9 @@ function resetForm() {
    BUTTON STATE
 ===================================================== */
 
-function setRegisterDisabled(disabled) {
+function setRegisterDisabled(
+  disabled
+) {
 
   winButton.disabled =
     disabled;
@@ -1951,16 +1804,13 @@ function showResultMessage(result) {
 
 
 /* =====================================================
-   ERROR MESSAGE
+   ERROR
 ===================================================== */
 
-function showErrorMessage(
-  message =
-    "No pudimos registrar la partida. ✧"
-) {
+function showErrorMessage() {
 
   showPopup(
-    message,
+    "No pudimos registrar la partida. ✧",
     "derrota"
   );
 
@@ -2017,6 +1867,7 @@ function launchConfetti() {
   ) {
 
     return;
+
   }
 
 
@@ -2165,7 +2016,9 @@ function isPlayerRole(role) {
     "mid",
     "adc",
     "support"
-  ].includes(role);
+  ].includes(
+    role
+  );
 
 }
 
@@ -2182,32 +2035,13 @@ function numberValue(value) {
   ) {
 
     return 0;
+
   }
 
 
   return Math.max(
     0,
     Math.floor(number)
-  );
-
-}
-
-
-
-function optionalNumber(value) {
-
-  if (
-    value === null ||
-    value === undefined ||
-    String(value).trim() === ""
-  ) {
-
-    return null;
-  }
-
-
-  return numberValue(
-    value
   );
 
 }
@@ -2222,6 +2056,7 @@ function formatDate(timestamp) {
   ) {
 
     return "Ahora";
+
   }
 
 
